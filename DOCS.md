@@ -1,0 +1,883 @@
+# DOCS.md — ProNurture Component & Configuration Documentation
+
+> **Last updated:** 2026-05-27  
+> **Status:** Homepage complete  
+> This is the living technical reference for the ProNurture codebase.  
+> Update this file after every new component, page, or config change.
+
+---
+
+## Table of Contents
+
+1. [Configuration Files](#1-configuration-files)
+   - [globals.css](#11-appglobalscss)
+   - [tailwind.config.ts](#12-tailwindconfigts--tailwind-v4-note)
+   - [next.config.ts](#13-nextconfigts)
+   - [layout.tsx](#14-applayouttsx)
+2. [Design System Reference](#2-design-system-reference)
+3. [Component Documentation](#3-component-documentation)
+   - [Navbar](#31-componentsnavbartsx)
+   - [Footer](#32-componentsfootertsx)
+   - [HeroSection](#33-componentsherosectiontsx)
+   - [SocialProofBar](#34-componentssocialproofbartsx)
+   - [ProblemSection](#35-componentsproblmsectiontsx)
+   - [FeaturesSection](#36-componentsfeaturessectiontsx)
+   - [AudienceSection](#37-componentsaudiencesectiontsx)
+   - [TestimonialsSection](#38-componentstestimonialsectiontsx)
+   - [StatsSection](#39-componentsstatssectiontsx)
+   - [BlogPreviewSection](#310-componentsblogpreviewsectiontsx)
+   - [WaitlistSection](#311-componentswaitlistsectiontsx)
+4. [Pages](#4-pages)
+5. [Sanity CMS Schemas](#5-sanity-cms-schemas)
+6. [Environment Variables](#6-environment-variables)
+7. [TODOs & Next Steps](#7-todos--next-steps)
+
+---
+
+## 1. Configuration Files
+
+---
+
+### 1.1 `app/globals.css`
+
+**Purpose:** Global stylesheet. Defines the ProNurture design token system using Tailwind CSS v4's `@theme` directive, sets body/HTML base styles, and enables smooth scrolling for anchor navigation.
+
+**Key changes from default:**
+
+| What | Why |
+|------|-----|
+| Added `@theme` block with `--color-brand-*` tokens | Tailwind v4 reads these and auto-generates all utility classes: `bg-brand-dark`, `text-brand-gold`, `border-brand-green`, etc. |
+| Added `--font-sans: var(--font-dm-sans)` in `@theme` | Applies DM Sans site-wide via the `font-sans` Tailwind utility, referencing the CSS variable injected by `next/font/google` in `layout.tsx` |
+| `html { scroll-behavior: smooth; }` | Enables smooth anchor scrolling so the "See How It Works" CTA in the hero glides to `#features` |
+| Removed dark-mode `@media prefers-color-scheme` | This is a marketing site — dark mode is not in scope and would undermine the brand palette |
+
+**Brand tokens defined:**
+
+```css
+@theme {
+  --color-brand-dark:  #103613;  /* Deep Green  — authority, trust, primary brand */
+  --color-brand-green: #7a853e;  /* Yellow Green — energy, approachability, eyebrow labels */
+  --color-brand-gold:  #c09e5a;  /* Gold/Warm    — ALL primary CTAs, icon accents */
+  --color-brand-white: #ffffff;  /* White        — card backgrounds, Navbar scrolled state */
+  --color-brand-light: #f5f5f0;  /* Off-white    — alternating section backgrounds */
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}
+```
+
+**Usage in Tailwind classes:**
+- `bg-brand-dark` → `background-color: #103613`
+- `text-brand-gold` → `color: #c09e5a`
+- `border-brand-green` → `border-color: #7a853e`
+- `hover:bg-brand-light` → hover state for off-white backgrounds
+
+---
+
+### 1.2 `tailwind.config.ts` — Tailwind v4 Note
+
+**This file does not exist in the project** — and that is correct.
+
+Tailwind CSS v4 eliminated `tailwind.config.ts`. All theme customisation is done directly in CSS via the `@theme` directive in `app/globals.css`. There is no separate config file to maintain. Do not create one.
+
+---
+
+### 1.3 `next.config.ts`
+
+**File:** `next.config.ts`  
+**Purpose:** Next.js project configuration.
+
+**Changes made:**
+
+```ts
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
+    ],
+  },
+};
+```
+
+**Why `placehold.co`?**  
+`next/image` blocks all external image sources by default for security. `placehold.co` is used for placeholder images across all sections during development, before real photography of Nigerian healthcare professionals is sourced. Every `<Image src="https://placehold.co/..." />` in the codebase needs this permission.
+
+**When to update:**  
+Once real photography is uploaded (Sanity CDN, Vercel Blob, or a custom CDN), add that hostname here and remove `placehold.co`.
+
+---
+
+### 1.4 `app/layout.tsx`
+
+**File:** `app/layout.tsx`  
+**Type:** Server Component (Next.js Root Layout)  
+**Purpose:** The outermost shell rendered on every page. Provides the font, metadata, Navbar, and Footer that wrap all page content.
+
+**Props:** `{ children: React.ReactNode }` — the page-specific content rendered between Navbar and Footer.
+
+**Key decisions:**
+
+| Decision | Why |
+|----------|-----|
+| `DM_Sans` from `next/font/google` with `variable: '--font-dm-sans'` | `next/font` self-hosts the font, eliminates the network round-trip to Google Fonts, and prevents layout shift. We load it as a CSS variable so `globals.css` can reference it in `--font-sans` for the entire site. |
+| Weights `400`, `500`, `700` | Covers Regular (body), Medium (nav links, labels), and Bold (headings, CTAs) — all weights used in the design system. |
+| `display: "swap"` | Prevents invisible text (FOIT) during font load — critical for LCP score. |
+| `<main className="flex-1">` | Pushes Footer to the bottom on short pages using CSS flexbox. Without this, the Footer floats mid-page on stub pages. |
+| `<Navbar />` above `{children}` | Navbar is `position: fixed` — it renders outside the normal document flow, so order here doesn't affect visual layout. It's above `children` semantically/logically. |
+| `antialiased` on `<body>` | Enables sub-pixel font rendering on macOS/retina screens — standard practice for premium-looking text. |
+
+**SEO metadata configured:**
+- Title: "ProNurture — Smarter Healthcare Workforce Management in Nigeria"
+- Description: Platform summary for Google snippets
+- Keywords: "healthcare staffing Nigeria", "locum doctor platform Nigeria", etc.
+- OpenGraph: `type: "website"` with title + description for social sharing
+
+---
+
+## 2. Design System Reference
+
+### Colour Usage Rules
+
+| Colour | Class | When to Use |
+|--------|-------|-------------|
+| Deep Green `#103613` | `brand-dark` | Section backgrounds (hero, stats, waitlist, footer), dark text on light backgrounds |
+| Yellow Green `#7a853e` | `brand-green` | Section eyebrow labels, hover states, second-level accents |
+| Gold `#c09e5a` | `brand-gold` | **Every primary CTA button**, icon highlights, number emphasis |
+| White `#ffffff` | `brand-white` | Card backgrounds, Navbar after scroll, body text on dark backgrounds |
+| Off-white `#f5f5f0` | `brand-light` | Alternating section backgrounds (ProofBar, Features, Blog) |
+
+### Section Background Alternation Pattern
+
+The homepage alternates backgrounds deliberately to create visual rhythm and prevent monotony:
+
+```
+Hero          → bg-brand-dark   (deep green)
+SocialProof   → bg-brand-light  (off-white)
+Problem       → bg-brand-white  (white)
+Features      → bg-brand-light  (off-white)
+Audience      → split: brand-dark / brand-green
+Testimonials  → bg-brand-white  (white)
+Stats         → bg-brand-dark   (deep green)
+Blog          → bg-brand-light  (off-white)
+Waitlist      → bg-brand-dark   (deep green)
+```
+
+### Typography Hierarchy
+
+| Element | Tailwind Classes | Context |
+|---------|-----------------|---------|
+| H1 | `text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight` | Hero headline only — one per page |
+| H2 | `text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight` | Section headings |
+| H3 | `text-xl font-bold` or `text-3xl sm:text-4xl font-bold` | Card titles or Audience section headings |
+| Body | `text-base leading-relaxed` | Paragraphs, descriptions |
+| Eyebrow | `text-xs font-semibold uppercase tracking-widest` | Section labels above H2 |
+| CTA | `text-base font-bold` or `text-sm font-bold` | Button text |
+
+---
+
+## 3. Component Documentation
+
+---
+
+### 3.1 `components/Navbar.tsx`
+
+**Type:** `'use client'` (Client Component)  
+**Renders in:** `app/layout.tsx` — appears on every page  
+**File:** `components/Navbar.tsx`
+
+#### Purpose
+Sticky top navigation bar. Transparent with a white logo when floating over the dark hero section; transitions to a white background with the full-colour logo once the user scrolls.
+
+#### Props
+None. This component manages its own state internally.
+
+#### State
+
+| State Variable | Type | Default | Description |
+|----------------|------|---------|-------------|
+| `scrolled` | `boolean` | `false` | `true` when `window.scrollY > 20`. Triggers the transparent → white transition. |
+| `mobileOpen` | `boolean` | `false` | `true` when the mobile hamburger menu is open. |
+
+#### Side Effects (`useEffect`)
+
+1. **Scroll listener:** Adds a passive `scroll` event listener on mount. Updates `scrolled` when the user scrolls past 20px. Cleaned up on unmount to prevent memory leaks.
+2. **Resize listener:** Closes the mobile menu (`setMobileOpen(false)`) if the viewport grows past 1024px (lg breakpoint). Prevents a stuck open state when resizing.
+
+#### Logo Strategy
+Both logos are rendered simultaneously using `position: absolute` inside a relative container. They crossfade via `opacity` transitions:
+
+```tsx
+{/* Full Color Logo — visible when scrolled */}
+<Image ... className={scrolled ? "opacity-100" : "opacity-0"} />
+
+{/* White Mono Logo — visible when at top */}
+<Image ... className={scrolled ? "opacity-0" : "opacity-100"} />
+```
+
+This avoids a flash/jump that would occur from conditional rendering. Both images load on mount (`priority`), so the transition is instant.
+
+#### Navigation Links
+Defined in the `navLinks` constant array at the top of the file:
+
+```ts
+const navLinks = [
+  { label: "Home",                   href: "/" },
+  { label: "For Employers",          href: "/employers" },
+  { label: "For Professionals",      href: "/professionals" },
+  { label: "About",                  href: "/about" },
+  { label: "Blog",                   href: "/blog" },
+]
+```
+
+To add or remove links, edit this array — changes propagate to both desktop and mobile menus automatically.
+
+#### CTA Button
+- Label: "Get Early Access"
+- Destination: `/waitlist`
+- Style: `bg-brand-gold text-brand-dark rounded-full font-bold`
+- On mobile: renders full-width inside the dropdown panel
+
+#### Hamburger Animation
+Three `<span>` bars animate into an X using `rotate-45`, `opacity-0`, and `-rotate-45` Tailwind transforms when `mobileOpen` is `true`.
+
+#### Accessibility
+- `aria-expanded` reflects `mobileOpen` state on the hamburger `<button>`
+- `aria-controls="mobile-menu"` links button to the panel
+- `aria-hidden={!mobileOpen}` hides collapsed panel from screen readers
+- `sr-only` text announces "Open menu" / "Close menu" to screen readers
+- Focus ring on the hamburger button and all interactive elements
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `position: fixed` not `sticky` | `sticky` only works if a parent doesn't have `overflow: hidden`. Fixed is reliable across all page layouts. |
+| Transparent at top, white on scroll | The hero is deep green — a white navbar would create a jarring bar across it. Transparency makes the Navbar feel integrated with the hero. Once the user scrolls, white provides readable contrast over lighter sections. |
+| `z-50` | Ensures the Navbar always sits above all page content, including floating cards in the hero image. |
+| Scroll threshold at `20px` not `0px` | Prevents a micro-flash of white background caused by momentum scrolling slightly past 0 on iOS. |
+
+---
+
+### 3.2 `components/Footer.tsx`
+
+**Type:** Server Component  
+**Renders in:** `app/layout.tsx` — appears on every page  
+**File:** `components/Footer.tsx`
+
+#### Purpose
+Site-wide footer providing navigation, social links, legal notice, and brand closure on a deep green background.
+
+#### Props
+None.
+
+#### Structure
+
+```
+Footer (bg-brand-dark)
+├── Main grid (4 columns)
+│   ├── Brand column
+│   │   ├── White Mono.svg logo (Link → /)
+│   │   ├── Tagline paragraph
+│   │   └── Social icons (LinkedIn, X/Twitter)
+│   ├── Platform column (links)
+│   ├── Company column (links)
+│   └── Resources column (links)
+└── Bottom bar
+    ├── Copyright line (left)
+    └── Tagline (right)
+```
+
+#### Data
+Navigation columns are defined in the `footerColumns` array. Each entry has a `heading` and `links` array of `{ label, href }` objects. To update footer navigation, edit this array.
+
+Social links are in the `socialLinks` array, each with a `label`, `href`, and inline SVG `icon`.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `White Mono.svg` logo | The footer background is deep green. The full-colour logo has a dark green wordmark that would be near-invisible. White Mono provides maximum contrast. |
+| `text-white/60` for link text | 60% opacity white reads comfortably on dark green without the harshness of pure white. It also creates a visual hierarchy where the column headings (pure white) stand out. |
+| `hover:text-brand-gold` on links | Consistent hover state across the site — gold is the interactive accent colour in the ProNurture palette. |
+| `border-t border-white/10` before bottom bar | A very subtle separator — dark enough to be visible, light enough to not interrupt the flow. |
+| `rel="noopener noreferrer"` on social links | Security best practice for all external `target="_blank"` links. Prevents the opened page from accessing `window.opener`. |
+
+---
+
+### 3.3 `components/HeroSection.tsx`
+
+**Type:** Server Component  
+**File:** `components/HeroSection.tsx`
+
+#### Purpose
+The above-the-fold section of the homepage. Must answer three questions in under 3 seconds: **What is this? Who is it for? Why should I care?** Drives two conversion paths: direct signup (waitlist) and soft conversion (explore features).
+
+#### Props
+None.
+
+#### Layout
+Two-column grid on desktop (lg+), stacked vertically on mobile:
+- **Left:** All text content — eyebrow, H1, subheadline, CTAs, trust indicators
+- **Right:** Hero image with a floating product-preview card
+
+#### Content Elements
+
+| Element | Content | Purpose |
+|---------|---------|---------|
+| Eyebrow badge | "Built for Nigerian Healthcare" | Immediately signals Nigeria-specific context — key differentiator |
+| H1 | "Smarter Staffing. Faster Hiring. Better Healthcare Operations." | Three punchy lines, each a distinct benefit. Gold highlight on the third line draws the eye to the biggest payoff. |
+| Subheadline | Platform description | Adds context, mentions both employer and professional features, targets both personas |
+| Primary CTA | "Join the Waitlist" → `/waitlist` | Gold background, arrow icon — highest visual weight on the page |
+| Secondary CTA | "See How It Works" → `#features` | White outline — lower weight, for users who need more convincing |
+| Trust indicators | No credit card / Nigeria-built / Free early access | Removes friction for hesitant visitors |
+| Hero image | `placehold.co/600x500/1a4a1e/c09e5a` | Placeholder — replace with real Nigerian healthcare team photography |
+| Floating card | "Shift Filled Successfully — Dr. Adaeze" | Product preview pattern: makes the platform feel real and already working |
+| Scroll indicator | "Scroll to explore" + bouncing dot | Visual cue for users who don't know there's more below |
+
+#### Background Decoration
+A dot-grid pattern at 5% opacity is applied via `background-image: radial-gradient(circle, #ffffff 1px, transparent 1px)` with `backgroundSize: '32px 32px'`. This adds depth and texture to the flat deep green without distracting from content. The same pattern is reused in `StatsSection` and `WaitlistSection` for visual consistency.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `min-h-screen` + `flex items-center` | Forces the hero to fill the full viewport height and vertically centre the content — this is the "full screen hero" design pattern. |
+| `pt-20 lg:pt-24` | Compensates for the fixed Navbar height (64px mobile / 80px desktop) so content isn't hidden beneath it. |
+| Gold highlight on third H1 line | Per visual hierarchy rules: the entire H1 is dominant, but the most important idea (the payoff) gets the strongest accent. |
+| `priority` on hero image | Hero image is above the fold. Next.js `priority` pre-fetches it before the page renders, improving LCP (Largest Contentful Paint) — a Core Web Vitals metric. |
+| `shadow-brand-gold/20` on primary CTA | The subtle gold glow shadow increases the button's perceived clickability (a premium landing page pattern). |
+| `focus:ring-offset-brand-dark` | Ensures the keyboard focus ring is visible against the dark green background, not lost in it. |
+
+---
+
+### 3.4 `components/SocialProofBar.tsx`
+
+**Type:** Server Component  
+**File:** `components/SocialProofBar.tsx`
+
+#### Purpose
+Establishes immediate credibility in the first scroll position after the hero. Uses key metrics instead of client logos (product is pre-launch, so logos aren't yet available).
+
+#### Props
+None.
+
+#### Data Structure
+
+```ts
+interface Stat {
+  value: string;   // "500+"
+  label: string;   // "Healthcare Professionals"
+}
+```
+
+Stats are defined in the `stats` array at the top of the file. Edit this array to update the numbers when real data is available.
+
+#### Current Stats
+
+| Value | Label |
+|-------|-------|
+| 500+ | Healthcare Professionals |
+| 50+ | Partner Facilities |
+| 10,000+ | Shifts Managed |
+| 98% | Compliance Rate |
+
+#### Layout
+- 2-column grid on mobile (2×2)
+- 4-column grid on md+ (1×4)
+- Vertical `border-r border-brand-dark/10` dividers between columns on md+ (not after the last column — controlled by `index < stats.length - 1`)
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `bg-brand-light` (off-white) | Creates a visual "exhale" after the deep green hero — softer than pure white, warmer than grey. |
+| "Platform Impact" micro-label above stats | Contextualises the numbers without making them feel boastful. |
+| Numbers at `text-4xl sm:text-5xl` | Large enough to be the first thing the eye lands on when scrolling into this section — per visual hierarchy principles. |
+| `text-brand-dark/60` for labels | 60% opacity creates a clear hierarchy: number dominates, label supports. |
+
+---
+
+### 3.5 `components/ProblemSection.tsx`
+
+**Type:** Server Component  
+**File:** `components/ProblemSection.tsx`
+
+#### Purpose
+Agitates the pain points that ProNurture solves. Placed before the Features section deliberately — good marketing acknowledges the problem first, creating empathy and making the solution feel necessary rather than optional.
+
+#### Props
+None.
+
+#### Data Structure
+
+```ts
+interface ProblemCard {
+  title: string;
+  description: string;
+  icon: React.ReactNode;  // Inline SVG
+}
+```
+
+#### Three Problem Cards
+
+| Card | Icon | Addresses Persona |
+|------|------|-------------------|
+| Manual & Fragmented Processes | Clipboard/warning | Both (employer: chaos; professional: poor experience) |
+| Unverified Locum Staff | Shield with X | Employer primarily (risk/compliance) |
+| Disconnected Payroll & CPD | Broken link/chain | Both (employer: finance pain; professional: CPD tracking) |
+
+#### Icon Colour Strategy
+Icons use amber/warning tones (`bg-amber-50 text-amber-600`) by default — amber signals "problem/broken." On hover, they transition to `bg-brand-dark text-brand-gold` — the brand palette — subtly suggesting the brand is the answer to these problems.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `bg-brand-white` (pure white) | Contrast after the off-white SocialProofBar. White + amber icons = clinical problem-identification tone. |
+| Transition teaser at the bottom | "ProNurture was built specifically to solve every one of these problems." — a bridge sentence into FeaturesSection. Keeps the narrative flowing. |
+| Specific, vivid descriptions | Vague problem descriptions don't resonate. "WhatsApp groups, paper rosters, 10 messages, 3 phone calls" creates recognition for people who live this reality. |
+| H2 with emotionally loaded words | "Understaffed and Overworked" — these words mirror how the target persona describes their own experience, creating immediate resonance. |
+
+---
+
+### 3.6 `components/FeaturesSection.tsx`
+
+**Type:** Server Component  
+**File:** `components/FeaturesSection.tsx`
+
+#### Purpose
+The solution reveal — presents the 6 core ProNurture platform features that solve the problems shown above. Anchored at `id="features"` so the hero's "See How It Works" CTA can scroll-link here.
+
+#### Props
+None.
+
+#### Data Structure
+
+```ts
+interface Feature {
+  title: string;
+  description: string;
+  icon: React.ReactNode;  // Inline SVG
+}
+```
+
+#### Six Feature Cards
+
+| # | Title | Icon | Maps to Problem |
+|---|-------|------|-----------------|
+| 1 | Shift Posting & Booking | Calendar | Manual rostering |
+| 2 | Credential Verification | Shield check | Unverified staff |
+| 3 | Payroll Management | ₦ circle | Disconnected payroll |
+| 4 | Attendance & Timesheets | Clock | Manual timesheets |
+| 5 | CPD Training | Graduation cap | Disconnected CPD |
+| 6 | Workforce Analytics | Bar chart | No data visibility |
+
+#### Icon Style
+- Container: `bg-brand-dark` (deep green square, rounded-xl)
+- Icon: `text-brand-gold` (gold SVG stroke)
+- Hover: container scales up `group-hover:scale-110`
+
+This maintains brand palette consistency — every icon uses the same brand-dark/gold combination.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `id="features"` anchor | The hero CTA "See How It Works" links to `#features` — they must be connected. Anchor navigation is better UX than a separate page. |
+| `bg-brand-light` (off-white) | Alternates from the white ProblemSection. Feature cards on white would blend in. |
+| White card backgrounds inside off-white section | Cards `bg-brand-white` pop against the `bg-brand-light` section — layered depth. |
+| `hover:-translate-y-1` on cards | Subtle lift on hover makes cards feel interactive and pressable — a premium SaaS design pattern. |
+| Benefit-focused descriptions | Each description ends with a concrete outcome ("Hire with confidence", "No more manual reconciliation") not just feature descriptions. |
+| Bottom CTA → `/waitlist` | After seeing all 6 features, an interested user should have an easy next step. Uses `bg-brand-dark` not gold — the gold CTAs are reserved for the strongest conversion moments. |
+
+---
+
+### 3.7 `components/AudienceSection.tsx`
+
+**Type:** Server Component  
+**File:** `components/AudienceSection.tsx`
+
+#### Purpose
+A full-width two-column split that speaks directly to each buyer persona in their own voice and tone. Allows visitors to self-identify and navigate deeper into the relevant section of the site.
+
+#### Props
+None.
+
+#### Data Structure
+
+```ts
+interface AudienceColumn {
+  eyebrow: string;
+  heading: string;
+  subheading: string;
+  benefits: { text: string }[];
+  ctaText: string;
+  ctaHref: string;
+  bgClass: string;
+  textClass: string;
+  subtextClass: string;
+  ctaClass: string;
+  checkClass: string;
+}
+```
+
+#### Two Columns
+
+| Column | Background | Audience | CTA | Tone |
+|--------|------------|----------|-----|------|
+| Left | `bg-brand-dark` | Healthcare Employers | "Explore Employer Features" → `/employers` | Formal, ROI-focused, data-driven |
+| Right | `bg-brand-green` | Healthcare Professionals | "Find Locum Shifts" → `/professionals` | Warm, opportunity-focused, mobile-first |
+
+**Employer benefits (left):**
+1. Post shifts and fill gaps in under 30 minutes
+2. Hire only verified, credentialed professionals
+3. Automate PAYE payroll and pension deductions
+4. Generate compliance reports for NHIA and regulators
+
+**Professional benefits (right):**
+1. Browse verified locum shifts near you
+2. Get paid quickly — no payment delays
+3. Complete accredited CPD to renew your licence
+4. Build a verified digital professional profile
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Full-width (`w-full`) with NO max-width container | The split columns should bleed edge-to-edge. A centered container would shrink both columns and lose the visual impact of the split. |
+| `bg-brand-dark` vs `bg-brand-green` | Dark green = employer authority/formality. Yellow-green = professional energy/approachability. Both in the brand palette, different psychological signals. |
+| Gold CTA on dark column | Gold pops hardest against deep green — maximum contrast for the employer CTA. |
+| White CTA on green column | A gold button would clash with yellow-green. White provides clean contrast and keeps the tone lighter/friendlier for professionals. |
+| 4 bullet benefits per column | Enough to be convincing, few enough to be scannable. Per visual hierarchy rules: don't enumerate everything — only the most compelling. |
+| Checkmark icons in column's accent colour | Employer column: `text-brand-gold` checks. Professional column: `text-white` checks. Maintains intra-column colour harmony. |
+
+---
+
+### 3.8 `components/TestimonialsSection.tsx`
+
+**Type:** Server Component  
+**File:** `components/TestimonialsSection.tsx`
+
+#### Purpose
+Social proof from real users. Per CLAUDE.md: "People buy from businesses that other people trust." Placed after the Audience split to reinforce each persona's decision with peer validation.
+
+#### Props
+None.
+
+#### Data Structure
+
+```ts
+interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  organisation: string;
+  initials: string;    // Two-letter avatar until real headshots are available
+  avatarBg: string;    // Tailwind class e.g. "bg-brand-dark"
+}
+```
+
+#### Three Testimonials (Placeholder — Replace Post-Launch)
+
+| Name | Role | Organisation | Persona | Avatar BG |
+|------|------|--------------|---------|-----------|
+| Dr. Chidinma Eze | Medical Director | Sterling Health Hospital, Lagos | Employer | `bg-brand-dark` |
+| Dr. Emeka Okonkwo | General Practitioner | Locum Professional, Abuja | Professional | `bg-brand-green` |
+| Nurse Funmilayo Adeyemi | Head of Nursing Services | Meridian Maternity Centre, Port Harcourt | Professional (nursing) | `bg-brand-gold` |
+
+Three testimonials cover three distinct user archetypes — hospital administrator, doctor, and nurse — maximising relatability across the target audience.
+
+#### Card Anatomy (top to bottom)
+1. Five gold star rating
+2. Large decorative quotation mark SVG (20% opacity green)
+3. Quote text in `blockquote` element
+4. Separator line
+5. Initials avatar + name, role, organisation
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Initials avatars not photos | No verified headshots yet. Initials look intentional and professional rather than "missing image." Each uses a different brand colour to add visual variety. |
+| `line-clamp-3` NOT used on quotes | Unlike blog excerpts, testimonials should be read in full — they're short enough. Truncating them would reduce their persuasive impact. |
+| `<blockquote>` semantic element | Correct HTML for quoted speech — improves accessibility and SEO (Google can recognise quote markup). |
+| `&ldquo;` and `&rdquo;` | Proper typographic curly quotes, not straight ASCII quotes. Contributes to the premium feel. |
+| `flex flex-col` + `flex-1` on quote | Makes all three cards the same height even if quote lengths differ. The quote stretches to fill available space, keeping the attribution row pinned to the bottom of each card. |
+| Hover: `border-brand-green/20 shadow-lg` | Subtle interactive feedback — cards lift slightly to acknowledge user hover without being distracting. |
+
+> ⚠️ **IMPORTANT:** Replace placeholder testimonials with real, verified quotes from actual ProNurture users after the beta launch. Fake testimonials damage credibility if discovered. The Sanity `testimonial` collection schema is ready for real content.
+
+---
+
+### 3.9 `components/StatsSection.tsx`
+
+**Type:** Server Component  
+**File:** `components/StatsSection.tsx`
+
+#### Purpose
+Reinforces the social proof from TestimonialsSection with hard numbers. Large, bold figures on a deep green background create a dramatic, high-confidence visual moment.
+
+#### Props
+None.
+
+#### Data Structure
+
+```ts
+interface StatItem {
+  value: string;
+  label: string;
+  sublabel?: string;  // Optional secondary descriptor
+}
+```
+
+#### Four Stats
+
+| Value | Label | Sublabel |
+|-------|-------|---------|
+| 500+ | Healthcare Professionals | Verified on platform |
+| 50+ | Partner Facilities | Hospitals, clinics & agencies |
+| 10,000+ | Shifts Managed | Across Nigeria |
+| 98% | Compliance Rate | Regulatory adherence |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `text-brand-gold` on numbers | Gold numbers on deep green = the highest contrast ratio in the ProNurture palette. The numbers must jump off the screen. |
+| `text-5xl sm:text-6xl lg:text-7xl` | Deliberately enormous. These numbers are meant to impress — small type defeats the purpose. |
+| Same background as hero and waitlist | Deep green in three positions (hero, stats, waitlist) creates a rhythmic brand-colour anchoring throughout the scroll journey. |
+| `lg:border-r lg:border-white/10` dividers | Subtle separators only on desktop — on mobile the 2-column grid provides natural separation. Avoids cluttered dividers on small screens. |
+| Dot-grid background decoration | Same pattern as hero and waitlist — visual motif that ties the deep-green sections together as one design language. |
+
+---
+
+### 3.10 `components/BlogPreviewSection.tsx`
+
+**Type:** Server Component  
+**File:** `components/BlogPreviewSection.tsx`
+
+#### Purpose
+Demonstrates thought leadership, provides SEO value through internal links, and educates visitors who aren't yet ready to sign up. The "educate before selling" tactic.
+
+#### Props
+None.
+
+#### Data Structure
+
+```ts
+interface BlogPost {
+  slug: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  readTime: string;
+  imagePlaceholder: string;
+  imageAlt: string;
+}
+```
+
+#### Category Tag Colour Map
+
+```ts
+const categoryStyles: Record<string, string> = {
+  "For Employers":      "bg-brand-dark text-white",
+  "For Professionals":  "bg-brand-green text-white",
+  "Industry Insights":  "bg-brand-gold text-brand-dark",
+}
+```
+
+Tags use brand colours that match the audience they address — employers get dark green, professionals get yellow-green, insights get gold.
+
+#### Three Placeholder Articles
+
+| Category | Title | Targets |
+|----------|-------|---------|
+| For Employers | How Nigerian Hospitals Can Fill Locum Shifts 5x Faster | Dr. Adaeze persona |
+| For Professionals | MDCN CPD Requirements for 2026 | Dr. Amarachi persona |
+| Industry Insights | Nigeria's Healthcare Workforce Crisis | Both personas |
+
+#### Card Anatomy (top to bottom)
+1. Image (600×340) with category tag overlay
+2. Date + read time (meta)
+3. Article title (H3)
+4. Excerpt (`line-clamp-3`)
+5. "Read More →" link
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `line-clamp-3` on excerpt | Cards must be the same height regardless of excerpt length. Clipping at 3 lines keeps layout predictable. Users should click through to read the full article. |
+| `group-hover:scale-105` on image | Image zoom on hover is a standard pattern for media cards — signals clickability and adds tactile pleasure. |
+| `group-hover:text-brand-green` on title | Reinforces that the entire card is clickable, not just the "Read More" link. |
+| "View All Articles →" top-right link | Provides an escape path for users who want to explore more without clicking a specific article — but placed subtly so it doesn't compete with the cards. |
+| Three topics covering both personas | Each article targets a specific audience (employers, professionals, or both). A visitor to this section should always find at least one article relevant to them. |
+
+> ⚠️ **TODO:** Replace static `blogPosts` array with a live Sanity GROQ query once real articles are written. See [Section 8](#8-how-to-extend) for the query pattern.
+
+---
+
+### 3.11 `components/WaitlistSection.tsx`
+
+**Type:** `'use client'` (Client Component)  
+**File:** `components/WaitlistSection.tsx`
+
+#### Purpose
+The final, highest-urgency conversion section on the page. Every visitor who made it this far (full scroll) is high-intent. This section captures their email before they leave.
+
+#### Props
+None. All state is internal.
+
+#### State
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `email` | `string` | `""` | Controlled input value for the email field. |
+| `status` | `"idle" \| "loading" \| "success" \| "error"` | `"idle"` | Form submission state machine. Drives the UI rendering logic. |
+| `errorMessage` | `string` | `""` | Error text displayed below the form on validation failure or API error. |
+
+#### State Machine
+
+```
+idle → (submit) → loading → success
+                          ↘ error → (user types) → idle
+```
+
+- **idle:** Default. Form renders normally.
+- **loading:** Button shows spinner + "Joining…" text. Input and button both `disabled`.
+- **success:** Entire form is replaced with a confirmation message + gold checkmark icon. Email field is cleared.
+- **error:** Error message appears below the form. Status resets to `idle` when the user starts typing again.
+
+#### Form Validation
+Client-side only (for now): checks that `email` is truthy and contains `@`. Server-side validation should be added in the API route.
+
+#### API Integration (Placeholder)
+Currently uses a 1-second `setTimeout` to simulate a network request:
+
+```ts
+await new Promise((resolve) => setTimeout(resolve, 1000));
+```
+
+**To connect to a real backend:**
+```ts
+const response = await fetch('/api/waitlist', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email }),
+});
+if (!response.ok) throw new Error('Server error');
+```
+
+See `app/api/waitlist/route.ts` (to be created) for the API route.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `'use client'` | The controlled input and submission state machine require React state + event handlers — not available in Server Components. |
+| Email-only form (no name field) | Per CLAUDE.md: "Keep forms short — name + email only for waitlist." Every additional field reduces conversion rates. |
+| Full form replaced on success | Hiding the form on success prevents double-submissions and gives clear, satisfying feedback. A confetti or green checkmark moment rewards the action. |
+| Privacy note below the form | "No spam, ever." — directly addresses the #1 objection to giving an email address. Specific language outperforms vague "we respect your privacy." |
+| Three trust signals below privacy note | Free access + priority onboarding + early adopter pricing — each is a concrete benefit for signing up now vs. later. Creates urgency without manufactured scarcity. |
+| `aria-busy`, `aria-invalid`, `aria-live` | Full accessibility for the form's dynamic states. Screen readers announce loading, errors, and success in real time. |
+| `noValidate` on `<form>` | Disables the browser's native validation UI so we can use our own styled error states that match the brand. |
+
+---
+
+## 4. Pages
+
+### `/` — Homepage
+
+**File:** `app/page.tsx`  
+**Type:** Server Component  
+**Status:** ✅ Complete  
+
+**Section order (conversion-funnel logic):**
+
+```
+1. HeroSection         → Attention + primary value prop + dual CTA
+2. SocialProofBar      → Immediate credibility after the pitch
+3. ProblemSection      → Empathy + urgency (agitate the pain)
+4. FeaturesSection     → Solution reveal (answer to the pain)
+5. AudienceSection     → Self-segmentation (which persona are you?)
+6. TestimonialsSection → Peer social proof
+7. StatsSection        → Scale and reliability with numbers
+8. BlogPreviewSection  → Thought leadership (educate the hesitant)
+9. WaitlistSection     → Final conversion CTA
+```
+
+This order follows the **Problem → Solution → Proof → Action** persuasion framework.
+
+---
+
+### `/studio` — Sanity Studio
+
+**File:** `app/studio/[[...tool]]/page.tsx`  
+**Status:** ✅ Complete (initial setup)
+
+---
+
+## 5. Sanity CMS Schemas
+
+All schemas in `sanity/schemaTypes/`. Studio at `http://localhost:3000/studio` (local) or `/studio` (production).
+
+| Schema | Type | Purpose |
+|--------|------|---------|
+| `homePage` | Singleton | Homepage content fields |
+| `employersPage` | Singleton | Employers page content |
+| `professionalsPage` | Singleton | Professionals page content |
+| `aboutPage` | Singleton | About page content |
+| `siteSettings` | Singleton | Global config (logo, nav, contact) |
+| `post` | Collection | Blog articles |
+| `author` | Collection | Team/author profiles |
+| `service` | Collection | Platform feature entries |
+| `testimonial` | Collection | User testimonials |
+| `faq` | Collection | FAQ entries |
+| `partner` | Collection | Partner/client logos |
+
+See previous DOCS.md entries for full field-level documentation of each schema.
+
+---
+
+## 6. Environment Variables
+
+| Variable | Value | Used In |
+|----------|-------|---------|
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | `cfu3qevi` | Sanity client, `sanity.config.ts` |
+| `NEXT_PUBLIC_SANITY_DATASET` | `production` | Sanity client, `sanity.config.ts` |
+| `NEXT_PUBLIC_SANITY_API_VERSION` | `2026-05-26` | Sanity client |
+| `SANITY_API_READ_TOKEN` | (secret) | Server-side fetching, live preview |
+
+All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_READ_TOKEN` is server-only — never prefix it with `NEXT_PUBLIC_`.
+
+---
+
+## 7. TODOs & Next Steps
+
+### Immediate (before launch)
+
+- [ ] **Replace placeholder hero image** — source real photography of Nigerian healthcare professionals. Update `HeroSection.tsx` image `src` and `alt`.
+- [ ] **Replace placeholder testimonials** — collect real quotes from beta users. Update `TestimonialsSection.tsx` or connect to Sanity `testimonial` collection.
+- [ ] **Replace placeholder blog posts** — write real articles in Sanity Studio. Connect `BlogPreviewSection.tsx` to Sanity via GROQ query.
+- [ ] **Connect waitlist form** — create `app/api/waitlist/route.ts` and integrate with Mailchimp / Resend / ConvertKit.
+- [ ] **Replace placeholder stats** — update numbers in `SocialProofBar.tsx` and `StatsSection.tsx` with real data.
+
+### Next pages to build (priority order)
+1. `/waitlist` — standalone waitlist page (the CTA destination — must exist before launch)
+2. `/employers` — For Healthcare Employers page
+3. `/professionals` — For Healthcare Professionals page
+4. `/about` — About page
+5. `/blog` — Blog listing page
+6. `/blog/[slug]` — Individual blog post page
+7. `/contact` — Contact page
+
+### Infrastructure
+- [ ] Add `app/api/waitlist/route.ts` — API route for waitlist form submissions
+- [ ] Configure email service (Resend recommended for Next.js) and add API key to `.env.local` + Vercel
+- [ ] Set up `SANITY_API_READ_TOKEN` in Vercel environment variables for server-side Sanity queries
+
+---
+
+*Documentation maintained by Claude Code | ProNurture by Sphere Limited*
