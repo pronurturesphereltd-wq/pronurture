@@ -57,7 +57,7 @@ const painCards: PainCard[] = [
 const ProfessionalsPainPoints = () => {
   return (
     <section
-      className="py-20 lg:py-28"
+      className="pt-20 pb-8 lg:pt-28 lg:pb-8"
       style={{ backgroundColor: "#f5f5f0" }}
       aria-label="Common pain points faced by Nigerian healthcare professionals"
     >

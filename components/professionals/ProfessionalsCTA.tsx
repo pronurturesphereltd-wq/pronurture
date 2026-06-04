@@ -66,7 +66,7 @@ const ProfessionalsCTA = () => {
 
   return (
     <section
-      className="relative bg-brand-dark py-16 overflow-hidden"
+      className="relative bg-brand-dark pt-16 pb-12 overflow-hidden"
       aria-label="Get early access to ProNurtureSphere for healthcare professionals"
     >
       {/* Dot grid decoration — consistent with WaitlistSection and EmployersCTA */}
