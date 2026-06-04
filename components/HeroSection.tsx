@@ -23,12 +23,8 @@ import Link from "next/link";
 const HeroSection = () => {
   return (
     <section
-      className="
-        bg-brand-light
-        h-screen overflow-hidden
-        pt-24
-        flex items-center
-      "
+      className="h-screen overflow-hidden pt-24 flex items-center"
+      style={{ backgroundColor: '#f5f5f0' }}
       aria-label="Hero section"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

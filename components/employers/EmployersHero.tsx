@@ -19,12 +19,8 @@ import Link from "next/link";
 const EmployersHero = () => {
   return (
     <section
-      className="
-        bg-brand-light
-        h-screen overflow-hidden
-        pt-24
-        flex items-center
-      "
+      className="h-screen overflow-hidden pt-24 flex items-center"
+      style={{ backgroundColor: '#f5f5f0' }}
       aria-label="For Healthcare Employers hero"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
