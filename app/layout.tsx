@@ -35,7 +35,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "ProNurtureSphere — Smarter Healthcare Workforce Management in Nigeria",
   description:
-    "ProNurtureSphere by Sphere Limited is Nigeria's digital platform for healthcare staffing, rostering, credential verification, payroll, and CPD training. Built for hospitals, clinics, and healthcare professionals.",
+    "ProNurtureSphere Limited is Nigeria's digital platform for healthcare staffing, rostering, credential verification, payroll, and CPD training. Built for hospitals, clinics, and healthcare professionals.",
   keywords: [
     "healthcare staffing Nigeria",
     "locum doctor platform Nigeria",

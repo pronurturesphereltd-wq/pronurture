@@ -165,7 +165,7 @@ const AboutTeam = () => {
 
             {/* Title */}
             <p className="text-brand-green text-sm font-semibold uppercase tracking-widest mb-6">
-              Founder & CEO, ProNurtureSphere by Sphere Limited
+              Founder & CEO, ProNurtureSphere Limited
             </p>
 
             {/* Bio */}

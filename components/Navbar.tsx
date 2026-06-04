@@ -60,7 +60,7 @@ const Navbar = () => {
             <div className="relative h-8 w-10">
               <Image
                 src="/brand-assets/Full Color Logo.svg"
-                alt="ProNurtureSphere by Sphere Limited"
+                alt="ProNurtureSphere Limited"
                 fill
                 className="object-contain object-left"
                 priority

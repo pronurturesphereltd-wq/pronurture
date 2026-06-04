@@ -1515,7 +1515,7 @@ Establishes human credibility with a prominent founder card and 6 director role 
 | Element | Content |
 |---------|---------|
 | Name | Iziegbe Asemota |
-| Title | Founder & CEO, ProNurtureSphere by Sphere Limited |
+| Title | Founder & CEO, ProNurtureSphere Limited |
 | Bio | Founded PSL on the conviction that the workforce crisis requires a complete ecosystem — education, deployment, mentorship, and technology. |
 | Avatar | Placeholder `placehold.co/160x160/103613/c09e5a?text=IA` |
 
@@ -1621,4 +1621,4 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 
 ---
 
-*Documentation maintained by Claude Code | ProNurtureSphere by Sphere Limited*
+*Documentation maintained by Claude Code | ProNurtureSphere Limited*

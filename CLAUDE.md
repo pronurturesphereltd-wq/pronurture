@@ -8,7 +8,7 @@
 
 ## 1. PROJECT OVERVIEW
 
-**Product:** ProNurtureSphere by Sphere Limited
+**Product:** ProNurtureSphere Limited
 **Type:** Marketing/product website (not a web app)
 **Purpose:** Present ProNurtureSphere's digital healthcare workforce platform to two audiences — healthcare employers and healthcare professionals in Nigeria.
 **Stack:** Next.js 15 + React 19 + TypeScript + Tailwind CSS + Sanity CMS
@@ -114,7 +114,7 @@ colors: {
 
 ## 5. ABOUT PRONURTURESPHERE (PSL)
 
-ProNurtureSphere by Sphere Limited is a **combined digital staffing, rostering, verification, payroll, and training platform** for hospitals, clinics, and staffing agencies in Nigeria.
+ProNurtureSphere Limited is a **combined digital staffing, rostering, verification, payroll, and training platform** for hospitals, clinics, and staffing agencies in Nigeria.
 
 **Core problem it solves:**
 Nigeria's health workforce faces staffing gaps, manual HR processes (WhatsApp, spreadsheets, paper rosters), and weak tracking of credentials, deployment, and continuing education.

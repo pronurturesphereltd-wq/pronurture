@@ -51,7 +51,7 @@ import AboutCTA from "@/components/about/AboutCTA";
 export const metadata = {
   title: "About ProNurtureSphere — Building the Healthcare Workforce Africa Deserves",
   description:
-    "ProNurtureSphere by Sphere Limited exists at the intersection of education, technology, and healthcare delivery — nurturing, equipping, deploying, and sustaining competent healthcare professionals across Nigeria and beyond.",
+    "ProNurtureSphere Limited exists at the intersection of education, technology, and healthcare delivery — nurturing, equipping, deploying, and sustaining competent healthcare professionals across Nigeria and beyond.",
 };
 
 export default function AboutPage() {

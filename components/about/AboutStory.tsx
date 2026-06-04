@@ -59,7 +59,7 @@ const AboutStory = () => {
             </p>
 
             <p>
-              ProNurtureSphere by Sphere Limited was founded to close that gap — not with
+              ProNurtureSphere Limited was founded to close that gap — not with
               a single tool, but with a complete ecosystem. We believe the workforce crisis
               is not a staffing problem. It is a systems problem. And systems problems require
               systems solutions.
@@ -100,7 +100,7 @@ const AboutStory = () => {
 
               <div className="mt-5 border-t border-white/10 pt-4">
                 <p className="text-brand-gold text-sm font-semibold">The founding insight</p>
-                <p className="text-white/50 text-xs mt-1">ProNurtureSphere by Sphere Limited</p>
+                <p className="text-white/50 text-xs mt-1">ProNurtureSphere Limited</p>
               </div>
             </blockquote>
 

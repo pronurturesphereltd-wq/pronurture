@@ -102,7 +102,7 @@ const Footer = () => {
               <div className="relative h-8 w-40 mb-6">
                 <Image
                   src="/brand-assets/White Mono.svg"
-                  alt="ProNurtureSphere by Sphere Limited"
+                  alt="ProNurtureSphere Limited"
                   fill
                   className="object-contain object-left"
                 />
@@ -169,7 +169,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-white/50 text-sm text-center sm:text-left">
-              © 2026 ProNurtureSphere Sphere Limited. All rights reserved.
+              © 2026 ProNurtureSphere Limited. All rights reserved.
             </p>
             <p className="text-white/40 text-xs text-center sm:text-right">
               Empowering Nigerian Healthcare Workforce

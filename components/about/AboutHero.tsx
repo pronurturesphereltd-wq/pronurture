@@ -53,7 +53,7 @@ const AboutHero = () => {
 
             {/* Subheadline — the full brand positioning statement */}
             <p className="text-gray-600 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
-              ProNurtureSphere by Sphere Limited exists at the intersection of education,
+              ProNurtureSphere Limited exists at the intersection of education,
               technology, and healthcare delivery — nurturing, equipping, deploying, and
               sustaining competent healthcare professionals across Nigeria and beyond.
             </p>
