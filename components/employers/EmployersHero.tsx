@@ -1,7 +1,7 @@
 /**
  * EmployersHero.tsx — Hero section for the For Healthcare Employers page
  *
- * White background, two-column layout: text left, dashboard visual right.
+ * Off-white (brand-light) background, two-column layout: text left, dashboard visual right.
  *
  * Per CLAUDE.md hero rules — answers 3 questions in under 3 seconds:
  *   1. What is this? → A workforce management platform
@@ -20,7 +20,7 @@ const EmployersHero = () => {
   return (
     <section
       className="
-        bg-white
+        bg-brand-light
         h-screen overflow-hidden
         pt-24
         flex items-center
