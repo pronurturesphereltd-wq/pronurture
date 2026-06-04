@@ -1,7 +1,7 @@
 # DOCS.md — ProNurtureSphere Component & Configuration Documentation
 
 > **Last updated:** 2026-06-03  
-> **Status:** Homepage + Employers page complete  
+> **Status:** Homepage + Employers + Professionals + About pages complete  
 > This is the living technical reference for the ProNurtureSphere codebase.  
 > Update this file after every new component, page, or config change.
 
@@ -1110,6 +1110,33 @@ This order follows the **Problem → Solution → Proof → Action** persuasion 
 
 ---
 
+### `/about` — About ProNurtureSphere
+
+**File:** `app/about/page.tsx`  
+**Type:** Server Component  
+**Status:** ✅ Complete
+
+**Target audience:** Both personas + partners, media, stakeholders  
+**Tone:** Mission-driven, institutional, authentic. Story page — NOT a conversion page.  
+**Section framework:** Narrative arc (Who → Why → What → How → Who We Serve → People → Operations → Action)
+
+**Section order:**
+
+```
+1. AboutHero          → Above the fold — page identity, H1, founding photograph
+2. AboutMission       → Mission (green) + Vision (light) two-column
+3. AboutStory         → Origin narrative + pull quote + founding stats
+4. AboutValues        → 7 core values card grid
+5. AboutEcosystem     → 4-pillar ecosystem model (green bg)
+6. AboutLifecycle     → 7-stage professional lifecycle model
+7. AboutWhoWeServe    → 3 audience groups: professionals, institutions, communities
+8. AboutTeam          → Founder card + 6 director role cards
+9. AboutPSLArms       → 6 operating arms of PSL
+10. AboutCTA          → Dual CTA: "Get Early Access" + "Contact Us"
+```
+
+---
+
 ### `/studio` — Sanity Studio
 
 **File:** `app/studio/[[...tool]]/page.tsx`  
@@ -1309,6 +1336,233 @@ Uses 1-second simulated delay. **TODO:** Replace with real API call including `s
 
 ---
 
+## 6. About Page Components
+
+All components live in `components/about/`. The page assembler is `app/about/page.tsx`.
+
+**Target audience:** Both buyer personas + partners, media, institutional stakeholders  
+**Tone:** Mission-driven, institutional, warm, authentic — story page not conversion page  
+**Section framework:** Narrative arc (identity → mission → story → values → how we work → who we serve → people → operations → action)
+
+---
+
+### 6.1 `components/about/AboutHero.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Above-the-fold hero for the `/about` page. Establishes organisational identity from first glance. Unlike the employers/professionals heroes, there are no CTA buttons — the goal is to draw the visitor into the story, not convert them immediately.
+
+#### Key Content
+
+| Element | Content |
+|---------|---------|
+| Badge | "About ProNurtureSphere" with green pulse dot |
+| H1 | "Building the Healthcare Workforce Africa Deserves." |
+| Subheadline | Full brand positioning statement — education, technology, healthcare delivery |
+| Decorative divider | Brand-dark + brand-gold + brand-green colour dots |
+| Right panel | Deep green container with placeholder image + "Est. 2024" founding badge |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| No CTA buttons | This is a story page. Buttons in the hero would signal "sell" when the tone should be "tell." The CTA at the bottom of the page serves the conversion need. |
+| `min-h-screen` (not `h-screen`) | About page hero doesn't need strict viewport locking — content-first layout. |
+| "Est. 2024" founding badge | Anchors the organisation in time. Stakeholders and partners look for this. |
+| Decorative bar (dark + gold + green) | Uses all three primary brand colours as a visual punctuation mark below the text. |
+
+---
+
+### 6.2 `components/about/AboutMission.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Presents mission and vision as two equal, visually contrasted statements. Placed immediately after the hero so the organisational north star is established before the story begins.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Deep green left / off-white right | Green = roots/foundation (mission). Light = aspiration/future (vision). Colour carries meaning. |
+| `<blockquote>` element | Semantic HTML — mission/vision statements are quotations from the organisation's founding charter. |
+| No body copy, just the statements | Both statements are long enough to stand alone. Adding explanatory text would dilute them. |
+
+---
+
+### 6.3 `components/about/AboutStory.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+The origin narrative. Answers "why does this organisation exist?" with five paragraphs of authentic, locally-grounded prose. A pull quote isolates the central founding insight. Two stat cards give the story institutional weight.
+
+#### Key Content
+
+| Element | Detail |
+|---------|--------|
+| H2 | "Why We Built ProNurtureSphere." |
+| Narrative | 5 paragraphs: problem (demand-supply gap) → employer pain → professional pain → founding decision → platform solution |
+| Pull quote | "Healthcare professionals are trained but not nurtured into sustainable excellence." |
+| Stat card 1 | 72k+ nurses with lapsed licences annually |
+| Stat card 2 | 1:8,000 doctor-to-patient ratio vs 1:600 WHO recommendation |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| 3:2 column split (prose left, quote right) | Prose gets the majority space — it is the content. The pull quote is accent, not equal weight. |
+| Stats sourced from real data context | Specific numbers beat vague claims. These figures contextualise the scale of the problem PSL was founded to address. |
+| Pull quote on `bg-brand-dark` with gold left border | The visual treatment isolates the most important insight on the entire About page — it must stand apart from the prose. |
+
+---
+
+### 6.4 `components/about/AboutValues.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Makes organisational character concrete and scannable. Seven values in a card grid — each with an icon, title, and 1–2 sentence description.
+
+#### Seven Values
+
+| Value | Core Message |
+|-------|-------------|
+| Compassion | Empathy, dignity, respect for human life |
+| Excellence | Evidence-based, clinical competence, international standards |
+| Integrity | Ethical practice, transparency, regulatory compliance |
+| Nurturing Leadership | Developing people, not just professionals |
+| Innovation | Forward-thinking: education + technology integrated |
+| Equity & Inclusion | Access regardless of geography or background |
+| Collaboration | Strategic partnerships that multiply impact |
+
+---
+
+### 6.5 `components/about/AboutEcosystem.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Repositions PSL from "training company" to "healthcare ecosystem builder." The 4-pillar connected flow communicates that the four stages are sequential and interdependent — not four separate products.
+
+#### Four Pillars
+
+| Stage | Outcome | Description |
+|-------|---------|-------------|
+| Training | Competence | PSL Learning Academy programmes |
+| Mentorship | Confidence | Cohort-based mentorship |
+| Deployment | Experience | Verified workforce placement |
+| Leadership | Sustainability | Advanced leadership pathways |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `bg-brand-dark` section | Dark green after the light values section — visual rhythm and authority |
+| Arrow connectors between pillars (desktop) | Shows sequential flow. Pillars are stages, not silos. |
+| Gold insight bar at the bottom | Closes the section with a unified statement — "PSL integrates all four." |
+
+---
+
+### 6.6 `components/about/AboutLifecycle.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Makes the ecosystem model tangible via 7 named career stages. Each stage includes a programme title, description, and numbered step circle. Visitors can identify where they currently are in the lifecycle.
+
+#### Seven Stages
+
+| # | Stage | Subtitle |
+|---|-------|----------|
+| 01 | Awareness | Career guidance & community outreach |
+| 02 | Training | PSL Learning Academy programmes |
+| 03 | Mentorship | Structured mentorship cohorts |
+| 04 | Certification & Competence | Clinical readiness validation |
+| 05 | Deployment | Staffing & workforce placement |
+| 06 | Practice Support | Continuous education & supervision |
+| 07 | Leadership Development | Advanced leadership & consultancy pathways |
+
+---
+
+### 6.7 `components/about/AboutWhoWeServe.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Names all three audiences explicitly so each visitor can identify themselves. Three equal columns with audience lists and green checkmark bullets.
+
+#### Three Audience Groups
+
+| Group | Key Audiences |
+|-------|--------------|
+| Healthcare Professionals | Doctors, nurses, pharmacists, allied health, students |
+| Healthcare Institutions | Hospitals, clinics, NGOs, universities, agencies |
+| Communities | Elderly, chronic disease patients, underserved communities |
+
+---
+
+### 6.8 `components/about/AboutTeam.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Establishes human credibility with a prominent founder card and 6 director role cards. Names for director roles are intentionally absent — will be added when leadership is publicly confirmed.
+
+#### Founder Card
+
+| Element | Content |
+|---------|---------|
+| Name | Iziegbe Asemota |
+| Title | Founder & CEO, ProNurtureSphere by Sphere Limited |
+| Bio | Founded PSL on the conviction that the workforce crisis requires a complete ecosystem — education, deployment, mentorship, and technology. |
+| Avatar | Placeholder `placehold.co/160x160/103613/c09e5a?text=IA` |
+
+#### Six Director Roles (names TBC)
+
+Director of Clinical Services · Director of Education & Training · Director of Workforce & Staffing Solutions · Director of Operations & Compliance · Director of Partnerships & Global Development · Director of Homecare & Wellness Services
+
+> ⚠️ Replace placeholder avatar with real founder photograph before launch. Add director names when confirmed.
+
+---
+
+### 6.9 `components/about/AboutPSLArms.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Documents all six operating divisions of PSL. Each card has a colour-accented top border (brand-dark / brand-green / brand-gold alternating) to visually differentiate the arms while maintaining brand cohesion.
+
+#### Six Arms
+
+| Arm | Tagline | Top Border |
+|-----|---------|------------|
+| PSL Learning Academy | Education & Professional Development | brand-dark |
+| PSL Workforce Solutions | Staffing & Global Deployment | brand-green |
+| PSL Homecare & Wellness | Community & Domiciliary Care | brand-gold |
+| PSL Clinical Services | Healthcare Delivery Programmes | brand-dark |
+| PSL Global Health Consulting | Health Systems Strengthening | brand-green |
+| PSL Foundation | Outreach, Scholarships & Humanitarian | brand-gold |
+
+---
+
+### 6.10 `components/about/AboutCTA.tsx`
+
+**Type:** Server Component (no form state — uses `<Link>` not email input)
+
+#### Purpose
+Final dual-action CTA. Serves both audiences explicitly named in the subtext. Deep green background consistent with all CTA sections site-wide.
+
+#### Two CTAs
+
+| Button | Destination | Style |
+|--------|-------------|-------|
+| "Get Early Access" | `/waitlist` | Gold `bg-brand-gold text-brand-dark` |
+| "Contact Us" | `/contact` | Outlined white `border-white/40 text-white` |
+
+---
+
 ## 5. Sanity CMS Schemas
 
 All schemas in `sanity/schemaTypes/`. Studio at `http://localhost:3000/studio` (local) or `/studio` (production).
@@ -1356,10 +1610,9 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 
 ### Next pages to build (priority order)
 1. `/waitlist` — standalone waitlist page (the CTA destination — must exist before launch)
-2. `/about` — About page
-5. `/blog` — Blog listing page
-6. `/blog/[slug]` — Individual blog post page
-7. `/contact` — Contact page
+2. `/contact` — Contact page
+3. `/blog` — Blog listing page
+4. `/blog/[slug]` — Individual blog post page
 
 ### Infrastructure
 - [ ] Add `app/api/waitlist/route.ts` — API route for waitlist form submissions

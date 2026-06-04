@@ -101,7 +101,7 @@ colors: {
 | Homepage | `/` | ✅ Complete |
 | For Healthcare Employers | `/employers` | ✅ Complete |
 | For Healthcare Professionals | `/professionals` | ✅ Complete |
-| About | `/about` | 🔲 Not started |
+| About | `/about` | ✅ Complete |
 | Blog / Resources | `/blog` | 🔲 Not started |
 | Blog Post | `/blog/[slug]` | 🔲 Not started |
 | Contact | `/contact` | 🔲 Not started |
@@ -435,3 +435,4 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-05-27 | HeroSection redesign — light layout (bg-brand-light), text-brand-dark headline, gray-600 subheadline, deep green accent panel on right, h-[calc(100vh-80px)] viewport fit, dark/inverted CTA buttons, mobile image fallback | HeroSection.tsx |
 | 2026-06-03 | Built complete For Healthcare Employers page — EmployersHero, EmployersPainPoints, EmployersTransformation, EmployersFeatures, EmployersHowItWorks, EmployersTestimonials, EmployersFAQ (client), EmployersCTA (client) — 8 components in components/employers/ | `/employers` |
 | 2026-06-03 | Built complete For Healthcare Professionals page — ProfessionalsHero, ProfessionalsPainPoints, ProfessionalsTransformation, ProfessionalsFeatures, ProfessionalsHowItWorks, ProfessionalsTestimonials, ProfessionalsFAQ (client), ProfessionalsCTA (client) — 8 components in components/professionals/ | `/professionals` |
+| 2026-06-03 | Built complete About page — AboutHero, AboutMission, AboutStory, AboutValues, AboutEcosystem, AboutLifecycle, AboutWhoWeServe, AboutTeam, AboutPSLArms, AboutCTA — 10 components in components/about/ | `/about` |
