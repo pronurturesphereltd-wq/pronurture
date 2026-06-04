@@ -56,13 +56,6 @@ const AboutHero = () => {
               technology, and healthcare delivery — nurturing, equipping, deploying, and
               sustaining competent healthcare professionals across Nigeria and beyond.
             </p>
-
-            {/* Decorative divider — visual breathing space before the scroll cue */}
-            <div className="mt-10 flex items-center gap-4 justify-center lg:justify-start">
-              <div className="w-12 h-1 rounded-full bg-brand-dark" aria-hidden="true" />
-              <div className="w-4 h-1 rounded-full bg-brand-gold" aria-hidden="true" />
-              <div className="w-2 h-1 rounded-full bg-brand-green" aria-hidden="true" />
-            </div>
           </div>
 
           {/* ── Right: Visual Panel (desktop) ──────────────────────────────── */}
