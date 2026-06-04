@@ -34,7 +34,7 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     quote:
-      "Before ProNurture, filling an emergency locum shift meant 2 hours of WhatsApp messages and phone calls. Now it takes 15 minutes. The credential verification feature alone has removed so much risk from our hiring process.",
+      "Before ProNurtureSphere, filling an emergency locum shift meant 2 hours of WhatsApp messages and phone calls. Now it takes 15 minutes. The credential verification feature alone has removed so much risk from our hiring process.",
     name: "Dr. Chidinma Eze",
     role: "Medical Director",
     organisation: "Sterling Health Hospital, Lagos",
@@ -43,7 +43,7 @@ const testimonials: Testimonial[] = [
   },
   {
     quote:
-      "I've worked locum shifts through three different platforms and ProNurture is the first one that actually paid on time, every time. The CPD modules are also the most relevant I've found for the Nigerian clinical context.",
+      "I've worked locum shifts through three different platforms and ProNurtureSphere is the first one that actually paid on time, every time. The CPD modules are also the most relevant I've found for the Nigerian clinical context.",
     name: "Dr. Emeka Okonkwo",
     role: "General Practitioner",
     organisation: "Locum Professional, Abuja",
@@ -82,7 +82,7 @@ const TestimonialsSection = () => {
 
           <p className="text-brand-dark/60 text-lg">
             From Lagos to Port Harcourt — here&apos;s what healthcare professionals
-            and administrators say about ProNurture.
+            and administrators say about ProNurtureSphere.
           </p>
         </div>
 

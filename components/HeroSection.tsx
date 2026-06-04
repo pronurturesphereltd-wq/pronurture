@@ -62,7 +62,7 @@ const HeroSection = () => {
             {/* Subheadline — muted gray, smaller to conserve vertical space */}
             <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4 max-w-xl mx-auto lg:mx-0">
               From digital rostering and payroll to verified locum staffing and
-              CPD management — ProNurture gives Nigerian healthcare organisations
+              CPD management — ProNurtureSphere gives Nigerian healthcare organisations
               one platform to manage their entire workforce.
             </p>
 
@@ -149,8 +149,8 @@ const HeroSection = () => {
               {/* Platform screenshot */}
               <div className="relative rounded-xl overflow-hidden shadow-xl mb-3">
                 <img
-                  src="https://placehold.co/560x300/1a5c1a/ffffff?text=ProNurture+Platform"
-                  alt="ProNurture workforce management platform dashboard"
+                  src="https://placehold.co/560x300/1a5c1a/ffffff?text=ProNurtureSphere+Platform"
+                  alt="ProNurtureSphere workforce management platform dashboard"
                   className="w-full h-auto block"
                 />
               </div>
@@ -187,8 +187,8 @@ const HeroSection = () => {
               />
               <div className="relative rounded-lg overflow-hidden">
                 <img
-                  src="https://placehold.co/400x220/1a5c1a/ffffff?text=ProNurture+Platform"
-                  alt="ProNurture workforce management platform dashboard"
+                  src="https://placehold.co/400x220/1a5c1a/ffffff?text=ProNurtureSphere+Platform"
+                  alt="ProNurtureSphere workforce management platform dashboard"
                   className="w-full h-auto block rounded-lg"
                 />
               </div>

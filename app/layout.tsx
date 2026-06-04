@@ -3,7 +3,7 @@
  *
  * This is the outermost shell for every page on the site.
  * It provides:
- * - DM Sans font (ProNurture brand typography) via next/font/google
+ * - DM Sans font (ProNurtureSphere brand typography) via next/font/google
  * - Global metadata for SEO
  * - Navbar (top of every page)
  * - Footer (bottom of every page)
@@ -20,7 +20,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 /**
- * DM Sans — ProNurture's primary brand font.
+ * DM Sans — ProNurtureSphere's primary brand font.
  * We expose it as a CSS variable (--font-dm-sans) so globals.css can
  * reference it in --font-sans, applying it site-wide via Tailwind.
  */
@@ -33,9 +33,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ProNurture — Smarter Healthcare Workforce Management in Nigeria",
+  title: "ProNurtureSphere — Smarter Healthcare Workforce Management in Nigeria",
   description:
-    "ProNurture by Sphere Limited is Nigeria's digital platform for healthcare staffing, rostering, credential verification, payroll, and CPD training. Built for hospitals, clinics, and healthcare professionals.",
+    "ProNurtureSphere by Sphere Limited is Nigeria's digital platform for healthcare staffing, rostering, credential verification, payroll, and CPD training. Built for hospitals, clinics, and healthcare professionals.",
   keywords: [
     "healthcare staffing Nigeria",
     "locum doctor platform Nigeria",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     "nursing jobs Lagos",
   ],
   openGraph: {
-    title: "ProNurture — Smarter Healthcare Workforce Management",
+    title: "ProNurtureSphere — Smarter Healthcare Workforce Management",
     description:
       "Nigeria's all-in-one platform for digital staffing, rostering, payroll, and CPD management.",
     type: "website",

@@ -73,7 +73,7 @@ const WaitlistSection = () => {
   return (
     <section
       className="relative bg-brand-dark py-24 lg:py-32 overflow-hidden"
-      aria-label="Join the ProNurture waitlist"
+      aria-label="Join the ProNurtureSphere waitlist"
     >
       {/* Background decoration — same dot grid as hero for visual consistency */}
       <div
@@ -226,7 +226,7 @@ const WaitlistSection = () => {
 
         {/* Privacy note — reduces email anxiety */}
         <p className="mt-5 text-white/40 text-xs">
-          🔒 No spam, ever. Your email is only used for ProNurture early access updates.
+          🔒 No spam, ever. Your email is only used for ProNurtureSphere early access updates.
           Unsubscribe anytime.
         </p>
 

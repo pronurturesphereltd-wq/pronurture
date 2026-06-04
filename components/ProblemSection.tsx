@@ -2,7 +2,7 @@
  * ProblemSection.tsx — "The Problem" section
  *
  * Position: After the social proof bar.
- * Purpose: Agitate the pain points that ProNurture solves.
+ * Purpose: Agitate the pain points that ProNurtureSphere solves.
  *          Good marketing acknowledges the problem before presenting the solution.
  *          This creates empathy and makes the solution feel necessary, not optional.
  *
@@ -174,7 +174,7 @@ const ProblemSection = () => {
         {/* ── Transition teaser ──────────────────────────────────────────── */}
         {/* Sets up the solution reveal in FeaturesSection below */}
         <p className="text-center mt-4 text-brand-dark/50 text-sm italic">
-          ProNurture was built specifically to solve every one of these problems.
+          ProNurtureSphere was built specifically to solve every one of these problems.
         </p>
       </div>
     </section>

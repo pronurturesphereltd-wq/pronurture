@@ -1,4 +1,4 @@
-# CLAUDE.md — ProNurture Website Project Guide
+# CLAUDE.md — ProNurtureSphere Website Project Guide
 
 > This file is the single source of truth for all AI agents (Claude Code, etc.) working on this project.
 > It must be updated after every major feature or page is completed.
@@ -8,9 +8,9 @@
 
 ## 1. PROJECT OVERVIEW
 
-**Product:** ProNurture by Sphere Limited
+**Product:** ProNurtureSphere by Sphere Limited
 **Type:** Marketing/product website (not a web app)
-**Purpose:** Present ProNurture's digital healthcare workforce platform to two audiences — healthcare employers and healthcare professionals in Nigeria.
+**Purpose:** Present ProNurtureSphere's digital healthcare workforce platform to two audiences — healthcare employers and healthcare professionals in Nigeria.
 **Stack:** Next.js 15 + React 19 + TypeScript + Tailwind CSS + Sanity CMS
 **Repo:** https://github.com/pronurturesphereltd-wq/pronurture.git
 **Live URL:** Deployed on Vercel (auto-deploys on push to main)
@@ -112,9 +112,9 @@ colors: {
 
 ---
 
-## 5. ABOUT PRONURTURE (PSL)
+## 5. ABOUT PRONURTURESPHERE (PSL)
 
-ProNurture by Sphere Limited is a **combined digital staffing, rostering, verification, payroll, and training platform** for hospitals, clinics, and staffing agencies in Nigeria.
+ProNurtureSphere by Sphere Limited is a **combined digital staffing, rostering, verification, payroll, and training platform** for hospitals, clinics, and staffing agencies in Nigeria.
 
 **Core problem it solves:**
 Nigeria's health workforce faces staffing gaps, manual HR processes (WhatsApp, spreadsheets, paper rosters), and weak tracking of credentials, deployment, and continuing education.
@@ -375,7 +375,7 @@ p   — Body copy, adds context, readable line length (60–80 chars)
 - Tailwind's grid and container classes handle this automatically
 - Never let elements float randomly — everything snaps to the grid
 
-### Color Theory — ProNurture Application
+### Color Theory — ProNurtureSphere Application
 - **Deep Green `#103613`** — trust, authority, health (primary brand)
 - **Yellow Green `#7a853e`** — energy, growth, approachability
 - **Gold `#c09e5a`** — warmth, premium, not clinical — use for CTAs and accents

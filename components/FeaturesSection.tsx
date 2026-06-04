@@ -124,7 +124,7 @@ const FeaturesSection = () => {
           </h2>
 
           <p className="text-brand-dark/65 text-lg leading-relaxed">
-            ProNurture replaces the fragmented tools with a single, connected system
+            ProNurtureSphere replaces the fragmented tools with a single, connected system
             designed specifically for Nigerian healthcare operations — from first
             shift post to payslip.
           </p>

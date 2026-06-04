@@ -55,17 +55,18 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
 
           {/* ── Logo ─────────────────────────────────────────────────────── */}
-          <Link href="/" className="flex-shrink-0" aria-label="ProNurture home">
+          <Link href="/" className="flex-shrink-0 flex items-center gap-3" aria-label="ProNurtureSphere home">
             {/* Always show Full Color Logo on white navbar background */}
-            <div className="relative h-8 w-40">
+            <div className="relative h-8 w-10">
               <Image
                 src="/brand-assets/Full Color Logo.svg"
-                alt="ProNurture by Sphere Limited"
+                alt="ProNurtureSphere by Sphere Limited"
                 fill
                 className="object-contain object-left"
                 priority
               />
             </div>
+            <span className="text-brand-dark font-bold text-lg">ProNurtureSphere</span>
           </Link>
 
           {/* ── Desktop Navigation Links ──────────────────────────────────── */}

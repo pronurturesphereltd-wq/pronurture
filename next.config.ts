@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 /**
- * next.config.ts — Next.js configuration for ProNurture
+ * next.config.ts — Next.js configuration for ProNurtureSphere
  *
  * Key settings:
  * - remotePatterns: allows next/image to load from placehold.co (placeholder images

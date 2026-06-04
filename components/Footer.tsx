@@ -30,7 +30,7 @@ const footerColumns = [
   {
     heading: "Company",
     links: [
-      { label: "About ProNurture", href: "/about" },
+      { label: "About ProNurtureSphere", href: "/about" },
       { label: "Blog & Resources", href: "/blog" },
       { label: "Contact Us", href: "/contact" },
       { label: "Join the Waitlist", href: "/waitlist" },
@@ -98,11 +98,11 @@ const Footer = () => {
           {/* ── Brand Column ─────────────────────────────────────────────── */}
           <div className="lg:col-span-1">
             {/* White Mono logo — correct for dark green background */}
-            <Link href="/" aria-label="ProNurture home">
+            <Link href="/" aria-label="ProNurtureSphere home">
               <div className="relative h-8 w-40 mb-6">
                 <Image
                   src="/brand-assets/White Mono.svg"
-                  alt="ProNurture by Sphere Limited"
+                  alt="ProNurtureSphere by Sphere Limited"
                   fill
                   className="object-contain object-left"
                 />
@@ -122,7 +122,7 @@ const Footer = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Follow ProNurture on ${social.label}`}
+                  aria-label={`Follow ProNurtureSphere on ${social.label}`}
                   className="
                     text-white/60 hover:text-brand-gold
                     transition-colors duration-200
@@ -169,7 +169,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-white/50 text-sm text-center sm:text-left">
-              © 2026 ProNurture Sphere Limited. All rights reserved.
+              © 2026 ProNurtureSphere Sphere Limited. All rights reserved.
             </p>
             <p className="text-white/40 text-xs text-center sm:text-right">
               Empowering Nigerian Healthcare Workforce

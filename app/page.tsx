@@ -1,7 +1,7 @@
 /**
  * app/page.tsx — Homepage (route: /)
  *
- * This is the entry point for all visitors to the ProNurture website.
+ * This is the entry point for all visitors to the ProNurtureSphere website.
  * It assembles all homepage sections in the correct conversion-optimised order:
  *
  * 1. HeroSection       — Grabs attention, communicates value proposition, drives CTAs

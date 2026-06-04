@@ -44,7 +44,7 @@ const columns: AudienceColumn[] = [
     eyebrow: "For Healthcare Facilities",
     heading: "Run Your Facility with Precision",
     subheading:
-      "Stop firefighting staffing gaps. ProNurture gives administrators real-time control over rosters, verified locum access, automated compliance, and payroll — in one dashboard.",
+      "Stop firefighting staffing gaps. ProNurtureSphere gives administrators real-time control over rosters, verified locum access, automated compliance, and payroll — in one dashboard.",
     benefits: [
       { text: "Post shifts and fill gaps in under 30 minutes" },
       { text: "Hire only verified, credentialed professionals" },
@@ -63,7 +63,7 @@ const columns: AudienceColumn[] = [
     eyebrow: "For Healthcare Professionals",
     heading: "Find Shifts. Earn More. Grow Faster.",
     subheading:
-      "Whether you&apos;re a doctor, nurse, pharmacist, or allied health professional — ProNurture connects you with verified employers, flexible locum shifts, and accredited CPD courses.",
+      "Whether you&apos;re a doctor, nurse, pharmacist, or allied health professional — ProNurtureSphere connects you with verified employers, flexible locum shifts, and accredited CPD courses.",
     benefits: [
       { text: "Browse verified locum shifts near you" },
       { text: "Get paid quickly — no payment delays" },
@@ -84,7 +84,7 @@ const AudienceSection = () => {
   return (
     <section
       className="w-full"
-      aria-label="Who ProNurture is for"
+      aria-label="Who ProNurtureSphere is for"
     >
       {/* Full-width two-column grid — no container constraints intentionally */}
       <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -111,7 +111,7 @@ const AudienceSection = () => {
                 // Note: &apos; handled in JSX directly below
               >
                 {col.eyebrow === "For Healthcare Professionals"
-                  ? "Whether you're a doctor, nurse, pharmacist, or allied health professional — ProNurture connects you with verified employers, flexible locum shifts, and accredited CPD courses."
+                  ? "Whether you're a doctor, nurse, pharmacist, or allied health professional — ProNurtureSphere connects you with verified employers, flexible locum shifts, and accredited CPD courses."
                   : col.subheading}
               </p>
 

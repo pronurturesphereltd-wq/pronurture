@@ -1,8 +1,8 @@
-# DOCS.md — ProNurture Component & Configuration Documentation
+# DOCS.md — ProNurtureSphere Component & Configuration Documentation
 
 > **Last updated:** 2026-05-27  
 > **Status:** Homepage complete  
-> This is the living technical reference for the ProNurture codebase.  
+> This is the living technical reference for the ProNurtureSphere codebase.  
 > Update this file after every new component, page, or config change.
 
 ---
@@ -40,7 +40,7 @@
 
 ### 1.1 `app/globals.css`
 
-**Purpose:** Global stylesheet. Defines the ProNurture design token system using Tailwind CSS v4's `@theme` directive, sets body/HTML base styles, and enables smooth scrolling for anchor navigation.
+**Purpose:** Global stylesheet. Defines the ProNurtureSphere design token system using Tailwind CSS v4's `@theme` directive, sets body/HTML base styles, and enables smooth scrolling for anchor navigation.
 
 **Key changes from default:**
 
@@ -128,7 +128,7 @@ Once real photography is uploaded (Sanity CDN, Vercel Blob, or a custom CDN), ad
 | `antialiased` on `<body>` | Enables sub-pixel font rendering on macOS/retina screens — standard practice for premium-looking text. |
 
 **SEO metadata configured:**
-- Title: "ProNurture — Smarter Healthcare Workforce Management in Nigeria"
+- Title: "ProNurtureSphere — Smarter Healthcare Workforce Management in Nigeria"
 - Description: Platform summary for Google snippets
 - Keywords: "healthcare staffing Nigeria", "locum doctor platform Nigeria", etc.
 - OpenGraph: `type: "website"` with title + description for social sharing
@@ -299,7 +299,7 @@ Social links are in the `socialLinks` array, each with a `label`, `href`, and in
 |----------|-----|
 | `White Mono.svg` logo | The footer background is deep green. The full-colour logo has a dark green wordmark that would be near-invisible. White Mono provides maximum contrast. |
 | `text-white/60` for link text | 60% opacity white reads comfortably on dark green without the harshness of pure white. It also creates a visual hierarchy where the column headings (pure white) stand out. |
-| `hover:text-brand-gold` on links | Consistent hover state across the site — gold is the interactive accent colour in the ProNurture palette. |
+| `hover:text-brand-gold` on links | Consistent hover state across the site — gold is the interactive accent colour in the ProNurtureSphere palette. |
 | `border-t border-white/10` before bottom bar | A very subtle separator — dark enough to be visible, light enough to not interrupt the flow. |
 | `rel="noopener noreferrer"` on social links | Security best practice for all external `target="_blank"` links. Prevents the opened page from accessing `window.opener`. |
 
@@ -404,7 +404,7 @@ Stats are defined in the `stats` array at the top of the file. Edit this array t
 **File:** `components/ProblemSection.tsx`
 
 #### Purpose
-Agitates the pain points that ProNurture solves. Placed before the Features section deliberately — good marketing acknowledges the problem first, creating empathy and making the solution feel necessary rather than optional.
+Agitates the pain points that ProNurtureSphere solves. Placed before the Features section deliberately — good marketing acknowledges the problem first, creating empathy and making the solution feel necessary rather than optional.
 
 #### Props
 None.
@@ -435,7 +435,7 @@ Icons use amber/warning tones (`bg-amber-50 text-amber-600`) by default — ambe
 | Decision | Why |
 |----------|-----|
 | `bg-brand-white` (pure white) | Contrast after the off-white SocialProofBar. White + amber icons = clinical problem-identification tone. |
-| Transition teaser at the bottom | "ProNurture was built specifically to solve every one of these problems." — a bridge sentence into FeaturesSection. Keeps the narrative flowing. |
+| Transition teaser at the bottom | "ProNurtureSphere was built specifically to solve every one of these problems." — a bridge sentence into FeaturesSection. Keeps the narrative flowing. |
 | Specific, vivid descriptions | Vague problem descriptions don't resonate. "WhatsApp groups, paper rosters, 10 messages, 3 phone calls" creates recognition for people who live this reality. |
 | H2 with emotionally loaded words | "Understaffed and Overworked" — these words mirror how the target persona describes their own experience, creating immediate resonance. |
 
@@ -447,7 +447,7 @@ Icons use amber/warning tones (`bg-amber-50 text-amber-600`) by default — ambe
 **File:** `components/FeaturesSection.tsx`
 
 #### Purpose
-The solution reveal — presents the 6 core ProNurture platform features that solve the problems shown above. Anchored at `id="features"` so the hero's "See How It Works" CTA can scroll-link here.
+The solution reveal — presents the 6 core ProNurtureSphere platform features that solve the problems shown above. Anchored at `id="features"` so the hero's "See How It Works" CTA can scroll-link here.
 
 #### Props
 None.
@@ -606,7 +606,7 @@ Three testimonials cover three distinct user archetypes — hospital administrat
 | `flex flex-col` + `flex-1` on quote | Makes all three cards the same height even if quote lengths differ. The quote stretches to fill available space, keeping the attribution row pinned to the bottom of each card. |
 | Hover: `border-brand-green/20 shadow-lg` | Subtle interactive feedback — cards lift slightly to acknowledge user hover without being distracting. |
 
-> ⚠️ **IMPORTANT:** Replace placeholder testimonials with real, verified quotes from actual ProNurture users after the beta launch. Fake testimonials damage credibility if discovered. The Sanity `testimonial` collection schema is ready for real content.
+> ⚠️ **IMPORTANT:** Replace placeholder testimonials with real, verified quotes from actual ProNurtureSphere users after the beta launch. Fake testimonials damage credibility if discovered. The Sanity `testimonial` collection schema is ready for real content.
 
 ---
 
@@ -644,7 +644,7 @@ interface StatItem {
 
 | Decision | Why |
 |----------|-----|
-| `text-brand-gold` on numbers | Gold numbers on deep green = the highest contrast ratio in the ProNurture palette. The numbers must jump off the screen. |
+| `text-brand-gold` on numbers | Gold numbers on deep green = the highest contrast ratio in the ProNurtureSphere palette. The numbers must jump off the screen. |
 | `text-5xl sm:text-6xl lg:text-7xl` | Deliberately enormous. These numbers are meant to impress — small type defeats the purpose. |
 | Same background as hero and waitlist | Deep green in three positions (hero, stats, waitlist) creates a rhythmic brand-colour anchoring throughout the scroll journey. |
 | `lg:border-r lg:border-white/10` dividers | Subtle separators only on desktop — on mobile the 2-column grid provides natural separation. Avoids cluttered dividers on small screens. |
@@ -880,4 +880,4 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 
 ---
 
-*Documentation maintained by Claude Code | ProNurture by Sphere Limited*
+*Documentation maintained by Claude Code | ProNurtureSphere by Sphere Limited*
