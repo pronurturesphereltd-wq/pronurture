@@ -14,7 +14,6 @@
  * h-screen + pt-24 ensures full hero fits above the fold with the fixed Navbar.
  */
 
-import Image from "next/image";
 
 const AboutHero = () => {
   return (
@@ -97,13 +96,10 @@ const AboutHero = () => {
 
               {/* Hero photograph placeholder */}
               <div className="relative rounded-2xl overflow-hidden shadow-xl mb-4">
-                <Image
-                  src="https://placehold.co/560x340/103613/ffffff?text=Nigerian+Healthcare+Professionals"
-                  alt="Nigerian healthcare professionals in a clinical setting — doctors, nurses, and allied health workers"
-                  width={560}
-                  height={340}
-                  className="w-full h-auto block"
-                  priority
+                <img
+                  src="https://placehold.co/600x500/103613/ffffff?text=ProNurtureSphere+Team"
+                  alt="ProNurtureSphere healthcare team"
+                  className="w-full h-full object-cover rounded-2xl"
                 />
               </div>
 
@@ -123,7 +119,7 @@ const AboutHero = () => {
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-brand-dark font-bold text-sm leading-tight">ProNurtureSphere by Sphere Ltd</p>
+                  <p className="text-brand-dark font-bold text-sm leading-tight">ProNurtureSphere Limited</p>
                   <p className="text-gray-500 text-xs mt-0.5">Nurturing healthcare workforce excellence</p>
                 </div>
                 <span className="flex-shrink-0 text-xs font-bold text-brand-green bg-brand-green/10 px-2 py-1 rounded-full">
@@ -145,12 +141,10 @@ const AboutHero = () => {
                 aria-hidden="true"
               />
               <div className="relative rounded-xl overflow-hidden mb-3">
-                <Image
-                  src="https://placehold.co/400x240/103613/ffffff?text=Healthcare+Professionals"
-                  alt="Nigerian healthcare professionals"
-                  width={400}
-                  height={240}
-                  className="w-full h-auto block rounded-xl"
+                <img
+                  src="https://placehold.co/400x240/103613/ffffff?text=ProNurtureSphere+Team"
+                  alt="ProNurtureSphere healthcare team"
+                  className="w-full h-full object-cover rounded-xl"
                 />
               </div>
               <div className="relative bg-white rounded-xl p-3 flex items-center gap-2">
@@ -160,7 +154,7 @@ const AboutHero = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-brand-dark font-bold text-xs">ProNurtureSphere by Sphere Ltd</p>
+                  <p className="text-brand-dark font-bold text-xs">ProNurtureSphere Limited</p>
                   <p className="text-gray-500 text-xs">Nurturing healthcare excellence</p>
                 </div>
                 <span className="ml-auto text-xs font-bold text-brand-green bg-brand-green/10 px-2 py-0.5 rounded-full">
