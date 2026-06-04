@@ -1,7 +1,7 @@
 # DOCS.md — ProNurtureSphere Component & Configuration Documentation
 
-> **Last updated:** 2026-05-27  
-> **Status:** Homepage complete  
+> **Last updated:** 2026-06-03  
+> **Status:** Homepage + Employers page complete  
 > This is the living technical reference for the ProNurtureSphere codebase.  
 > Update this file after every new component, page, or config change.
 
@@ -27,10 +27,19 @@
    - [StatsSection](#39-componentsstatssectiontsx)
    - [BlogPreviewSection](#310-componentsblogpreviewsectiontsx)
    - [WaitlistSection](#311-componentswaitlistsectiontsx)
-4. [Pages](#4-pages)
-5. [Sanity CMS Schemas](#5-sanity-cms-schemas)
-6. [Environment Variables](#6-environment-variables)
-7. [TODOs & Next Steps](#7-todos--next-steps)
+4. [Employers Page Components](#4-employers-page-components)
+   - [EmployersHero](#41-componentsemployersemployersherotsx)
+   - [EmployersPainPoints](#42-componentsemployersemployerspainpointstsx)
+   - [EmployersTransformation](#43-componentsemployersemployerstransformationtsx)
+   - [EmployersFeatures](#44-componentsemployersemployersfeaturestsx)
+   - [EmployersHowItWorks](#45-componentsemployersemployershow-it-workstsx)
+   - [EmployersTestimonials](#46-componentsemployersemployerstestimonialtsx)
+   - [EmployersFAQ](#47-componentsemployersemployersfaqtsx)
+   - [EmployersCTA](#48-componentsemployersemployersctатsx)
+5. [Pages](#5-pages)
+6. [Sanity CMS Schemas](#6-sanity-cms-schemas)
+7. [Environment Variables](#7-environment-variables)
+8. [TODOs & Next Steps](#8-todos--next-steps)
 
 ---
 
@@ -786,7 +795,250 @@ See `app/api/waitlist/route.ts` (to be created) for the API route.
 
 ---
 
-## 4. Pages
+---
+
+## 4. Employers Page Components
+
+All components live in `components/employers/`. The page assembler is `app/employers/page.tsx`.
+
+**Target persona:** Dr. Adaeze Okafor — Hospital Administrator / Medical Director / HR Manager  
+**Tone:** Formal, data-driven, ROI-focused, compliance-aware  
+**Section framework:** AIDA (Attention → Interest → Desire → Action)
+
+---
+
+### 4.1 `components/employers/EmployersHero.tsx`
+
+**Type:** Server Component  
+**File:** `components/employers/EmployersHero.tsx`
+
+#### Purpose
+Above-the-fold hero for the `/employers` page. White background, two-column layout (text left, dashboard panel right). Answers what/who/why in under 3 seconds for the employer persona specifically.
+
+#### Key Content
+
+| Element | Content |
+|---------|---------|
+| Badge | "For Healthcare Facilities" |
+| H1 | "Build a Stronger Healthcare Team. Starting Today." |
+| Subheadline | ProNurtureSphere value prop — hire verified professionals, CPD compliance, workforce growth |
+| Primary CTA | "Get Early Access" → `/waitlist` (`bg-brand-dark text-white`) |
+| Secondary CTA | "See How It Works" → `#how-it-works` (outlined) |
+| Stat card overlay | "98% Compliance Rate" — immediate ROI signal for compliance-focused administrator |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| White (not brand-light) background | The employer persona is formal — white feels cleaner and more corporate than off-white. Contrast with the homepage hero's brand-light. |
+| `h-screen overflow-hidden` | Forces full-viewport height so the hero content fits above the fold with no scroll required. |
+| "98% Compliance Rate" stat card | Speaks directly to Dr. Adaeze's #1 concern: regulatory compliance. Numbers are more persuasive than words for this persona. |
+| `#how-it-works` secondary CTA target | Addresses Dr. Adaeze's implementation fear ("how complex is this?") by linking straight to the 3-step process. |
+
+---
+
+### 4.2 `components/employers/EmployersPainPoints.tsx`
+
+**Type:** Server Component  
+**File:** `components/employers/EmployersPainPoints.tsx`
+
+#### Purpose
+Empathy section. Resonates with the employer's known frustrations before presenting any solution. Empathy earns trust; trust enables conversion.
+
+#### Three Pain Points
+
+| Title | Icon | Addresses |
+|-------|------|-----------|
+| Managing shifts on WhatsApp, still getting gaps | Chat bubble | Scheduling chaos (Dr. Adaeze primary pain) |
+| Can't verify if locum staff are actually qualified | Warning triangle | Compliance and patient-safety risk |
+| Payroll, compliance, and training in three places | Stacked layers | Admin fragmentation / month-end chaos |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Red-tinted icon backgrounds (`bg-red-50 text-red-500`) | Red signals "pain/problem." Unlike solution sections where icons use brand-dark/gold, pain-point icons are intentionally red to signal "this is what we're fixing." |
+| Transition teaser at the bottom | "ProNurtureSphere was built specifically to solve every one of these problems." — a bridge sentence into the transformation/solution sections. |
+
+---
+
+### 4.3 `components/employers/EmployersTransformation.tsx`
+
+**Type:** Server Component  
+**File:** `components/employers/EmployersTransformation.tsx`
+
+#### Purpose
+The pivot from problem to solution using Before → After framing. Deep green background signals we've entered the "answer" phase of the page narrative.
+
+#### Three Transformations
+
+| Before | After | Icon |
+|--------|-------|------|
+| Reactive staffing | Proactive workforce control | Trending up |
+| Unverified hires | Credentialed, CPD-trained professionals only | Shield check |
+| Manual admin chaos | One dashboard for everything | Grid/dashboard |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Strikethrough on "Before" text | Visual grammar: strikethrough = "leaving this behind." Emotionally separates the bad old state from the good new state. |
+| Arrow SVG between before/after | Arrow icon between the strikethrough and the after-text reinforces directionality — moving forward, not backward. |
+| Gold button on deep green | Maximum contrast — the primary conversion action at the bottom of the most persuasive section. |
+
+---
+
+### 4.4 `components/employers/EmployersFeatures.tsx`
+
+**Type:** Server Component  
+**File:** `components/employers/EmployersFeatures.tsx`
+
+#### Purpose
+Detailed platform capabilities, presented benefit-first. Every card title is the *outcome* (benefit), with the feature category shown smaller beneath as secondary context.
+
+#### Six Feature Cards
+
+| Benefit Title | Feature Category | Key Copy Element |
+|---------------|-----------------|-----------------|
+| Fill Shifts in Minutes, Not Hours | Shift Posting & Booking | "No phone calls. No WhatsApp groups." |
+| Only Hire Who You Can Trust | Credential Verification | MDCN/NMCN + CPD certificates |
+| Payroll That Runs Itself | Payroll Management | ₦ currency, PAYE tax, pension |
+| Know Who's Working, Always | Attendance & Timesheets | Real-time visibility, no paper |
+| Keep Your Team Compliant | CPD Training | Licence renewals, inspection-ready |
+| See Your Workforce Clearly | Workforce Analytics | Gaps, fill rates, cost-per-hire |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Benefit title + feature subtitle hierarchy | Users care about outcomes first, features second. "Fill Shifts in Minutes" sells the promise; "Shift Posting & Booking" labels the mechanism. |
+| `id="features"` anchor | Kept consistent with homepage pattern — enables anchor-linking from hero CTAs. |
+| `brand-light` card background inside white section | Cards on white would blend. Off-white cards on a white section create a subtle layered depth. |
+
+---
+
+### 4.5 `components/employers/EmployersHowItWorks.tsx`
+
+**Type:** Server Component  
+**File:** `components/employers/EmployersHowItWorks.tsx`
+
+#### Purpose
+Reduces the implementation complexity to 3 named steps, directly countering Dr. Adaeze's "Implementation cost / staff adoption concerns" barrier (CLAUDE.md Section 3).
+
+#### Three Steps
+
+| # | Title | Key Message |
+|---|-------|-------------|
+| 01 | Create facility profile and post first shift | Same-day live, no technical training |
+| 02 | Browse verified professionals and hire | Credentials pre-checked, one-click confirm |
+| 03 | Manage shifts, payroll, compliance from one dashboard | Fully automated after onboarding |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `id="how-it-works"` anchor | The hero secondary CTA "See How It Works" links here. Must be connected. |
+| Brand-dark step number containers with gold text | Large, prominent, high-contrast step indicators give the section immediate visual structure. The eye naturally reads 01 → 02 → 03. |
+| "Post their first shift within an hour" in subheadline | Concrete timeframe is more persuasive than vague "quick setup." Specificity = credibility. |
+
+---
+
+### 4.6 `components/employers/EmployersTestimonials.tsx`
+
+**Type:** Server Component  
+**File:** `components/employers/EmployersTestimonials.tsx`
+
+#### Purpose
+Employer-specific social proof. Unlike the homepage testimonials (mixed audiences), these are exclusively from hospital administrators and HR officers — exactly the peer group Dr. Adaeze respects.
+
+#### Two Placeholder Testimonials
+
+| Name | Role | Organisation | Key Claim |
+|------|------|--------------|-----------|
+| Dr. Ngozi Anyanwu | Medical Director | Bright Future Specialist Hospital, Abuja | WhatsApp → one dashboard in under a week |
+| Mrs. Adaeze Obiechina | Chief HR Officer | Crestview Diagnostics & Maternity, Lagos | Month-end payroll reconciliation eliminated |
+
+> ⚠️ Replace with verified quotes post-beta. The Sanity `testimonial` collection schema is ready.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| 2-column layout (not 3) | Longer, richer employer testimonials need more horizontal space than the homepage 3-column layout. |
+| HEFAMAA mentioned in second testimonial | Regulatory specificity (a real Nigerian health body) increases authenticity and resonates with compliance-focused administrators. |
+
+---
+
+### 4.7 `components/employers/EmployersFAQ.tsx`
+
+**Type:** `'use client'` (Client Component)  
+**File:** `components/employers/EmployersFAQ.tsx`
+
+#### Purpose
+Handles final objections before the conversion CTA. Each question is mapped to a specific barrier from the Dr. Adaeze persona.
+
+#### State
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `openIndex` | `number \| null` | `null` | Index of the currently expanded FAQ item. `null` = all closed. |
+
+#### State Logic
+```ts
+const toggle = (index: number) => {
+  setOpenIndex((prev) => (prev === index ? null : index));
+};
+```
+Clicking the open item closes it (toggle). Clicking a different item opens it and closes the previous one.
+
+#### Five FAQs and Their Barrier Mapping
+
+| Question | Addresses |
+|----------|-----------|
+| How long does onboarding take? | Implementation cost / complexity fear |
+| Can I manage permanent staff AND locums? | Scope/flexibility concern |
+| How does credential verification work? | Trust in the verification process |
+| Is it compliant with Nigerian regulations? | Regulatory compliance concern |
+| What does early access include? | Value clarity for sign-up decision |
+
+#### Accordion Animation
+Uses `max-h` CSS transition (`max-h-0 opacity-0` → `max-h-96 opacity-100`) rather than JavaScript-measured heights. This avoids layout reflow and works without `useRef` measuring.
+
+#### Accessibility
+- `aria-expanded` on the trigger button
+- `aria-controls` links button to answer panel
+- `role="region"` + `aria-labelledby` on answer panel
+- Focus ring on trigger button (`:focus` visible state)
+
+---
+
+### 4.8 `components/employers/EmployersCTA.tsx`
+
+**Type:** `'use client'` (Client Component)  
+**File:** `components/employers/EmployersCTA.tsx`
+
+#### Purpose
+Final email capture for employer visitors. Identical pattern to `WaitlistSection.tsx` — deep green background, gold CTA, trust badges — for consistent conversion UX across the site.
+
+#### State
+Same state machine as `WaitlistSection.tsx`:
+
+```
+idle → loading → success
+                ↘ error → (user types) → idle
+```
+
+#### Three Trust Badges
+- "Free to join" — removes cost barrier
+- "No credit card required" — removes financial commitment barrier
+- "Nigeria-built platform" — local fit/relevance signal
+
+#### API Integration
+Uses a 1-second simulated delay (same as WaitlistSection). **TODO:** Replace with real API call including `source: 'employers'` tag to distinguish employer signups from general waitlist signups.
+
+---
+
+## 5. Pages
 
 ### `/` — Homepage
 
@@ -809,6 +1061,27 @@ See `app/api/waitlist/route.ts` (to be created) for the API route.
 ```
 
 This order follows the **Problem → Solution → Proof → Action** persuasion framework.
+
+---
+
+### `/employers` — For Healthcare Employers
+
+**File:** `app/employers/page.tsx`  
+**Type:** Server Component  
+**Status:** ✅ Complete
+
+**Section order (AIDA framework):**
+
+```
+1. EmployersHero           → Attention — above the fold, "For Healthcare Facilities"
+2. EmployersPainPoints     → Interest  — empathy with Dr. Adaeze's daily frustrations
+3. EmployersTransformation → Desire    — Before/After narrative pivot (deep green)
+4. EmployersFeatures       → Desire    — 6 benefit-led platform capability cards
+5. EmployersHowItWorks     → Desire    — 3 steps to remove implementation fear
+6. EmployersTestimonials   → Desire    — social proof from hospital administrators only
+7. EmployersFAQ            → Action    — resolves final objections (client component)
+8. EmployersCTA            → Action    — email capture + trust badges (client component)
+```
 
 ---
 
@@ -866,8 +1139,7 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 
 ### Next pages to build (priority order)
 1. `/waitlist` — standalone waitlist page (the CTA destination — must exist before launch)
-2. `/employers` — For Healthcare Employers page
-3. `/professionals` — For Healthcare Professionals page
+2. `/professionals` — For Healthcare Professionals page
 4. `/about` — About page
 5. `/blog` — Blog listing page
 6. `/blog/[slug]` — Individual blog post page
