@@ -100,7 +100,7 @@ colors: {
 |------|-------|--------|
 | Homepage | `/` | ✅ Complete |
 | For Healthcare Employers | `/employers` | ✅ Complete |
-| For Healthcare Professionals | `/professionals` | 🔲 Not started |
+| For Healthcare Professionals | `/professionals` | ✅ Complete |
 | About | `/about` | 🔲 Not started |
 | Blog / Resources | `/blog` | 🔲 Not started |
 | Blog Post | `/blog/[slug]` | 🔲 Not started |
@@ -434,3 +434,4 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-05-27 | HeroSection fixes — replaced next/image with plain img tag for placeholder; H1 made entirely white (removed gold span); reduced font sizes to text-4xl/5xl/6xl; reduced padding to pt-24 pb-12 so full hero content fits above the fold | HeroSection.tsx |
 | 2026-05-27 | HeroSection redesign — light layout (bg-brand-light), text-brand-dark headline, gray-600 subheadline, deep green accent panel on right, h-[calc(100vh-80px)] viewport fit, dark/inverted CTA buttons, mobile image fallback | HeroSection.tsx |
 | 2026-06-03 | Built complete For Healthcare Employers page — EmployersHero, EmployersPainPoints, EmployersTransformation, EmployersFeatures, EmployersHowItWorks, EmployersTestimonials, EmployersFAQ (client), EmployersCTA (client) — 8 components in components/employers/ | `/employers` |
+| 2026-06-03 | Built complete For Healthcare Professionals page — ProfessionalsHero, ProfessionalsPainPoints, ProfessionalsTransformation, ProfessionalsFeatures, ProfessionalsHowItWorks, ProfessionalsTestimonials, ProfessionalsFAQ (client), ProfessionalsCTA (client) — 8 components in components/professionals/ | `/professionals` |

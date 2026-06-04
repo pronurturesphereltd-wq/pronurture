@@ -1085,10 +1085,227 @@ This order follows the **Problem → Solution → Proof → Action** persuasion 
 
 ---
 
+### `/professionals` — For Healthcare Professionals
+
+**File:** `app/professionals/page.tsx`  
+**Type:** Server Component  
+**Status:** ✅ Complete
+
+**Target persona:** Dr. Amarachi Bello — Doctor / Nurse / Pharmacist / Allied Health Professional  
+**Tone:** Warm, opportunity-focused, encouraging, mobile-first. Uses "you" language throughout.  
+**Section framework:** AIDA (Attention → Interest → Desire → Action)
+
+**Section order:**
+
+```
+1. ProfessionalsHero           → Attention — above the fold, "For Healthcare Professionals"
+2. ProfessionalsPainPoints     → Interest  — empathy with Dr. Amarachi's daily frustrations
+3. ProfessionalsTransformation → Desire    — Before/After narrative pivot (deep green)
+4. ProfessionalsFeatures       → Desire    — 6 benefit-led platform capability cards
+5. ProfessionalsHowItWorks     → Desire    — 3 steps to remove complexity and trust barriers
+6. ProfessionalsTestimonials   → Desire    — social proof from Nigerian doctors and nurses
+7. ProfessionalsFAQ            → Action    — resolves final hesitations (client component)
+8. ProfessionalsCTA            → Action    — email capture + trust badges (client component)
+```
+
+---
+
 ### `/studio` — Sanity Studio
 
 **File:** `app/studio/[[...tool]]/page.tsx`  
 **Status:** ✅ Complete (initial setup)
+
+---
+
+## 5. Professionals Page Components
+
+All components live in `components/professionals/`. The page assembler is `app/professionals/page.tsx`.
+
+**Target persona:** Dr. Amarachi Bello — Doctor / Nurse / Pharmacist / Allied Health Professional  
+**Tone:** Warm, opportunity-focused, encouraging, mobile-first  
+**Section framework:** AIDA (Attention → Interest → Desire → Action)
+
+---
+
+### 5.1 `components/professionals/ProfessionalsHero.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Above-the-fold hero for the `/professionals` page. Off-white background, two-column layout (text left, platform panel right). Answers what/who/why in under 3 seconds for the professional persona.
+
+#### Key Content
+
+| Element | Content |
+|---------|---------|
+| Badge | "For Healthcare Professionals" |
+| H1 | "Your Skills Are in Demand. We Make Sure You Get Paid for Them." |
+| Subheadline | Names all professional types; mentions verified employers, locum shifts, and CPD |
+| Primary CTA | "Get Early Access" → `/waitlist` (`bg-brand-dark text-white`) |
+| Secondary CTA | "See Available Shifts" → `#how-it-works` (outlined) |
+| Stat card overlay | "500+ Verified Professionals" — social proof / safety-in-numbers trust signal |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `style={{ backgroundColor: '#f5f5f0' }}` inline | Guarantees correct rendering regardless of Tailwind class resolution — consistent with homepage and employers hero |
+| Stat card: "Growing" green badge | Signals the community is active and growing — reduces Dr. Amarachi's trust barrier ("am I the first?") |
+| Secondary CTA: "See Available Shifts" | More specific than "See How It Works" — speaks to Dr. Amarachi's primary goal (finding shifts) |
+
+---
+
+### 5.2 `components/professionals/ProfessionalsPainPoints.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Empathy section. Resonates with the professional's known frustrations before presenting any solution. Placed before the transformation to earn trust first.
+
+#### Three Pain Cards
+
+| Title | Icon | Addresses |
+|-------|------|-----------|
+| Chasing employers who don't respond or pay late | Warning circle | Payment reliability (primary pain) |
+| CPD is expensive, hard to find, and not always relevant | Graduation cap | CPD accessibility and cost |
+| Don't know if the job posting is real | Sad face | Fake listings / trust in employers |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Amber icon backgrounds (`bg-amber-50 text-amber-600`) | Red/amber = pain/broken signal. Consistent with ProblemSection on homepage. |
+| "you" language throughout | Direct address increases emotional resonance with Dr. Amarachi — she feels seen and understood. |
+| Transition teaser at bottom | "ProNurtureSphere was built specifically to fix every one of these problems — by clinicians who lived them." Bridges into the solution section. |
+
+---
+
+### 5.3 `components/professionals/ProfessionalsTransformation.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+The narrative pivot from problem to solution using Before → After framing. Deep green background signals the "answer" phase. Strikethrough on "Before" text visually separates the old state from the new.
+
+#### Three Transformations
+
+| Before (strikethrough) | After | Icon |
+|------------------------|-------|------|
+| Chasing payments | Get paid on time, every time | Wallet |
+| Expensive, irrelevant CPD | Accredited courses built for Nigerian clinicians | Graduation cap |
+| Fake job listings | Verified employers only, no wasted applications | Shield check |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Strikethrough + arrow + after text | Clear visual grammar: leaving old state behind, moving forward to new state. Proven direct-response copywriting pattern. |
+| Gold CTA on deep green at bottom | Maximum contrast — the primary action after the most persuasive section on the page. |
+
+---
+
+### 5.4 `components/professionals/ProfessionalsFeatures.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Presents 6 platform features benefit-first for the professional persona. Anchored at `id="features"`.
+
+#### Six Feature Cards
+
+| Benefit Title | Category | Key Outcome |
+|---------------|----------|-------------|
+| Find Shifts That Fit Your Life | Locum Shift Marketplace | Apply in minutes, no phone calls |
+| Get Paid Without the Chase | Fast, Reliable Payments | Rate agreed upfront, payment on schedule |
+| CPD That Actually Counts | Accredited CPD Courses | MDCN/NMCN recognised, affordable |
+| Build Your Professional Profile | Verified Digital Profile | Trust-at-a-glance for employers |
+| Track Your Licences & Renewals | Credential Tracking | Automatic renewal reminders |
+| Learn From Nigeria's Best Clinicians | Webinars & Live Events | Practical learning + CPD credits |
+
+---
+
+### 5.5 `components/professionals/ProfessionalsHowItWorks.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Reduces signup anxiety to 3 clear steps. Concrete timeframes ("less than 10 minutes", "one tap") add credibility. Counters the "bad UX" barrier from Dr. Amarachi persona.
+
+#### Three Steps
+
+| # | Title | Key Message |
+|---|-------|-------------|
+| 01 | Create your verified professional profile | Under 48 hours verification, 10 minutes to set up |
+| 02 | Browse and apply for locum shifts near you | One tap, no CV, profile speaks for you |
+| 03 | Complete shifts, earn CPD credits, get paid on time | Automatic logs, record grows with every shift |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `id="how-it-works"` anchor | Hero secondary CTA "See Available Shifts" links here — they must stay connected. |
+| Connector line between steps (desktop) | Positioned on right edge of step containers to visually show sequential journey. |
+| "Create Your Profile Today" bottom CTA | Bridges directly from understanding the process to taking the first action. |
+
+---
+
+### 5.6 `components/professionals/ProfessionalsTestimonials.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Professional-specific social proof. Both testimonials are from healthcare professionals (not employers) — peer validation is highest for Dr. Amarachi.
+
+#### Two Placeholder Testimonials
+
+| Name | Role | Location | Key Claim |
+|------|------|----------|-----------|
+| Dr. Emeka Okonkwo | General Practitioner | Lagos | Three verified shifts, paid exactly on time |
+| Nurse Amaka Chukwu | Registered Nurse | Abuja | CPD accepted by Nursing Council, found 2 locum shifts |
+
+> ⚠️ Replace with verified quotes from real users after beta launch. Sanity `testimonial` schema is ready.
+
+---
+
+### 5.7 `components/professionals/ProfessionalsFAQ.tsx`
+
+**Type:** `'use client'` (Client Component)
+
+#### Purpose
+Handles final hesitations from Dr. Amarachi before she signs up. Each question maps to a real barrier from the professional persona.
+
+#### Five FAQs and Their Barrier Mapping
+
+| Question | Addresses |
+|----------|-----------|
+| How do I verify my credentials? | Trust in the verification process |
+| Are CPD courses accredited by Nigerian bodies? | CPD value / regulatory acceptance fear |
+| How quickly will I get paid? | Payment reliability concern |
+| Can I work locum while keeping my permanent job? | Flexibility / conflict-of-interest concern |
+| What types of professionals can join? | Eligibility clarity for non-doctor professionals |
+
+#### State Logic
+Identical to `EmployersFAQ.tsx` — `openIndex: number | null`, toggle function closes open item on re-click.
+
+---
+
+### 5.8 `components/professionals/ProfessionalsCTA.tsx`
+
+**Type:** `'use client'` (Client Component)
+
+#### Purpose
+Final email capture for professional visitors. Deep green background, gold button, same state machine as `EmployersCTA.tsx`.
+
+#### Three Trust Badges
+
+| Badge | Barrier It Overcomes |
+|-------|----------------------|
+| "Free to join" | Cost barrier |
+| "Accredited CPD" | CPD value / relevance concern |
+| "Verified employers only" | Trust in employer legitimacy |
+
+#### API Integration
+Uses 1-second simulated delay. **TODO:** Replace with real API call including `source: 'professionals'` tag.
 
 ---
 
@@ -1139,8 +1356,7 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 
 ### Next pages to build (priority order)
 1. `/waitlist` — standalone waitlist page (the CTA destination — must exist before launch)
-2. `/professionals` — For Healthcare Professionals page
-4. `/about` — About page
+2. `/about` — About page
 5. `/blog` — Blog listing page
 6. `/blog/[slug]` — Individual blog post page
 7. `/contact` — Contact page
