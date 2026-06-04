@@ -67,7 +67,8 @@ const AboutHero = () => {
             <div className="
               relative w-full max-w-lg
               bg-brand-dark rounded-3xl
-              p-5 pb-6 shadow-2xl overflow-hidden
+              p-5 shadow-2xl overflow-hidden
+              max-h-[500px]
             ">
 
               {/* Dot grid texture */}
@@ -87,20 +88,20 @@ const AboutHero = () => {
               />
 
               {/* Hero photograph placeholder */}
-              <div className="relative rounded-2xl overflow-hidden shadow-xl mb-4">
+              <div className="relative h-72 rounded-xl overflow-hidden shadow-xl mb-3">
                 <img
                   src="https://placehold.co/600x500/103613/ffffff?text=ProNurtureSphere+Team"
                   alt="ProNurtureSphere healthcare team"
-                  className="w-full h-full object-cover rounded-2xl"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
               {/* "Since 2024" founding badge */}
               <div className="relative bg-white rounded-2xl p-3 shadow-lg flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-brand-dark flex items-center justify-center flex-shrink-0">
+                <div className="w-9 h-9 rounded-full bg-brand-dark flex items-center justify-center flex-shrink-0">
                   {/* Heart/pulse icon — health sector visual identity */}
                   <svg
-                    className="w-5 h-5 text-brand-gold"
+                    className="w-4 h-4 text-brand-gold"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
