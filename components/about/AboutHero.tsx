@@ -18,7 +18,7 @@
 const AboutHero = () => {
   return (
     <section
-      className="min-h-screen overflow-hidden pt-24 pb-12 flex items-center"
+      className="min-h-screen pt-24 pb-20 flex items-center"
       style={{ backgroundColor: "#f5f5f0" }}
       aria-label="About ProNurtureSphere hero"
     >
@@ -67,8 +67,7 @@ const AboutHero = () => {
             <div className="
               relative w-full max-w-lg
               bg-brand-dark rounded-3xl
-              p-5 shadow-2xl overflow-hidden
-              max-h-[70vh]
+              p-5 pb-6 shadow-2xl overflow-hidden
             ">
 
               {/* Dot grid texture */}
