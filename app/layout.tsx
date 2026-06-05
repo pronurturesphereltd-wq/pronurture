@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     template: "%s | ProNurtureSphere",
   },
   description:
-    "ProNurtureSphere is Nigeria's digital platform for healthcare workforce management — staffing, rostering, payroll, credential verification, and CPD in one place.",
+    "ProNurtureSphere is Nigeria's all-in-one healthcare workforce platform — staffing, rostering, payroll, credential verification, and CPD training.",
   keywords: [
     "healthcare staffing Nigeria",
     "locum shifts Nigeria",
@@ -56,10 +56,13 @@ export const metadata: Metadata = {
     siteName: "ProNurtureSphere",
     title: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
     description:
-      "ProNurtureSphere is Nigeria's digital platform for healthcare workforce management — staffing, rostering, payroll, credential verification, and CPD in one place.",
+      "ProNurtureSphere is Nigeria's all-in-one healthcare workforce platform — staffing, rostering, payroll, credential verification, and CPD training.",
     images: [
       {
-        url: "/og-image.png",
+        // /opengraph-image.png is served by app/opengraph-image.tsx (the Next.js
+        // file convention). metadataBase resolves this to the full absolute URL
+        // that social crawlers need: https://pronurture.vercel.app/opengraph-image.png
+        url: "/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
@@ -71,8 +74,17 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
     description:
-      "ProNurtureSphere is Nigeria's digital platform for healthcare workforce management — staffing, rostering, payroll, credential verification, and CPD in one place.",
-    images: ["/og-image.png"],
+      "ProNurtureSphere is Nigeria's all-in-one healthcare workforce platform — staffing, rostering, payroll, credential verification, and CPD training.",
+    images: [
+      {
+        // /twitter-image.png is served by app/twitter-image.tsx (re-exports
+        // the same ImageResponse as opengraph-image.tsx)
+        url: "/twitter-image.png",
+        width: 1200,
+        height: 630,
+        alt: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
+      },
+    ],
   },
 
   icons: {

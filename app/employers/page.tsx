@@ -29,7 +29,7 @@
 export const metadata = {
   title: "For Healthcare Employers",
   description:
-    "Replace spreadsheets and WhatsApp rosters with ProNurtureSphere — shift posting, credential verification, automated payroll handoff, and compliance reporting for Nigerian hospitals and clinics.",
+    "Ditch spreadsheets and WhatsApp rosters. ProNurtureSphere gives Nigerian facilities shift posting, credential checks, rostering, and payroll in one place.",
 };
 
 import EmployersHero from "@/components/employers/EmployersHero";

@@ -37,7 +37,7 @@ import WaitlistFAQ from "@/components/waitlist/WaitlistFAQ";
 export const metadata = {
   title: "Get Early Access",
   description:
-    "Get free early access to ProNurtureSphere — Nigeria's digital healthcare staffing, CPD, and workforce management platform. Priority onboarding, no credit card required.",
+    "Join the ProNurtureSphere waitlist and get free early access to Nigeria's healthcare staffing, CPD, and workforce platform. No credit card required.",
 };
 
 export default function WaitlistPage() {

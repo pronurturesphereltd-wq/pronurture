@@ -29,7 +29,7 @@
 export const metadata = {
   title: "For Healthcare Professionals",
   description:
-    "Find verified locum shifts, complete accredited CPD courses, and manage your healthcare career from one mobile-friendly platform built for Nigerian doctors, nurses, and allied health professionals.",
+    "Find verified locum shifts, complete accredited CPD, and grow your healthcare career — built for Nigerian doctors, nurses, and allied health professionals.",
 };
 
 import ProfessionalsHero from "@/components/professionals/ProfessionalsHero";

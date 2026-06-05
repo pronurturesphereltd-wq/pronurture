@@ -21,7 +21,7 @@
 export const metadata = {
   title: "Smarter Staffing for Nigerian Healthcare",
   description:
-    "ProNurtureSphere gives Nigerian hospitals, clinics, and staffing agencies a single platform for shift posting, credential verification, rostering, payroll, and CPD training.",
+    "ProNurtureSphere helps Nigerian hospitals and clinics post shifts, verify credentials, manage rosters, and handle payroll — from one platform.",
 };
 
 import HeroSection from "@/components/HeroSection";

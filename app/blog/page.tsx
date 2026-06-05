@@ -33,7 +33,7 @@ import BlogNewsletterCTA from "@/components/blog/BlogNewsletterCTA";
 export const metadata = {
   title: "Resources & Insights",
   description:
-    "Practical guides, industry analysis, and career resources for Nigerian healthcare professionals and the facilities that employ them.",
+    "Practical guides, policy analysis, and career resources for Nigerian healthcare professionals and the hospitals and clinics that employ them.",
 };
 
 export default function BlogPage() {
