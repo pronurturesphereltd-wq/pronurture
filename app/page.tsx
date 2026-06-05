@@ -18,6 +18,12 @@
  * client boundaries ('use client') where interactivity is needed (Navbar, Waitlist).
  */
 
+export const metadata = {
+  title: "Smarter Staffing for Nigerian Healthcare",
+  description:
+    "ProNurtureSphere gives Nigerian hospitals, clinics, and staffing agencies a single platform for shift posting, credential verification, rostering, payroll, and CPD training.",
+};
+
 import HeroSection from "@/components/HeroSection";
 import SocialProofBar from "@/components/SocialProofBar";
 import ProblemSection from "@/components/ProblemSection";

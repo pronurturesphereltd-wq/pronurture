@@ -15,7 +15,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Privacy Policy — ProNurtureSphere",
+  title: "Privacy Policy",
   description:
     "How ProNurtureSphere Limited collects, uses, and protects your personal data. Our commitment to data privacy for healthcare professionals and facilities in Nigeria.",
 };

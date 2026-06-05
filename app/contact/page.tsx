@@ -38,7 +38,7 @@ import ContactFAQ from "@/components/contact/ContactFAQ";
  * and "ProNurtureSphere demo request".
  */
 export const metadata = {
-  title: "Contact Us — ProNurtureSphere",
+  title: "Contact Us",
   description:
     "Get in touch with the ProNurtureSphere team. Whether you're a healthcare professional, a facility, or a partner — we'd love to hear from you. We respond within 24 hours.",
 };

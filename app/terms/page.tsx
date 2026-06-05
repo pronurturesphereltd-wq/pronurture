@@ -15,7 +15,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Terms of Service — ProNurtureSphere",
+  title: "Terms of Service",
   description:
     "Terms and conditions for using the ProNurtureSphere platform and website. Read before joining the early access programme.",
 };

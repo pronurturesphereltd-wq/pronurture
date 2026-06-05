@@ -42,6 +42,12 @@
 8. [TODOs & Next Steps](#8-todos--next-steps)
 11. [API Routes](#11-api-routes)
     - [POST /api/waitlist](#111-appapiwaitlestroutets)
+12. [SEO & Metadata](#12-seo--metadata)
+    - [Root metadata (layout.tsx)](#121-root-metadata-applayouttsx)
+    - [Per-page metadata](#122-per-page-metadata)
+    - [app/opengraph-image.tsx](#123-appopengraph-imagetsx)
+    - [app/robots.ts](#124-approbotsTs)
+    - [app/sitemap.ts](#125-appsitemaptts)
 
 ---
 
@@ -138,11 +144,14 @@ Once real photography is uploaded (Sanity CDN, Vercel Blob, or a custom CDN), ad
 | `<Navbar />` above `{children}` | Navbar is `position: fixed` — it renders outside the normal document flow, so order here doesn't affect visual layout. It's above `children` semantically/logically. |
 | `antialiased` on `<body>` | Enables sub-pixel font rendering on macOS/retina screens — standard practice for premium-looking text. |
 
-**SEO metadata configured:**
-- Title: "ProNurtureSphere — Smarter Healthcare Workforce Management in Nigeria"
+**SEO metadata configured (see Section 12 for full SEO documentation):**
+- `metadataBase`: `https://pronurture.vercel.app` — required for Next.js to resolve absolute URLs in OG/Twitter image paths
+- Title template: `{ default: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform", template: "%s | ProNurtureSphere" }` — pages set a short title like `"About Us"`, the template appends " | ProNurtureSphere" automatically
 - Description: Platform summary for Google snippets
-- Keywords: "healthcare staffing Nigeria", "locum doctor platform Nigeria", etc.
-- OpenGraph: `type: "website"` with title + description for social sharing
+- Keywords: healthcare staffing, locum shifts, CPD, medical workforce, hospital staffing
+- OpenGraph: `type: "website"`, `siteName`, title, description, and `/og-image.png` (1200×630, dynamically generated)
+- Twitter card: `summary_large_image` with same title, description, and image
+- Icons: `Green Mono.svg` from `public/brand-assets/` used as SVG favicon
 
 ---
 
@@ -2413,6 +2422,157 @@ Two `console.error` calls are present for server-side observability:
 - `[waitlist] Unexpected error: {error}` — catch-all for network failures and unexpected throws
 
 These are visible in Vercel Function Logs under the `/api/waitlist` route.
+
+---
+
+## 12. SEO & Metadata
+
+All SEO infrastructure lives in the `app/` root directory as Next.js file conventions. No third-party SEO library is used — Next.js 15 App Router handles everything natively.
+
+---
+
+### 12.1 Root Metadata (`app/layout.tsx`)
+
+The `export const metadata` in `app/layout.tsx` sets the site-wide defaults. Every page inherits from this unless it overrides specific fields.
+
+**Title template:**
+
+```ts
+title: {
+  default: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
+  template: "%s | ProNurtureSphere",
+}
+```
+
+- `default` is used for any page that does NOT export its own `metadata.title`.
+- `template` wraps per-page titles: `"About Us"` → `"About Us | ProNurtureSphere"`.
+- Result: all page titles are distinct for SEO, with consistent brand suffix for recognition.
+
+**metadataBase:**
+
+```ts
+metadataBase: new URL("https://pronurture.vercel.app")
+```
+
+Required by Next.js to resolve relative URLs in OpenGraph and Twitter image paths to absolute URLs. When the domain moves from Vercel to `pronurture.com.ng`, update this one value.
+
+**OpenGraph:**
+
+| Field | Value |
+|-------|-------|
+| `type` | `"website"` |
+| `siteName` | `"ProNurtureSphere"` |
+| `title` | Site-wide default |
+| `description` | Site-wide default |
+| `images[0].url` | `/og-image.png` (1200×630, see Section 12.3) |
+
+**Twitter Card:**
+
+| Field | Value |
+|-------|-------|
+| `card` | `"summary_large_image"` |
+| `title` | Site-wide default |
+| `description` | Site-wide default |
+| `images` | `["/og-image.png"]` |
+
+**Icons:**
+
+```ts
+icons: {
+  icon: "/brand-assets/Green Mono.svg",
+  apple: "/brand-assets/Green Mono.svg",
+}
+```
+
+Uses the mono green SVG logo as the browser tab favicon and Apple touch icon.
+
+---
+
+### 12.2 Per-page Metadata
+
+Each page exports its own `metadata` object with a short `title` and unique `description`. The title template in `layout.tsx` appends `" | ProNurtureSphere"` automatically.
+
+| Route | Title (pre-template) | Description focus |
+|-------|---------------------|-------------------|
+| `/` | Smarter Staffing for Nigerian Healthcare | Platform overview, both audiences |
+| `/employers` | For Healthcare Employers | Shift posting, credentials, payroll, compliance |
+| `/professionals` | For Healthcare Professionals | Locum shifts, CPD, verified employers |
+| `/about` | About Us | Origin story, mission, ecosystem model |
+| `/blog` | Resources & Insights | Guides, analysis, career resources |
+| `/waitlist` | Get Early Access | Early access, no credit card, priority onboarding |
+| `/contact` | Contact Us | Contact, demo request, 24-hour response |
+| `/privacy` | Privacy Policy | Data collection, storage, rights |
+| `/terms` | Terms of Service | Platform terms, early access programme, IP |
+
+**No client component pages needed splitting** — all `page.tsx` files are already Server Components. The `'use client'` directive is on child components only (e.g. `WaitlistForm.tsx`, `ContactMain.tsx`), not on the page assemblers.
+
+---
+
+### 12.3 `app/opengraph-image.tsx`
+
+**Type:** Next.js special file convention (OG image route)  
+**Served at:** `/opengraph-image.png` (auto-wired to `<meta og:image>` and `<meta twitter:image>`)  
+**Dimensions:** 1200×630px (social sharing standard)  
+**Format:** PNG (rendered at request time by Satori / ImageResponse)
+
+#### Design
+
+| Element | Style |
+|---------|-------|
+| Background | Deep green `#103613` |
+| Brand bar | White (40px) + Gold (20px) + Green (20px) horizontal pills — mirrors the page divider motif |
+| Wordmark | "ProNurtureSphere" — 80px bold white, letter-spacing -1px |
+| Tagline | "Nigeria's Healthcare Workforce Platform" — 34px `#c09e5a` (brand gold) |
+| Font | `system-ui, sans-serif` — Satori does not load Google Fonts by default; system font renders cleanly at this size |
+
+#### Key Decisions
+
+| Decision | Why |
+|----------|-----|
+| File convention (`opengraph-image.tsx`) | Next.js auto-wires it — no manual `<meta>` tags or routes needed |
+| System font instead of DM Sans | Loading Google Fonts in Satori requires a manual `fetch` + base64 embed. System fonts render cleanly at 80px and remove the async dependency from the image route |
+| `export const size` + spread `{...size}` | `ImageResponse` second-arg options must match the exported `size` — exporting both ensures they stay in sync |
+
+---
+
+### 12.4 `app/robots.ts`
+
+**Served at:** `/robots.txt`
+
+```
+User-Agent: *
+Allow: /
+Disallow: /studio/
+Disallow: /api/
+Sitemap: https://pronurture.vercel.app/sitemap.xml
+```
+
+- Allows all crawlers on all public pages.
+- Blocks Sanity Studio (`/studio/`) — no SEO value; no need to expose the CMS endpoint to crawlers.
+- Blocks API routes (`/api/`) — internal server routes, not indexable content.
+
+---
+
+### 12.5 `app/sitemap.ts`
+
+**Served at:** `/sitemap.xml`
+
+| URL | Priority | Change Frequency |
+|-----|----------|-----------------|
+| `/` | 1.0 | monthly |
+| `/employers` | 0.9 | monthly |
+| `/professionals` | 0.9 | monthly |
+| `/about` | 0.8 | monthly |
+| `/blog` | 0.8 | weekly |
+| `/waitlist` | 0.7 | yearly |
+| `/contact` | 0.6 | yearly |
+| `/privacy` | 0.3 | yearly |
+| `/terms` | 0.3 | yearly |
+
+**Blog post slugs are not included** — they will be added dynamically once blog posts are wired to the live Sanity `post` collection via GROQ. The sitemap function will need to `fetch` published slug values from Sanity at that point.
+
+**To update the domain:**  
+Change `BASE_URL` in `app/sitemap.ts` and `metadataBase` in `app/layout.tsx`. Also update the `sitemap` field in `app/robots.ts`.
 
 ---
 

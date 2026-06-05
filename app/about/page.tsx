@@ -49,7 +49,7 @@ import AboutPSLArms from "@/components/about/AboutPSLArms";
 import AboutCTA from "@/components/about/AboutCTA";
 
 export const metadata = {
-  title: "About ProNurtureSphere — Building the Healthcare Workforce Africa Deserves",
+  title: "About Us",
   description:
     "ProNurtureSphere Limited exists at the intersection of education, technology, and healthcare delivery — nurturing, equipping, deploying, and sustaining competent healthcare professionals across Nigeria and beyond.",
 };

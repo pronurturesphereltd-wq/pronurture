@@ -31,7 +31,7 @@ import BlogFilteredContent from "@/components/blog/BlogFilteredContent";
 import BlogNewsletterCTA from "@/components/blog/BlogNewsletterCTA";
 
 export const metadata = {
-  title: "Resources & Insights — ProNurtureSphere",
+  title: "Resources & Insights",
   description:
     "Practical guides, industry analysis, and career resources for Nigerian healthcare professionals and the facilities that employ them.",
 };

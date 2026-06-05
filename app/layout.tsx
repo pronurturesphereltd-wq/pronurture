@@ -33,22 +33,51 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ProNurtureSphere — Smarter Healthcare Workforce Management in Nigeria",
+  metadataBase: new URL("https://pronurture.vercel.app"),
+
+  title: {
+    default: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
+    template: "%s | ProNurtureSphere",
+  },
   description:
-    "ProNurtureSphere Limited is Nigeria's digital platform for healthcare staffing, rostering, credential verification, payroll, and CPD training. Built for hospitals, clinics, and healthcare professionals.",
+    "ProNurtureSphere is Nigeria's digital platform for healthcare workforce management — staffing, rostering, payroll, credential verification, and CPD in one place.",
   keywords: [
     "healthcare staffing Nigeria",
-    "locum doctor platform Nigeria",
-    "hospital staffing software",
-    "medical payroll software Nigeria",
+    "locum shifts Nigeria",
     "CPD accreditation Nigeria",
+    "medical workforce management",
+    "hospital staffing software",
+    "locum doctor platform Nigeria",
     "nursing jobs Lagos",
   ],
+
   openGraph: {
-    title: "ProNurtureSphere — Smarter Healthcare Workforce Management",
-    description:
-      "Nigeria's all-in-one platform for digital staffing, rostering, payroll, and CPD management.",
     type: "website",
+    siteName: "ProNurtureSphere",
+    title: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
+    description:
+      "ProNurtureSphere is Nigeria's digital platform for healthcare workforce management — staffing, rostering, payroll, credential verification, and CPD in one place.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
+    description:
+      "ProNurtureSphere is Nigeria's digital platform for healthcare workforce management — staffing, rostering, payroll, credential verification, and CPD in one place.",
+    images: ["/og-image.png"],
+  },
+
+  icons: {
+    icon: "/brand-assets/Green Mono.svg",
+    apple: "/brand-assets/Green Mono.svg",
   },
 };
 

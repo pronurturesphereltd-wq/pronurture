@@ -26,6 +26,12 @@
  * in the two 'use client' sub-components, keeping the page JS bundle lean.
  */
 
+export const metadata = {
+  title: "For Healthcare Professionals",
+  description:
+    "Find verified locum shifts, complete accredited CPD courses, and manage your healthcare career from one mobile-friendly platform built for Nigerian doctors, nurses, and allied health professionals.",
+};
+
 import ProfessionalsHero from "@/components/professionals/ProfessionalsHero";
 import ProfessionalsPainPoints from "@/components/professionals/ProfessionalsPainPoints";
 import ProfessionalsTransformation from "@/components/professionals/ProfessionalsTransformation";

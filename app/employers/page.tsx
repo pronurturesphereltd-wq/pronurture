@@ -26,6 +26,12 @@
  * in the two 'use client' sub-components, keeping the page bundle lean.
  */
 
+export const metadata = {
+  title: "For Healthcare Employers",
+  description:
+    "Replace spreadsheets and WhatsApp rosters with ProNurtureSphere — shift posting, credential verification, automated payroll handoff, and compliance reporting for Nigerian hospitals and clinics.",
+};
+
 import EmployersHero from "@/components/employers/EmployersHero";
 import EmployersPainPoints from "@/components/employers/EmployersPainPoints";
 import EmployersTransformation from "@/components/employers/EmployersTransformation";
