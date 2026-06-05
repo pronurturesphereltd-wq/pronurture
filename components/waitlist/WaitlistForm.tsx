@@ -4,18 +4,24 @@
  * Left column  → The pitch: badge, H1, subheadline, 3 benefit bullets.
  *                Answers "why sign up?" so the form on the right closes the deal.
  *
- * Right column → White card with three fields (name, email, user type) and a
- *                gold "Join the Waitlist" submit button.
+ * Right column → White card with four fields (name, email, user type, and a
+ *                conditional second dropdown) and a gold "Join the Waitlist" button.
+ *
+ * Conditional second dropdown logic:
+ *   • "Healthcare Professional" selected → "Your Profession" dropdown appears
+ *   • "Healthcare Facility / Employer" selected → "Facility Type" dropdown appears
+ *   • "Other" selected → no second dropdown (nothing to segment)
+ *
+ *   The reveal uses a max-h CSS transition so the field slides in smoothly
+ *   without JavaScript-measured heights or animation libraries.
  *
  * On successful submission the form card is replaced with a success state:
- * green checkmark, confirmation copy, a spam-folder reminder, and a
- * "Back to Home" link. The left pitch column stays visible.
+ * checkmark, confirmation copy, a spam-folder reminder, and "Back to Home".
  *
- * Submission flow:
- *   1. Client-side validation (name required, valid email format)
- *   2. POST JSON to the Make.com webhook with { name, email, userType }
- *   3. On 200 → show success state
- *   4. On network error / non-2xx → show inline error message
+ * Webhook payload:
+ *   { name, email, userType }                                     — always
+ *   { ..., profession }    when userType === "Healthcare Professional"
+ *   { ..., facilityType }  when userType === "Healthcare Facility / Employer"
  *
  * State machine:
  *   idle → (submit) → loading → success
@@ -25,6 +31,7 @@
  *   - NEVER use localStorage or sessionStorage
  *   - All form state lives in React useState
  *   - Email is validated on the client before the fetch fires
+ *   - Secondary dropdown is required when visible
  */
 
 "use client";
@@ -37,13 +44,13 @@ type SubmitStatus = "idle" | "loading" | "success" | "error";
 
 /**
  * Make.com webhook URL.
- * Receives a JSON body of { name, email, userType } and handles downstream
- * routing (e.g. adding the lead to a CRM, sending a welcome email).
+ * Receives a JSON body and handles downstream routing (CRM, welcome email).
+ * All payload fields are documented next to the fetch() call below.
  */
 const WEBHOOK_URL =
   "https://hook.eu1.make.com/km9hduqfg83mft3u8j9k3e2qqnr92f00";
 
-/** Reusable Tailwind class string for text inputs and the select dropdown */
+/** Reusable Tailwind class string for all text inputs and select dropdowns */
 const inputClass = `
   w-full px-4 py-3 rounded-xl
   border border-brand-dark/15 bg-white
@@ -57,26 +64,82 @@ const inputClass = `
 /** Reusable label class */
 const labelClass = "block text-brand-dark font-semibold text-sm mb-1.5";
 
-/** The three benefit bullets shown in the left column */
+/** Benefit bullets shown in the left pitch column */
 const benefits = [
   "Priority onboarding when we launch",
   "Free early access — no credit card",
   "Direct input into the platform roadmap",
 ];
 
+/**
+ * Profession options — shown when userType === "Healthcare Professional".
+ * Ordered by approximate population size in Nigerian healthcare workforce.
+ */
+const professionOptions = [
+  "Doctor / Physician",
+  "Registered Nurse",
+  "Midwife",
+  "Pharmacist",
+  "Medical Laboratory Scientist",
+  "Radiographer",
+  "Physiotherapist",
+  "Dentist",
+  "Community Health Worker",
+  "Healthcare Assistant",
+  "Allied Health Professional",
+  "Other Healthcare Professional",
+];
+
+/**
+ * Facility type options — shown when userType === "Healthcare Facility / Employer".
+ * Ordered by prevalence in the private Nigerian healthcare sector (PSL's primary market).
+ */
+const facilityTypeOptions = [
+  "Private Hospital",
+  "Public Hospital",
+  "Maternity Home",
+  "Diagnostics Centre",
+  "Clinic",
+  "Staffing Agency",
+  "Other Facility",
+];
+
 const WaitlistForm = () => {
   /** ── Form field state ─────────────────────────────────────────────────── */
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  /**
+   * userType defaults to "Healthcare Professional" — the larger persona.
+   * Changing this also resets the secondary fields (see onChange handler).
+   */
   const [userType, setUserType] = useState("Healthcare Professional");
+
+  /**
+   * Secondary dropdown state — both hold a default value so validation
+   * never blocks a user who accepted the default. They reset to their
+   * defaults whenever userType changes to prevent stale cross-type values
+   * (e.g. "Maternity Home" lingering in the payload for a professional).
+   */
+  const [profession, setProfession] = useState("Doctor / Physician");
+  const [facilityType, setFacilityType] = useState("Private Hospital");
 
   /** ── Submission state ────────────────────────────────────────────────── */
   const [status, setStatus] = useState<SubmitStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  /** ── Derived flags for conditional rendering ─────────────────────────── */
+  const showProfessionSelect = userType === "Healthcare Professional";
+  const showFacilityTypeSelect = userType === "Healthcare Facility / Employer";
   /**
-   * Clears the error state when the user starts typing again after a failure.
-   * Prevents the error from feeling "sticky" and blocking the user.
+   * showSecondarySelect drives the max-h reveal animation wrapper.
+   * True for both Professional and Employer; false for "Other".
+   */
+  const showSecondarySelect = showProfessionSelect || showFacilityTypeSelect;
+
+  /**
+   * clearErrorOnChange — resets the error state when the user edits any field.
+   * Prevents the error from feeling "sticky" after a failed submit.
    */
   const clearErrorOnChange = () => {
     if (status === "error") {
@@ -86,26 +149,21 @@ const WaitlistForm = () => {
   };
 
   /**
-   * handleSubmit — validates, posts to webhook, updates state machine.
+   * handleSubmit — validates fields, builds the payload, and POSTs to webhook.
    *
-   * We use `noValidate` on the <form> element so that we control the
-   * validation UI ourselves (styled to match the brand) rather than letting
-   * the browser show its native (un-styled) validation popups.
+   * noValidate on <form> disables browser-native popups so we control
+   * the full validation UI (styled to the brand palette).
    */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    /** ── Client-side validation ──────────────────────────────────────────
-     * Check name and email before hitting the network.
-     * Saves a round-trip and gives instant feedback.
-     */
+    /** ── Client-side validation ───────────────────────────────────────── */
     if (!name.trim()) {
       setErrorMessage("Please enter your full name.");
       setStatus("error");
       return;
     }
 
-    /** Basic email format check — catches obvious typos before sending */
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
       setErrorMessage("Please enter a valid email address.");
@@ -113,44 +171,42 @@ const WaitlistForm = () => {
       return;
     }
 
-    /** ── Begin network request ─────────────────────────────────────────── */
+    /** ── Begin network request ────────────────────────────────────────── */
     setStatus("loading");
     setErrorMessage("");
 
     try {
+      /**
+       * Payload structure:
+       *   name         — full name (trimmed)
+       *   email        — email address (trimmed)
+       *   userType     — primary audience segment (always present)
+       *   profession   — only included for Healthcare Professionals
+       *   facilityType — only included for Healthcare Facility / Employer
+       *
+       * Using a spread with conditional object entries keeps the payload
+       * clean — irrelevant fields are absent rather than null/empty.
+       */
+      const payload: Record<string, string> = {
+        name: name.trim(),
+        email: email.trim(),
+        userType,
+        ...(showProfessionSelect && { profession }),
+        ...(showFacilityTypeSelect && { facilityType }),
+      };
+
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        /**
-         * Payload matches the Make.com scenario's expected structure.
-         * name      → full name as entered
-         * email     → trimmed to remove accidental spaces
-         * userType  → selected audience type for segmentation
-         */
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-          userType,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        /**
-         * Make.com returns a non-2xx status if the webhook is disabled or
-         * misconfigured. We surface a user-friendly message rather than
-         * exposing the HTTP status code.
-         */
         throw new Error(`Webhook returned ${response.status}`);
       }
 
-      /** Submission succeeded — swap the form for the success state */
       setStatus("success");
     } catch {
-      /**
-       * Network errors (offline, CORS, server unavailable) land here.
-       * We don't re-throw — the error is displayed inline and the user
-       * can try again without reloading the page.
-       */
       setStatus("error");
       setErrorMessage(
         "Something went wrong. Please check your connection and try again."
@@ -170,7 +226,7 @@ const WaitlistForm = () => {
 
           {/* ── LEFT: Pitch ─────────────────────────────────────────────────
            * Answers "why sign up?" before the user looks at the form.
-           * Benefit-led rather than feature-led — what does the user GAIN?
+           * Benefit-led — what does the user GAIN?
            */}
           <div>
 
@@ -182,7 +238,7 @@ const WaitlistForm = () => {
               </span>
             </div>
 
-            {/* H1 — page headline (one per page per CLAUDE.md hierarchy rules) */}
+            {/* H1 — one per page per CLAUDE.md visual hierarchy rules */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-dark leading-tight tracking-tight mb-5">
               Be First to Transform Your Healthcare Workforce.
             </h1>
@@ -193,14 +249,10 @@ const WaitlistForm = () => {
               on the ProNurtureSphere waitlist. Early access is free.
             </p>
 
-            {/* ── Benefit bullets ─────────────────────────────────────────
-             * Three short points that directly address the hesitations of
-             * both buyer personas: cost, commitment, and relevance.
-             */}
+            {/* Benefit bullets */}
             <ul className="space-y-4" role="list">
               {benefits.map((benefit) => (
                 <li key={benefit} className="flex items-start gap-3">
-                  {/* Checkmark icon in brand-dark — signals "you'll get this" */}
                   <span
                     className="
                       w-6 h-6 rounded-full bg-brand-dark
@@ -226,7 +278,7 @@ const WaitlistForm = () => {
               ))}
             </ul>
 
-            {/* Decorative brand-colour rule — consistent with BlogHero and AboutHero */}
+            {/* Decorative brand-colour rule */}
             <div className="flex items-center gap-1.5 mt-10" aria-hidden="true">
               <span className="inline-block w-10 h-1 rounded-full bg-brand-dark" />
               <span className="inline-block w-4 h-1 rounded-full bg-brand-gold" />
@@ -235,8 +287,8 @@ const WaitlistForm = () => {
           </div>
 
           {/* ── RIGHT: Form card or Success state ───────────────────────────
-           * The white card swaps its internal content when status === "success".
-           * The card itself remains, preserving the layout for a smooth swap.
+           * Card shell remains constant — only the interior swaps on success.
+           * aria-live="polite" announces the success state to screen readers.
            */}
           <div
             className="bg-white rounded-2xl shadow-xl border border-brand-dark/5 p-8 md:p-10"
@@ -250,7 +302,7 @@ const WaitlistForm = () => {
               /* ── Success state ─────────────────────────────────────────── */
               <div className="flex flex-col items-center text-center py-4">
 
-                {/* Large green checkmark */}
+                {/* Checkmark icon */}
                 <div
                   className="
                     w-16 h-16 rounded-full bg-brand-dark
@@ -270,24 +322,16 @@ const WaitlistForm = () => {
                   </svg>
                 </div>
 
-                {/* Confirmation headline */}
                 <h2 className="text-2xl font-bold text-brand-dark mb-3">
                   You&apos;re on the List! 🎉
                 </h2>
 
-                {/* Confirmation message */}
                 <p className="text-gray-600 text-base leading-relaxed mb-6 max-w-sm">
                   Thank you for joining the ProNurtureSphere waitlist. We&apos;ve
                   sent a welcome message to your email — please check your inbox now.
                 </p>
 
-                {/* ── Spam folder reminder box ─────────────────────────────
-                 * Light gold background — warm, not alarming. Helps users
-                 * find the welcome email and ensures future deliverability.
-                 * Per email marketing best practice, the first action of
-                 * marking as "Not Spam" trains the inbox filter for all
-                 * subsequent communications.
-                 */}
+                {/* Spam folder reminder — warm gold bg, not alarming */}
                 <div
                   className="
                     bg-brand-gold/15 border border-brand-gold/30
@@ -305,7 +349,6 @@ const WaitlistForm = () => {
                   </p>
                 </div>
 
-                {/* Back to Home — gives the user a clear next action */}
                 <Link
                   href="/"
                   className="
@@ -345,11 +388,12 @@ const WaitlistForm = () => {
                   </h2>
                 </div>
 
-                {/* noValidate — we control validation UI (styled to brand) */}
                 <form onSubmit={handleSubmit} noValidate aria-label="Waitlist signup form">
+
+                  {/* ── Fixed fields (always visible) ─────────────────────── */}
                   <div className="space-y-5">
 
-                    {/* ── Full Name ──────────────────────────────────────── */}
+                    {/* Full Name */}
                     <div>
                       <label htmlFor="waitlist-name" className={labelClass}>
                         Full Name <span className="text-red-500" aria-hidden="true">*</span>
@@ -359,10 +403,7 @@ const WaitlistForm = () => {
                         type="text"
                         name="name"
                         value={name}
-                        onChange={(e) => {
-                          setName(e.target.value);
-                          clearErrorOnChange();
-                        }}
+                        onChange={(e) => { setName(e.target.value); clearErrorOnChange(); }}
                         placeholder="e.g. Dr. Adaeze Okafor"
                         required
                         autoComplete="name"
@@ -372,7 +413,7 @@ const WaitlistForm = () => {
                       />
                     </div>
 
-                    {/* ── Email Address ──────────────────────────────────── */}
+                    {/* Email Address */}
                     <div>
                       <label htmlFor="waitlist-email" className={labelClass}>
                         Email Address <span className="text-red-500" aria-hidden="true">*</span>
@@ -382,10 +423,7 @@ const WaitlistForm = () => {
                         type="email"
                         name="email"
                         value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          clearErrorOnChange();
-                        }}
+                        onChange={(e) => { setEmail(e.target.value); clearErrorOnChange(); }}
                         placeholder="you@example.com"
                         required
                         autoComplete="email"
@@ -396,12 +434,7 @@ const WaitlistForm = () => {
                       />
                     </div>
 
-                    {/* ── I am a... (user type select) ────────────────────
-                     * Collects audience segment so the Make.com automation
-                     * can route to the correct onboarding sequence.
-                     * Defaults to "Healthcare Professional" — the larger
-                     * of the two primary personas.
-                     */}
+                    {/* I am a... — primary audience segment */}
                     <div>
                       <label htmlFor="waitlist-user-type" className={labelClass}>
                         I am a...
@@ -412,6 +445,15 @@ const WaitlistForm = () => {
                         value={userType}
                         onChange={(e) => {
                           setUserType(e.target.value);
+                          /**
+                           * Reset secondary dropdowns to their defaults.
+                           * Prevents a stale value from a previous selection
+                           * being silently included in the webhook payload.
+                           * e.g. switching from Employer → Professional should
+                           * not carry over the "Maternity Home" facilityType.
+                           */
+                          setProfession("Doctor / Physician");
+                          setFacilityType("Private Hospital");
                           clearErrorOnChange();
                         }}
                         disabled={status === "loading"}
@@ -425,11 +467,78 @@ const WaitlistForm = () => {
 
                   </div>
 
-                  {/* ── Inline error message ──────────────────────────────
-                   * Rendered below the fields so it doesn't shift layout
-                   * when it appears. `role="alert"` ensures screen readers
-                   * announce it immediately when it enters the DOM.
+                  {/* ── Conditional second dropdown ────────────────────────────
+                   *
+                   * Reveal animation: max-h-0 → max-h-28 transition.
+                   * The wrapper sits outside space-y-5 so the margin-top
+                   * (mt-5) only applies when the field is visible — no
+                   * phantom gap when collapsed.
+                   *
+                   * The inner content conditionally renders the profession
+                   * or facilityType select based on userType. When switching
+                   * directly between Professional and Employer the wrapper
+                   * stays open (showSecondarySelect remains true) and only
+                   * the label/options swap — no height animation needed for
+                   * that case, just a clean content swap.
                    */}
+                  <div
+                    className={`
+                      overflow-hidden
+                      transition-all duration-300 ease-in-out
+                      ${showSecondarySelect
+                        ? "max-h-28 opacity-100 mt-5"
+                        : "max-h-0 opacity-0"
+                      }
+                    `}
+                  >
+                    {/* Your Profession — only for Healthcare Professionals */}
+                    {showProfessionSelect && (
+                      <div>
+                        <label htmlFor="waitlist-profession" className={labelClass}>
+                          Your Profession <span className="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <select
+                          id="waitlist-profession"
+                          name="profession"
+                          value={profession}
+                          onChange={(e) => { setProfession(e.target.value); clearErrorOnChange(); }}
+                          disabled={status === "loading"}
+                          required
+                          aria-required="true"
+                          className={`${inputClass} appearance-none cursor-pointer`}
+                        >
+                          {professionOptions.map((opt) => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Facility Type — only for Healthcare Facility / Employer */}
+                    {showFacilityTypeSelect && (
+                      <div>
+                        <label htmlFor="waitlist-facility-type" className={labelClass}>
+                          Facility Type <span className="text-red-500" aria-hidden="true">*</span>
+                        </label>
+                        <select
+                          id="waitlist-facility-type"
+                          name="facilityType"
+                          value={facilityType}
+                          onChange={(e) => { setFacilityType(e.target.value); clearErrorOnChange(); }}
+                          disabled={status === "loading"}
+                          required
+                          aria-required="true"
+                          className={`${inputClass} appearance-none cursor-pointer`}
+                        >
+                          {facilityTypeOptions.map((opt) => (
+                            <option key={opt} value={opt}>{opt}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* ── Inline error message ──────────────────────────────── */}
                   {status === "error" && errorMessage && (
                     <p
                       className="mt-4 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3"
@@ -440,11 +549,7 @@ const WaitlistForm = () => {
                     </p>
                   )}
 
-                  {/* ── Submit button ─────────────────────────────────────
-                   * Gold background (brand-gold) per CLAUDE.md CTA rules.
-                   * Full width for maximum tap area on mobile.
-                   * Disabled and dimmed during loading to prevent double-submit.
-                   */}
+                  {/* ── Submit button ─────────────────────────────────────── */}
                   <button
                     type="submit"
                     disabled={status === "loading"}
@@ -464,7 +569,6 @@ const WaitlistForm = () => {
                   >
                     {status === "loading" ? (
                       <>
-                        {/* Spinner — communicates that the form is processing */}
                         <svg
                           className="animate-spin w-4 h-4 flex-shrink-0"
                           fill="none"
@@ -492,12 +596,7 @@ const WaitlistForm = () => {
 
                 </form>
 
-                {/* ── Privacy note ─────────────────────────────────────────
-                 * Directly below the button — this is the last thing a
-                 * hesitant user reads before deciding to submit.
-                 * Specific language ("only used for ProNurtureSphere early
-                 * access updates") beats vague privacy platitudes.
-                 */}
+                {/* Privacy note */}
                 <p className="mt-4 text-xs text-brand-dark/45 text-center leading-relaxed">
                   No spam, ever. Your details are only used for ProNurtureSphere
                   early access updates.
@@ -507,7 +606,6 @@ const WaitlistForm = () => {
             )}
 
           </div>
-          {/* ── End right column ─────────────────────────────────────────── */}
 
         </div>
       </div>
