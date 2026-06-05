@@ -1,9 +1,12 @@
 /**
  * BlogGrid.tsx — Responsive 3-column grid of blog post cards
  *
- * Presents 9 articles covering all three content categories:
- * "For Professionals", "For Employers", and "CPD & Compliance".
- * The mix ensures both buyer personas find relevant content on every visit.
+ * Accepts an activeCategory prop and renders only the matching posts.
+ * "All" shows every post; any other value filters by exact category match.
+ *
+ * Animation: The grid wrapper uses key={activeCategory} so React remounts
+ * the div on every filter change, re-triggering the `animate-fade-in` CSS
+ * animation defined in globals.css for a subtle fade + slide-up on swap.
  *
  * Layout: 1-column (mobile) → 2-column (md/tablet) → 3-column (lg/desktop)
  *
@@ -13,9 +16,6 @@
  *   3. Article title (H3)
  *   4. Excerpt (line-clamp-3 for consistent card height)
  *   5. "Read More →" link
- *
- * Hover effects: subtle card lift (-translate-y-1) + deeper shadow + title colour shift.
- * Placeholder images use placehold.co with brand-dark background to match the palette.
  *
  * TODO: Replace static `blogPosts` array with a live GROQ query from Sanity CMS
  *       once articles are published in the Sanity Studio.
@@ -29,12 +29,18 @@ interface BlogPost {
   category: string;
   title: string;
   excerpt: string;
-  date: string;          // Human-readable display date
-  dateTime: string;      // ISO 8601 for <time> element accessibility
+  date: string;       // Human-readable display date
+  dateTime: string;   // ISO 8601 for <time> element accessibility
   readTime: string;
   imageAlt: string;
 }
 
+interface BlogGridProps {
+  /** Category to filter by — "All" disables filtering and shows every post */
+  activeCategory: string;
+}
+
+/** All blog post data — filtered at render time based on activeCategory prop */
 const blogPosts: BlogPost[] = [
   {
     slug: "mdcn-nmcn-licence-renewal-2026-cpd-checklist",
@@ -137,126 +143,172 @@ const blogPosts: BlogPost[] = [
   },
 ];
 
-/**
- * Maps each category to a Tailwind class string.
- * All use the gold/20 tint specified in CLAUDE.md for consistent tag styling
- * across the blog page (featured post + grid).
- */
+/** All blog category tags use the same gold/20 pill style throughout the blog */
 const categoryTagClass = "bg-brand-gold/20 text-brand-dark";
 
-const BlogGrid = () => {
+const BlogGrid = ({ activeCategory }: BlogGridProps) => {
+  /** Filter posts — "All" bypasses the filter entirely */
+  const filteredPosts =
+    activeCategory === "All"
+      ? blogPosts
+      : blogPosts.filter((post) => post.category === activeCategory);
+
+  /** Section label reflects the active filter for context */
+  const sectionLabel = activeCategory === "All" ? "All Articles" : activeCategory;
+
   return (
     <section
       className="py-12 lg:py-16"
       style={{ backgroundColor: "#f5f5f0" }}
       aria-label="Blog article grid"
+      aria-live="polite"
+      aria-atomic="true"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Section label + article count */}
+        {/* Section label + live article count */}
         <div className="flex items-baseline justify-between mb-8">
           <p className="text-brand-green text-xs font-semibold uppercase tracking-widest">
-            All Articles
+            {sectionLabel}
           </p>
           <span className="text-brand-dark/40 text-sm">
-            {blogPosts.length} articles
+            {filteredPosts.length} {filteredPosts.length === 1 ? "article" : "articles"}
           </span>
         </div>
 
-        {/* ── Article Grid ─────────────────────────────────────────────────── */}
-        {/* 1-col mobile → 2-col tablet → 3-col desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {blogPosts.map((post) => (
-            <article
-              key={post.slug}
-              className="
-                group
-                bg-white rounded-2xl overflow-hidden
-                border border-brand-dark/5
-                hover:shadow-xl hover:-translate-y-1
-                transition-all duration-300
-                flex flex-col
-              "
-            >
-              {/* ── Card Image + Category Overlay ───────────────────────── */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={`https://placehold.co/400x240/103613/ffffff?text=${encodeURIComponent(post.category)}`}
-                  alt={post.imageAlt}
-                  className="
-                    w-full h-48 object-cover
-                    group-hover:scale-105
-                    transition-transform duration-500
-                  "
-                />
+        {/* ── Empty state — shown when no posts match the selected category ── */}
+        {filteredPosts.length === 0 && (
+          <div
+            key={`empty-${activeCategory}`}
+            className="animate-fade-in flex flex-col items-center justify-center py-20 text-center"
+            role="status"
+          >
+            {/* Decorative icon */}
+            <div className="w-14 h-14 rounded-full bg-brand-dark/8 flex items-center justify-center mb-5">
+              <svg
+                className="w-7 h-7 text-brand-dark/30"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            </div>
+            <p className="text-brand-dark font-semibold text-base mb-1">
+              No articles in this category yet
+            </p>
+            <p className="text-brand-dark/50 text-sm max-w-xs leading-relaxed">
+              We&apos;re working on new{" "}
+              <span className="font-medium text-brand-dark/70">{activeCategory}</span>{" "}
+              content. Check back soon — or browse all articles in the meantime.
+            </p>
+          </div>
+        )}
 
-                {/* Category tag — gold/20 pill on the image bottom-left */}
-                <div className="absolute top-4 left-4">
-                  <span className={`
-                    inline-block
-                    text-xs font-semibold
-                    px-3 py-1 rounded-full
-                    ${categoryTagClass}
-                  `}>
-                    {post.category}
-                  </span>
+        {/* ── Article Grid ────────────────────────────────────────────────────
+         * key={activeCategory} causes React to remount the div on every filter
+         * change, which re-triggers the animate-fade-in CSS animation for a
+         * clean fade + slide-up effect on each category switch.
+         */}
+        {filteredPosts.length > 0 && (
+          <div
+            key={activeCategory}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 animate-fade-in"
+          >
+            {filteredPosts.map((post) => (
+              <article
+                key={post.slug}
+                className="
+                  group
+                  bg-white rounded-2xl overflow-hidden
+                  border border-brand-dark/5
+                  hover:shadow-xl hover:-translate-y-1
+                  transition-all duration-300
+                  flex flex-col
+                "
+              >
+                {/* ── Card Image + Category Overlay ────────────────────── */}
+                <div className="relative overflow-hidden">
+                  <img
+                    src={`https://placehold.co/400x240/103613/ffffff?text=${encodeURIComponent(post.category)}`}
+                    alt={post.imageAlt}
+                    className="
+                      w-full h-48 object-cover
+                      group-hover:scale-105
+                      transition-transform duration-500
+                    "
+                  />
+
+                  {/* Category tag — gold/20 pill on image top-left */}
+                  <div className="absolute top-4 left-4">
+                    <span className={`
+                      inline-block
+                      text-xs font-semibold
+                      px-3 py-1 rounded-full
+                      ${categoryTagClass}
+                    `}>
+                      {post.category}
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              {/* ── Card Body ────────────────────────────────────────────── */}
-              <div className="p-6 flex flex-col flex-1">
+                {/* ── Card Body ────────────────────────────────────────── */}
+                <div className="p-6 flex flex-col flex-1">
 
-                {/* Meta: date + read time */}
-                <div className="flex items-center gap-2 text-brand-dark/40 text-xs mb-3">
-                  <time dateTime={post.dateTime}>{post.date}</time>
-                  <span aria-hidden="true">·</span>
-                  <span>{post.readTime}</span>
-                </div>
+                  {/* Meta: date + read time */}
+                  <div className="flex items-center gap-2 text-brand-dark/40 text-xs mb-3">
+                    <time dateTime={post.dateTime}>{post.date}</time>
+                    <span aria-hidden="true">·</span>
+                    <span>{post.readTime}</span>
+                  </div>
 
-                {/* Article title — H3 in the section hierarchy */}
-                <h3 className="
-                  text-brand-dark font-bold text-base leading-snug
-                  mb-3
-                  group-hover:text-brand-green
-                  transition-colors duration-200
-                ">
-                  {post.title}
-                </h3>
-
-                {/* Excerpt — clamp at 3 lines to keep all cards the same height */}
-                <p className="text-brand-dark/60 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
-                  {post.excerpt}
-                </p>
-
-                {/* Read More link — pinned to card bottom by flex-1 on excerpt */}
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="
-                    inline-flex items-center gap-1.5
-                    text-brand-dark font-semibold text-sm
-                    cursor-pointer hover:text-brand-green
+                  {/* Article title — H3 in the section hierarchy */}
+                  <h3 className="
+                    text-brand-dark font-bold text-base leading-snug
+                    mb-3
+                    group-hover:text-brand-green
                     transition-colors duration-200
-                    group/link
-                  "
-                  aria-label={`Read more: ${post.title}`}
-                >
-                  Read More
-                  <svg
-                    className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-200"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    aria-hidden="true"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </Link>
+                  ">
+                    {post.title}
+                  </h3>
 
-              </div>
-            </article>
-          ))}
-        </div>
+                  {/* Excerpt — clamp at 3 lines to keep all cards the same height */}
+                  <p className="text-brand-dark/60 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
+                    {post.excerpt}
+                  </p>
+
+                  {/* Read More link — pinned to card bottom by flex-1 on excerpt */}
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="
+                      inline-flex items-center gap-1.5
+                      text-brand-dark font-semibold text-sm
+                      cursor-pointer hover:text-brand-green
+                      transition-colors duration-200
+                      group/link
+                    "
+                    aria-label={`Read more: ${post.title}`}
+                  >
+                    Read More
+                    <svg
+                      className="w-4 h-4 group-hover/link:translate-x-1 transition-transform duration-200"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </Link>
+
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
 
       </div>
     </section>
