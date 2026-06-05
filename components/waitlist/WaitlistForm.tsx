@@ -195,15 +195,18 @@ const WaitlistForm = () => {
         ...(showFacilityTypeSelect && { facilityType }),
       };
 
-      const response = await fetch(WEBHOOK_URL, {
+      /**
+       * no-cors mode: the browser fires the request but returns an opaque
+       * response (type "opaque") — response.ok is always false and the body
+       * is unreadable. We treat any completion without a network throw as
+       * success; actual delivery errors are handled on the Make.com side.
+       */
+      await fetch(WEBHOOK_URL, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
-      if (!response.ok) {
-        throw new Error(`Webhook returned ${response.status}`);
-      }
 
       setStatus("success");
     } catch {
