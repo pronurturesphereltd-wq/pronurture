@@ -217,7 +217,7 @@ const WaitlistForm = () => {
   /** ── Render ─────────────────────────────────────────────────────────── */
   return (
     <section
-      className="min-h-screen py-12 flex items-center"
+      className="min-h-screen pt-28 pb-12 flex items-center"
       style={{ backgroundColor: "#f5f5f0" }}
       aria-label="Join the ProNurtureSphere waitlist"
     >
