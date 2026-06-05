@@ -52,7 +52,7 @@ const WEBHOOK_URL =
 
 /** Reusable Tailwind class string for all text inputs and select dropdowns */
 const inputClass = `
-  w-full px-4 py-3 rounded-xl
+  w-full px-4 py-2.5 rounded-xl
   border border-brand-dark/15 bg-white
   text-brand-dark text-sm font-medium
   placeholder:text-brand-dark/35
@@ -217,7 +217,7 @@ const WaitlistForm = () => {
   /** ── Render ─────────────────────────────────────────────────────────── */
   return (
     <section
-      className="min-h-screen pt-28 pb-16 flex items-center"
+      className="min-h-screen py-12 flex items-center"
       style={{ backgroundColor: "#f5f5f0" }}
       aria-label="Join the ProNurtureSphere waitlist"
     >
@@ -291,7 +291,7 @@ const WaitlistForm = () => {
            * aria-live="polite" announces the success state to screen readers.
            */}
           <div
-            className="bg-white rounded-2xl shadow-xl border border-brand-dark/5 p-8 md:p-10"
+            className="bg-white rounded-2xl shadow-xl border border-brand-dark/5 p-6 md:p-8"
             role="region"
             aria-live="polite"
             aria-atomic="true"
@@ -391,7 +391,7 @@ const WaitlistForm = () => {
                 <form onSubmit={handleSubmit} noValidate aria-label="Waitlist signup form">
 
                   {/* ── Fixed fields (always visible) ─────────────────────── */}
-                  <div className="space-y-5">
+                  <div className="space-y-4">
 
                     {/* Full Name */}
                     <div>
