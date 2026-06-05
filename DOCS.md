@@ -1988,9 +1988,176 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 - `generateMetadata` is already defined (returns placeholder values for now)
 
 ### Infrastructure
-- [ ] Add `app/api/waitlist/route.ts` — API route for waitlist form submissions
 - [ ] Configure email service (Resend recommended for Next.js) and add API key to `.env.local` + Vercel
 - [ ] Set up `SANITY_API_READ_TOKEN` in Vercel environment variables for server-side Sanity queries
+
+---
+
+## 9. Waitlist Page Components
+
+All components live in `components/waitlist/`. The page assembler is `app/waitlist/page.tsx`.
+
+**Target audience:** All visitors who clicked a "Get Early Access" CTA from any page  
+**Tone:** Confident, benefit-led, low-friction — the goal is a single conversion action  
+**Section framework:** Pitch → Form → FAQ (objection-handling below the fold)
+
+---
+
+### 9.1 `components/waitlist/WaitlistForm.tsx`
+
+**Type:** `'use client'` (Client Component)  
+**File:** `components/waitlist/WaitlistForm.tsx`
+
+#### Purpose
+The primary conversion section of the site. Every "Get Early Access" button across the site links to this component. Two-column layout pitches the value on the left, closes with the signup form on the right.
+
+#### Layout
+
+```
+Section (bg-brand-light, min-h-screen, pt-28 for navbar clearance)
+└── grid grid-cols-1 lg:grid-cols-2
+    ├── LEFT — Pitch column
+    │   ├── "Early Access" badge (gold dot + brand-dark/10 bg)
+    │   ├── H1: "Be First to Transform Your Healthcare Workforce."
+    │   ├── Subheadline
+    │   ├── 3 benefit bullets (dark circle + gold checkmark icon)
+    │   └── Decorative brand-colour rule
+    └── RIGHT — Form card (bg-white rounded-2xl shadow-xl)
+        ├── [idle/error/loading state]: Form fields + submit button
+        └── [success state]: Checkmark + confirmation + spam note + Back to Home
+```
+
+#### State Machine
+
+```
+idle → (submit) → loading → success
+                           ↘ error → (user types) → idle
+```
+
+| State | UI Behaviour |
+|-------|-------------|
+| idle | Form renders normally — all fields enabled |
+| loading | Button shows spinner + "Joining…" text. All fields + button disabled. |
+| success | Entire form card replaced by success state (checkmark, H2, message, spam note, Back to Home link) |
+| error | Red error message below fields. Status resets to idle when user types in any field. |
+
+#### Form Fields
+
+| Field | Type | Validation | Name sent to webhook |
+|-------|------|-----------|----------------------|
+| Full Name | `text` | Required, non-empty after trim | `name` |
+| Email Address | `email` | Required, regex `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` | `email` |
+| I am a... | `select` | Defaults to "Healthcare Professional", no required validation | `userType` |
+
+**Select options:** `"Healthcare Professional"` · `"Healthcare Facility / Employer"` · `"Other"`
+
+#### Webhook Integration
+
+**URL:** `https://hook.eu1.make.com/km9hduqfg83mft3u8j9k3e2qqnr92f00`  
+**Method:** POST  
+**Headers:** `Content-Type: application/json`  
+**Body:**
+
+```json
+{
+  "name": "Dr. Adaeze Okafor",
+  "email": "adaeze@hospital.ng",
+  "userType": "Healthcare Facility / Employer"
+}
+```
+
+The Make.com scenario receives this payload and handles downstream routing — adding the lead to a CRM, sending a welcome email, or notifying the team. To change the routing logic, update the Make.com scenario (not the front-end code).
+
+#### Success State Elements
+
+| Element | Detail |
+|---------|--------|
+| Checkmark icon | White SVG on `bg-brand-dark` circle — consistent with benefit bullet style |
+| H2 | "You're on the List! 🎉" |
+| Confirmation message | Instructs user to check inbox for welcome email |
+| Spam folder reminder box | `bg-brand-gold/15 border-brand-gold/30` — warm but not alarming; instructs user to mark as "Not Spam" for deliverability |
+| "Back to Home" link | Outlined pill `→ /` — gives user a clear next action after submitting |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `min-h-screen pt-28` | Fills the viewport (hero-level section) and clears the fixed 80px navbar. The form is the entire page content — it must feel like a destination, not a section. |
+| Left pitch column always visible (even after success) | Keeps the page from feeling empty after the success state appears. The benefits stay visible as a reassurance. |
+| `noValidate` on `<form>` | Disables browser native validation popups so we control the UI entirely — styled to brand palette (red-50 error boxes, not browser chrome). |
+| Error resets on user typing | `clearErrorOnChange()` is called in every `onChange`. Prevents the error from feeling "sticky" — users shouldn't have to dismiss it manually. |
+| `role="alert"` on error message | Screen readers announce the error immediately when it enters the DOM. Required for accessible form validation. |
+| `aria-live="polite" aria-atomic="true"` on the card | When the form card swaps to the success state, screen readers announce the new content. `polite` waits until the current announcement finishes; `atomic` reads the full new content rather than just the diff. |
+| Gold button hover to brand-dark | Standard ProNurtureSphere CTA pattern: gold primary, dark hover — provides clear hover feedback without losing the gold CTA treatment at rest. |
+
+---
+
+### 9.2 `components/waitlist/WaitlistFAQ.tsx`
+
+**Type:** `'use client'` (Client Component — accordion requires `useState`)  
+**File:** `components/waitlist/WaitlistFAQ.tsx`
+
+#### Purpose
+Handles the final hesitations of visitors who scrolled past the form without submitting. Placed below the fold — visitors who reach the FAQ have demonstrated enough interest to keep reading, which makes them high-intent prospects.
+
+#### State
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `openIndex` | `number \| null` | `null` | Index of the currently expanded FAQ. `null` = all closed. |
+
+#### State Logic
+
+```ts
+const toggle = (index: number) => {
+  setOpenIndex((prev) => (prev === index ? null : index));
+};
+```
+
+Clicking the open item closes it. Clicking a different item opens it and closes the previous one.
+
+#### Four FAQs and Their Objection Mapping
+
+| Question | Objection Addressed |
+|----------|---------------------|
+| Is early access really free? | Cost / financial commitment barrier |
+| When will ProNurtureSphere launch? | Timeline uncertainty |
+| What do I get as an early access member? | Value clarity — what's the actual benefit? |
+| Who is ProNurtureSphere for? | Eligibility — "is this for me?" |
+
+#### Accordion Animation
+`max-h-0 → max-h-96` CSS transition (same pattern as `EmployersFAQ.tsx` and `ProfessionalsFAQ.tsx`). Avoids JS-measured heights — no `useRef` required. `overflow-hidden` clips content during the transition.
+
+#### Bottom prompt
+`"Still have questions? Email us directly"` with `mailto:pronurturesphereltd@gmail.com`. Provides a fallback for visitors whose objection isn't covered by the four FAQ items, without requiring a full contact form.
+
+#### Accessibility
+- `aria-expanded` on each trigger button
+- `aria-controls` links button to its answer panel
+- `role="region"` + `aria-labelledby` on each answer panel
+- Focus ring on trigger buttons (`focus-visible:ring-2`)
+
+---
+
+### `/waitlist` Page
+
+**File:** `app/waitlist/page.tsx`  
+**Type:** Server Component  
+**Status:** ✅ Complete
+
+**SEO metadata:**
+- Title: "Join the Waitlist — ProNurtureSphere Early Access"
+- Description: Keyword-optimised for "early access" + "Nigeria healthcare platform"
+
+**Section order:**
+
+```
+1. WaitlistForm  → Above the fold — pitch (left) + form card (right)
+2. WaitlistFAQ   → Below the fold — 4-question accordion for objection handling
+```
+
+**Why only two sections?**  
+The waitlist page has a single goal: form submission. Every additional section is a distraction that reduces conversion rate. The FAQ is an exception because it directly supports the goal — it answers questions and sends users back up to the form.
 
 ---
 
