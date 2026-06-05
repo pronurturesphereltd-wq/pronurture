@@ -102,7 +102,7 @@ colors: {
 | For Healthcare Employers | `/employers` | ✅ Complete |
 | For Healthcare Professionals | `/professionals` | ✅ Complete |
 | About | `/about` | ✅ Complete |
-| Blog / Resources | `/blog` | 🔲 Not started |
+| Blog / Resources | `/blog` | ✅ Complete |
 | Blog Post | `/blog/[slug]` | 🔲 Not started |
 | Contact | `/contact` | 🔲 Not started |
 | Waitlist / Early Access | `/waitlist` | 🔲 Not started |
@@ -436,3 +436,4 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-03 | Built complete For Healthcare Employers page — EmployersHero, EmployersPainPoints, EmployersTransformation, EmployersFeatures, EmployersHowItWorks, EmployersTestimonials, EmployersFAQ (client), EmployersCTA (client) — 8 components in components/employers/ | `/employers` |
 | 2026-06-03 | Built complete For Healthcare Professionals page — ProfessionalsHero, ProfessionalsPainPoints, ProfessionalsTransformation, ProfessionalsFeatures, ProfessionalsHowItWorks, ProfessionalsTestimonials, ProfessionalsFAQ (client), ProfessionalsCTA (client) — 8 components in components/professionals/ | `/professionals` |
 | 2026-06-03 | Built complete About page — AboutHero, AboutMission, AboutStory, AboutValues, AboutEcosystem, AboutLifecycle, AboutWhoWeServe, AboutTeam, AboutPSLArms, AboutCTA — 10 components in components/about/ | `/about` |
+| 2026-06-04 | Built complete Blog / Resources page — BlogHero, BlogFilters, BlogFeaturedPost, BlogGrid (9 articles), BlogNewsletterCTA — 5 components in components/blog/ | `/blog` |

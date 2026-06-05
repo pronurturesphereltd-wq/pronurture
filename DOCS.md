@@ -728,6 +728,211 @@ Tags use brand colours that match the audience they address — employers get da
 
 ---
 
+## 7. Blog Page Components
+
+All components live in `components/blog/`. The page assembler is `app/blog/page.tsx`.
+
+**Target audience:** Both buyer personas + SEO-driven organic traffic  
+**Tone:** Educational, authoritative, locally grounded — thought leadership  
+**Section framework:** Content-discovery flow (Orientation → Editorial → Retention)
+
+---
+
+### 7.1 `components/blog/BlogHero.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Compact page-identity section (~50vh) for the `/blog` route. Unlike full-page heroes, this is intentionally lean — the articles below are the content, and the hero exists to orient the visitor, not to hold their attention.
+
+#### Key Content
+
+| Element | Content |
+|---------|---------|
+| Badge | "Resources & Insights" with gold dot |
+| H1 | "Insights for Nigeria's Healthcare Workforce." |
+| Subheadline | Describes scope — practical guides, industry analysis, career resources, both personas |
+| Decorative rule | Brand-dark + brand-gold + brand-green colour trio |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `minHeight: "50vh"` (not `min-h-screen`) | Blog listing is a content page — visitors scrolled here to read articles, not to admire a hero. Half-viewport keeps the featured post visible above the fold on most screens. |
+| No CTA buttons | The page's CTAs are the article cards themselves and the newsletter at the bottom. Adding CTA buttons in the hero would confuse the hierarchy. |
+| Centred text layout (no two-column) | Article cards provide all the visual richness below. The hero is a clean headline + subheadline — no competing imagery needed. |
+
+---
+
+### 7.2 `components/blog/BlogFilters.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Horizontal row of category filter pills below the hero. Helps visitors self-identify and navigate to the content category most relevant to them.
+
+#### Five Categories
+
+| Label | Audience |
+|-------|----------|
+| All | Default — shows all articles |
+| For Professionals | Dr. Amarachi persona |
+| For Employers | Dr. Adaeze persona |
+| Industry Insights | Both personas, broader ecosystem context |
+| CPD & Compliance | Professionals seeking licence/renewal content |
+
+#### States
+
+| State | Classes |
+|-------|---------|
+| Active | `bg-brand-dark text-white border-brand-dark` |
+| Inactive | `bg-transparent text-brand-dark/70 border-brand-dark/30 hover:border-brand-dark` |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `overflow-x-auto` on wrapper | 5 pills risk wrapping on narrow screens. Horizontal scroll keeps them on one row without shrinking. |
+| Visual-only (no functional filtering yet) | Static blog page — real filtering requires either client-side state or server query params. Wiring this is a TODO once articles are in Sanity. |
+| `aria-pressed` on buttons | Communicates the active state to screen readers correctly, even before real filtering is implemented. |
+
+---
+
+### 7.3 `components/blog/BlogFeaturedPost.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+A single premium full-width article card above the 3-column grid. The larger format signals editorial priority and drives click-through on the most strategically valuable piece.
+
+#### Featured Article
+
+| Field | Content |
+|-------|---------|
+| Category | Industry Insights |
+| Title | Nigeria's Doctor Shortage by the Numbers — and What It Means for Your Facility |
+| Excerpt | Doctor-to-patient ratio framing, WHo recommendation comparison, response strategies |
+| Date | June 2, 2026 |
+| Read time | 8 min read |
+| Slug | `nigeria-doctor-shortage-numbers` |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| "Featured" gold badge on image | Visual grammar: this badge communicates editorial curation — increases perceived value and click-through. |
+| Two-column (image left, text right) | Horizontal layout maximises use of the full container width — more impactful than a vertical card. |
+| `group-hover:scale-105` on image | Reinforces that the entire card is clickable — a standard interactive media card pattern. |
+| `group-hover:text-brand-green` on title | Consistent hover behaviour with BlogGrid cards — the entire card registers as a single clickable unit. |
+
+---
+
+### 7.4 `components/blog/BlogGrid.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+The main content section of the blog page. Nine articles across all content categories presented in a responsive card grid. The article mix covers all buyer personas so every visitor finds relevant content.
+
+#### Nine Articles
+
+| # | Category | Title |
+|---|----------|-------|
+| 1 | For Professionals | MDCN & NMCN Licence Renewal 2026 |
+| 2 | For Professionals | Japa or Stay? Locum Work as a Middle Path |
+| 3 | For Professionals | How to Spot a Fake Locum Listing |
+| 4 | For Employers | Real Cost of an Empty Shift |
+| 5 | For Employers | Credential Verification Compliance Guide |
+| 6 | For Employers | Retention Over Recruitment |
+| 7 | CPD & Compliance | 5 Affordable Ways Nurses Can Meet MCPDP Requirements |
+| 8 | For Professionals | Building a Professional Profile |
+| 9 | Industry Insights | Why Nigeria Needs a Healthcare Workforce Ecosystem |
+
+#### Card Data Structure
+
+```ts
+interface BlogPost {
+  slug: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  date: string;       // Display format: "May 28, 2026"
+  dateTime: string;   // ISO 8601 for <time> accessibility: "2026-05-28"
+  readTime: string;
+  imageAlt: string;
+}
+```
+
+#### Category Tag Style
+All tags use `bg-brand-gold/20 text-brand-dark` — a unified gold-tint pill style per CLAUDE.md spec. This differs from `BlogPreviewSection.tsx` on the homepage (which uses colour-coded category tags) — the blog page uses a single consistent tag style for visual cohesion.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `line-clamp-3` on excerpt | Card heights must be consistent across the grid regardless of excerpt length. `flex-1` on the excerpt div + `flex flex-col` on the card pushes the "Read More" link to the card bottom. |
+| `encodeURIComponent` in placeholder URL | The `category` string in the placehold.co URL includes spaces and ampersands — encoding prevents broken image URLs. |
+| `flex flex-col flex-1` card structure | Makes all cards in a row the same height — required for a clean grid with bottom-aligned CTAs. |
+| 1-col → 2-col → 3-col breakpoints | Mobile-first; 2-col tablet avoids very wide cards before switching to the full 3-column desktop layout. |
+
+> ⚠️ **TODO:** Replace the static `blogPosts` array with a GROQ query fetching from the Sanity `post` collection. The schema is already configured. Use `client.fetch()` in the page Server Component and pass articles as props.
+
+---
+
+### 7.5 `components/blog/BlogNewsletterCTA.tsx`
+
+**Type:** `'use client'` (Client Component)
+
+#### Purpose
+Newsletter email capture at the bottom of the blog page. Retains readers who found value in an article but aren't ready to join the platform waitlist yet. Lower-commitment than the waitlist — builds the email audience for ongoing content marketing.
+
+#### State Machine
+
+```
+idle → (submit) → loading → success
+                           ↘ error → (user types) → idle
+```
+
+| State | UI Behaviour |
+|-------|-------------|
+| idle | Form renders normally |
+| loading | Button shows spinner + "Subscribing…" text. Input + button both disabled. |
+| success | Form replaced by gold checkmark + confirmation message |
+| error | Error message below form. Resets to idle when user types |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Deep green (`#103613`) background | Consistent with all conversion sections site-wide — WaitlistSection, EmployersCTA, ProfessionalsCTA. Visual language signals: "this is where we ask you for something." |
+| Email-only form | Per CLAUDE.md: "Keep forms short." Name field would reduce conversion rate for minimal benefit. |
+| `source: 'blog'` tag in TODO comment | When the real API is connected, tagging the source helps segment newsletter subscribers from waitlist subscribers for targeted campaigns. |
+| Privacy note below form | "No spam, ever. Unsubscribe any time." — addresses the #1 objection to giving an email address. Short and specific. |
+
+---
+
+### `/blog` Page
+
+**File:** `app/blog/page.tsx`  
+**Type:** Server Component  
+**Status:** ✅ Complete
+
+**SEO metadata:**
+- Title: "Resources & Insights — ProNurtureSphere"
+- Description: Platform description targeting both personas + SEO keywords
+
+**Section order:**
+
+```
+1. BlogHero          → Compact orientation (~50vh) — badge, H1, subheadline
+2. BlogFilters       → Category pills — self-selection for both personas
+3. BlogFeaturedPost  → Full-width featured article — editorial centrepiece
+4. BlogGrid          → 9-article responsive card grid (1→2→3 columns)
+5. BlogNewsletterCTA → Newsletter email capture — retention CTA (deep green)
+```
+
+---
+
 ### 3.11 `components/WaitlistSection.tsx`
 
 **Type:** `'use client'` (Client Component)  
@@ -1611,8 +1816,8 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 ### Next pages to build (priority order)
 1. `/waitlist` — standalone waitlist page (the CTA destination — must exist before launch)
 2. `/contact` — Contact page
-3. `/blog` — Blog listing page
-4. `/blog/[slug]` — Individual blog post page
+3. `/blog/[slug]` — Individual blog post page (blog listing `/blog` is complete)
+4. Connect BlogGrid and BlogPreviewSection to live Sanity `post` collection via GROQ
 
 ### Infrastructure
 - [ ] Add `app/api/waitlist/route.ts` — API route for waitlist form submissions
