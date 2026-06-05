@@ -64,6 +64,13 @@ const ContactMain = () => {
    */
   const [mailtoLink, setMailtoLink] = useState("");
 
+  /**
+   * gmailLink — Gmail web compose URL for users without a configured
+   * desktop email client. Opens mail.google.com in a new tab with the
+   * same subject and body pre-filled.
+   */
+  const [gmailLink, setGmailLink] = useState("");
+
   /** Reset error when the user edits any field */
   const clearError = () => {
     if (status === "error") {
@@ -117,7 +124,22 @@ const ContactMain = () => {
     const body = `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`;
     const link = `mailto:uwa@pronurture.com.ng?subject=${encodeURIComponent(subject.trim())}&body=${encodeURIComponent(body)}`;
 
+    /**
+     * Gmail web compose URL — same data as the mailto link but opens
+     * mail.google.com directly. Used as a fallback for visitors whose
+     * browser doesn't have a default mail app configured.
+     *
+     * Parameters:
+     *   view=cm  — compose mode
+     *   fs=1     — full-screen compose window
+     *   to       — recipient pre-filled
+     *   su       — subject line (encodeURIComponent for safety)
+     *   body     — message body (encodeURIComponent for safety)
+     */
+    const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=uwa@pronurture.com.ng&su=${encodeURIComponent(subject.trim())}&body=${encodeURIComponent(body)}`;
+
     setMailtoLink(link);
+    setGmailLink(gmail);
     setStatus("sent");
 
     /**
@@ -138,6 +160,7 @@ const ContactMain = () => {
     setMessage("");
     setErrorMessage("");
     setMailtoLink("");
+    setGmailLink("");
   };
 
   return (
@@ -320,7 +343,7 @@ const ContactMain = () => {
                   * didn't open (no mail app configured, browser restrictions, etc.)
                   */}
                 <div
-                  className="bg-brand-gold/15 border border-brand-gold/30 rounded-xl p-4 text-sm text-brand-dark leading-relaxed text-left w-full mb-6"
+                  className="bg-brand-gold/15 border border-brand-gold/30 rounded-xl p-4 text-sm text-brand-dark leading-relaxed text-left w-full mb-4"
                   role="note"
                 >
                   <p>
@@ -342,6 +365,40 @@ const ContactMain = () => {
                     .
                   </p>
                 </div>
+
+                {/* Gmail compose button — secondary path for visitors who
+                  * use Gmail in the browser and have no desktop mail client.
+                  * Opens mail.google.com in a new tab with subject + body
+                  * pre-filled from the form data.
+                  */}
+                <a
+                  href={gmailLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open Gmail compose window with message pre-filled (opens in new tab)"
+                  className="
+                    w-full mb-6
+                    inline-flex items-center justify-center gap-2.5
+                    bg-brand-light border border-brand-dark/15
+                    rounded-xl px-5 py-2.5
+                    text-brand-dark text-sm font-semibold
+                    hover:bg-brand-dark hover:text-white hover:border-brand-dark
+                    transition-all duration-200 cursor-pointer
+                    focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark/30
+                  "
+                >
+                  {/* Gmail envelope icon (M-shape letterform) */}
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    fill="currentColor"
+                  >
+                    <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-.9.732-1.636 1.636-1.636h1.82L12 10.09l8.545-6.27h1.819A1.636 1.636 0 0124 5.457z" />
+                  </svg>
+                  Open in Gmail
+                </a>
 
                 <button
                   type="button"
