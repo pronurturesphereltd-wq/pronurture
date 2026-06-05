@@ -40,6 +40,8 @@
 6. [Sanity CMS Schemas](#6-sanity-cms-schemas)
 7. [Environment Variables](#7-environment-variables)
 8. [TODOs & Next Steps](#8-todos--next-steps)
+11. [API Routes](#11-api-routes)
+    - [POST /api/waitlist](#111-appapiwaitlestroutets)
 
 ---
 
@@ -2051,22 +2053,32 @@ idle → (submit) → loading → success
 
 **Select options:** `"Healthcare Professional"` · `"Healthcare Facility / Employer"` · `"Other"`
 
-#### Webhook Integration
+#### Submission Flow
 
-**URL:** `https://hook.eu1.make.com/km9hduqfg83mft3u8j9k3e2qqnr92f00`  
-**Method:** POST  
-**Headers:** `Content-Type: application/json`  
-**Body:**
+The form POSTs to the internal Next.js API route `/api/waitlist` (see Section 11.1). The API route validates the payload server-side and forwards it to Make.com. The client reads the real JSON response and branches on `data.success`.
+
+```
+Browser → POST /api/waitlist → server validates → POST Make.com webhook
+                             ← { success: true } ← Make.com 200
+```
+
+**Why API route instead of direct browser→Make.com:**
+- Removes the CORS restriction that previously required `mode: 'no-cors'`
+- Makes the response readable — opaque `no-cors` responses always show `ok: false`
+- Gives the user real success/failure feedback instead of optimistic assumption
+
+**Payload to `/api/waitlist`:**
 
 ```json
 {
   "name": "Dr. Adaeze Okafor",
   "email": "adaeze@hospital.ng",
-  "userType": "Healthcare Facility / Employer"
+  "userType": "Healthcare Facility / Employer",
+  "facilityType": "Private Hospital"
 }
 ```
 
-The Make.com scenario receives this payload and handles downstream routing — adding the lead to a CRM, sending a welcome email, or notifying the team. To change the routing logic, update the Make.com scenario (not the front-end code).
+The API route strips unneeded fields and forwards clean JSON to Make.com. To change routing logic (CRM mapping, welcome email), update the Make.com scenario — not this code.
 
 #### Success State Elements
 
@@ -2317,6 +2329,90 @@ Identical to `WaitlistFAQ.tsx`: `openIndex: number | null`, toggle function clos
 ```
 
 **Footer link:** `Footer.tsx` already contained `{ label: "Contact Us", href: "/contact" }` in the Company column — no update needed.
+
+---
+
+---
+
+## 11. API Routes
+
+All API routes live under `app/api/` following the Next.js 15 App Router Route Handler convention. Each route exports named HTTP method functions (`GET`, `POST`, etc.) from a `route.ts` file.
+
+---
+
+### 11.1 `app/api/waitlist/route.ts`
+
+**Route:** `POST /api/waitlist`  
+**Type:** Next.js Route Handler (Server)  
+**File:** `app/api/waitlist/route.ts`
+
+#### Purpose
+
+Server-side proxy between the waitlist form and the Make.com webhook. Introduced to solve two problems with the previous direct browser→Make.com approach:
+
+| Problem | Solution |
+|---------|---------|
+| CORS restriction required `mode: 'no-cors'` | Server-to-server fetch has no browser origin policy |
+| Opaque response — could never confirm success | Real JSON `{ success: true/false }` returned to client |
+| Client-side-only validation was bypassable | Server validates again before forwarding |
+
+#### Request
+
+```http
+POST /api/waitlist
+Content-Type: application/json
+
+{
+  "name": "Dr. Adaeze Okafor",
+  "email": "adaeze@hospital.ng",
+  "userType": "Healthcare Facility / Employer",
+  "facilityType": "Private Hospital"
+}
+```
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `name` | ✅ | Non-empty after trim |
+| `email` | ✅ | Must pass `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` |
+| `userType` | No | Defaults to `"Other"` if absent |
+| `profession` | No | Only sent when `userType === "Healthcare Professional"` |
+| `facilityType` | No | Only sent when `userType === "Healthcare Facility / Employer"` |
+
+#### Responses
+
+| Status | Body | When |
+|--------|------|------|
+| 200 | `{ "success": true }` | Make.com accepted the payload |
+| 400 | `{ "success": false, "error": "..." }` | Validation failure (missing/invalid fields) |
+| 500 | `{ "success": false, "error": "..." }` | Make.com returned non-2xx, or network error |
+
+#### Internal Flow
+
+```
+1. Parse JSON body (return 400 if malformed)
+2. Validate name present + email regex (return 400 if invalid)
+3. Build clean payload (omit empty optional fields)
+4. fetch() to Make.com webhook — no CORS restriction server-side
+5. If makeResponse.ok → return { success: true }
+6. If makeResponse not ok → log status, return 500
+7. Catch any thrown error → log, return 500
+```
+
+#### Make.com Webhook
+
+**URL:** `https://hook.eu1.make.com/km9hduqfg83mft3u8j9k3e2qqnr92f00`  
+**Method:** POST  
+**Content-Type:** `application/json`
+
+The Make.com scenario handles downstream routing: CRM lead creation, welcome email, team notification. To update routing logic, edit the Make.com scenario — not this file.
+
+#### Error Logging
+
+Two `console.error` calls are present for server-side observability:
+- `[waitlist] Make.com webhook returned {status}` — HTTP-level failure from Make.com
+- `[waitlist] Unexpected error: {error}` — catch-all for network failures and unexpected throws
+
+These are visible in Vercel Function Logs under the `/api/waitlist` route.
 
 ---
 

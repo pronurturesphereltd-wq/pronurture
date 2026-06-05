@@ -18,7 +18,14 @@
  * On successful submission the form card is replaced with a success state:
  * checkmark, confirmation copy, a spam-folder reminder, and "Back to Home".
  *
- * Webhook payload:
+ * Submission flow:
+ *   1. Client validates name + email (instant, no network)
+ *   2. POST to /api/waitlist (same-origin Next.js route)
+ *   3. API route validates again, forwards to Make.com server-side (no CORS)
+ *   4. API returns { success: true } or { success: false, error: "..." }
+ *   5. Client reads the real JSON response and shows success or error
+ *
+ * Payload to API:
  *   { name, email, userType }                                     — always
  *   { ..., profession }    when userType === "Healthcare Professional"
  *   { ..., facilityType }  when userType === "Healthcare Facility / Employer"
@@ -43,12 +50,12 @@ import Link from "next/link";
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
 /**
- * Make.com webhook URL.
- * Receives a JSON body and handles downstream routing (CRM, welcome email).
- * All payload fields are documented next to the fetch() call below.
+ * Internal API route that validates the payload server-side and forwards
+ * it to Make.com. Using our own route avoids the CORS restriction that
+ * previously forced `mode: 'no-cors'` and prevented us from reading the
+ * response. See app/api/waitlist/route.ts for the full server logic.
  */
-const WEBHOOK_URL =
-  "https://hook.eu1.make.com/km9hduqfg83mft3u8j9k3e2qqnr92f00";
+const WAITLIST_API = "/api/waitlist";
 
 /** Reusable Tailwind class string for all text inputs and select dropdowns */
 const inputClass = `
@@ -196,19 +203,32 @@ const WaitlistForm = () => {
       };
 
       /**
-       * no-cors mode: the browser fires the request but returns an opaque
-       * response (type "opaque") — response.ok is always false and the body
-       * is unreadable. We treat any completion without a network throw as
-       * success; actual delivery errors are handled on the Make.com side.
+       * POST to our own Next.js API route.
+       *
+       * Same-origin call — no CORS restriction, no opaque response.
+       * The route validates, forwards to Make.com server-side, and returns
+       * a real JSON body: { success: true } or { success: false, error: "..." }.
        */
-      await fetch(WEBHOOK_URL, {
+      const response = await fetch(WAITLIST_API, {
         method: "POST",
-        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      setStatus("success");
+      const data: { success: boolean; error?: string } = await response.json();
+
+      if (data.success) {
+        setStatus("success");
+      } else {
+        /**
+         * Server confirmed failure — show the error from the API so the
+         * user gets a meaningful message and can retry without reloading.
+         */
+        setStatus("error");
+        setErrorMessage(
+          data.error || "Something went wrong. Please try again."
+        );
+      }
     } catch {
       setStatus("error");
       setErrorMessage(

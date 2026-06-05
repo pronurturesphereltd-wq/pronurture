@@ -246,12 +246,16 @@ pronurture/
 ├── app/                    # Next.js App Router pages
 │   ├── layout.tsx          # Root layout (Navbar + Footer)
 │   ├── page.tsx            # Homepage
+│   ├── api/                # Next.js Route Handlers (server-side API)
+│   │   └── waitlist/       # POST /api/waitlist — proxies to Make.com webhook
 │   ├── employers/          # For Employers page
 │   ├── professionals/      # For Professionals page
 │   ├── about/              # About page
 │   ├── blog/               # Blog listing + [slug]
 │   ├── contact/            # Contact page
 │   ├── waitlist/           # Waitlist page
+│   ├── privacy/            # Privacy Policy page
+│   ├── terms/              # Terms of Service page
 │   └── studio/             # Sanity Studio
 ├── components/             # Reusable UI components
 │   ├── Navbar.tsx
@@ -443,5 +447,7 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-04 | Built complete Waitlist / Early Access page — WaitlistForm (two-column pitch + form card, Make.com webhook POST, success state with spam-folder note), WaitlistFAQ (4-question accordion) — 2 components in components/waitlist/ | `/waitlist` |
 | 2026-06-05 | Built complete Contact page — ContactHero (compact ~40vh, bg-brand-light), ContactMain (two-column: email card + social links left, mailto: form card right), ContactFAQ (4-question accordion) — 3 components in components/contact/ | `/contact` |
 | 2026-06-05 | Fixed Footer social URLs — LinkedIn corrected to https://www.linkedin.com/company/psl25/, X corrected to https://x.com/pronurture; ContactMain was already correct; no other social links found elsewhere | Footer.tsx |
+| 2026-06-05 | Created app/api/waitlist/route.ts — POST handler that validates name/email server-side and forwards to Make.com webhook; replaces no-cors browser fetch; returns real JSON { success } so the client can confirm delivery | /api/waitlist |
+| 2026-06-05 | Updated WaitlistForm.tsx — POST to /api/waitlist instead of Make.com directly; removed mode:no-cors; reads data.success from JSON response; shows inline error on failure so user can retry without reload | WaitlistForm |
 | 2026-06-05 | Built Privacy Policy page — preliminary legal content with 7 sections: Introduction, Information We Collect, How We Use Your Information, Data Storage & Security, Third-Party Services (HubSpot, Google, Make.com, Vercel), Your Rights, Contact Us; legal review notice banner; back link | `/privacy` |
 | 2026-06-05 | Built Terms of Service page — preliminary legal content with 8 sections: Introduction, Acceptance of Terms, Use of the Platform, Early Access Programme, Intellectual Property, Limitation of Liability, Changes to Terms, Contact Us; legal review notice banner; links to /privacy and /contact | `/terms` |
