@@ -2161,4 +2161,163 @@ The waitlist page has a single goal: form submission. Every additional section i
 
 ---
 
+---
+
+## 10. Contact Page Components
+
+All components live in `components/contact/`. The page assembler is `app/contact/page.tsx`.
+
+**Target audience:** Both buyer personas + partner organisations  
+**Tone:** Warm, welcoming, professional — "we want to hear from you"  
+**Section framework:** Orientation → Contact → Objection handling
+
+---
+
+### 10.1 `components/contact/ContactHero.tsx`
+
+**Type:** Server Component  
+**File:** `components/contact/ContactHero.tsx`
+
+#### Purpose
+Compact (~40vh) above-the-fold orientation for the `/contact` page. Sets the welcoming tone before the visitor sees the form. Intentionally lean — the form and contact details below are the real value.
+
+#### Key Content
+
+| Element | Content |
+|---------|---------|
+| Badge | "Get in Touch" with gold dot |
+| H1 | "Let's Talk About Your Healthcare Workforce." |
+| Subheadline | Welcomes professionals, facilities, and partners |
+| Decorative rule | Brand-dark + brand-gold + brand-green colour trio |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| No CTA buttons | The page is entirely a contact funnel — CTA buttons would compete with the form just below |
+| `minHeight: "40vh"` | Unlike full hero pages, a contact hero should not dominate — the content below is the destination |
+| `pt-28` | Clears the fixed Navbar (112px) — consistent with WaitlistForm and other pages |
+
+---
+
+### 10.2 `components/contact/ContactMain.tsx`
+
+**Type:** `'use client'` (Client Component)  
+**File:** `components/contact/ContactMain.tsx`
+
+#### Purpose
+Two-column section: direct contact details on the left, a mailto-based enquiry form on the right. The form builds a pre-filled `mailto:` URL on submit and triggers `window.location.href` to open the visitor's default email client.
+
+#### Why mailto instead of a backend form?
+Zero dependencies — no API key, no email service, no server route required at this pre-launch stage. Works immediately without infrastructure. Trade-off: depends on the visitor having a configured email client, which is true for virtually all healthcare professionals and hospital administrators.
+
+#### Left Column — Contact Details
+
+| Element | Detail |
+|---------|--------|
+| Email card | Icon + "Email Us" label + `uwa@pronurture.com.ng` (mailto link) |
+| LinkedIn button | Links to `https://www.linkedin.com/company/psl25/` (opens `target="_blank"`) |
+| X button | Links to `https://x.com/pronurture` (opens `target="_blank"`) |
+| Response time | "We typically respond within 24 hours." with green pulse dot |
+
+#### Right Column — Form Card
+
+| Field | Type | Notes |
+|-------|------|-------|
+| Full Name | `type="text"` | Required; `autoComplete="name"` |
+| Email Address | `type="email"` | Required; validated with regex |
+| Subject | `type="text"` | Required; becomes mailto `?subject=` param |
+| Message | `<textarea rows={5}` | Required; `resize-none` keeps card height stable |
+
+#### Mailto Construction
+
+```ts
+const body = `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`;
+const link = `mailto:uwa@pronurture.com.ng?subject=${encodeURIComponent(subject.trim())}&body=${encodeURIComponent(body)}`;
+window.location.href = link;
+```
+
+`encodeURIComponent` converts special characters (`\n` → `%0A`, `&` → `%26`, accented letters → percent-encoded sequences) so the subject and body survive URL encoding without breaking.
+
+#### State Machine
+
+```
+idle → (submit valid)   → sent
+     → (submit invalid) → error → (user types) → idle
+```
+
+| State | UI Behaviour |
+|-------|-------------|
+| idle | Form renders normally |
+| error | Styled error message below form. Resets when user types |
+| sent | Form card replaced with checkmark + "email client opened" confirmation + fallback link if it didn't open |
+
+#### Sent State Fallback
+The sent state stores `mailtoLink` in React state so the fallback anchor (`"Click here to try again"`) renders the exact same URL that was triggered. Handles the case where no email client is configured or the browser blocked the redirect.
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `items-start` on grid (not `items-center`) | Form card with 5 fields + button is taller than the contact details column — `items-start` top-aligns both columns cleanly |
+| `resize-none` on textarea | Prevents layout breakage if the user drags the textarea handle — the card shadow would distort |
+| Social links as `<a>` not `<Link>` | External URLs must use `<a target="_blank">` — `next/link` is for internal routes only |
+
+#### Accessibility
+- `aria-required="true"` on all required inputs
+- `noValidate` on `<form>` to suppress browser validation UI in favour of styled brand error messages
+- `role="alert"` + `aria-live="assertive"` on error message
+- `aria-live="polite"` + `aria-atomic="true"` on card shell for sent-state announcement
+- `focus-visible:ring-2` on social link buttons
+- `aria-label` on all social links (includes "opens in new tab" context)
+
+---
+
+### 10.3 `components/contact/ContactFAQ.tsx`
+
+**Type:** `'use client'` (Client Component)  
+**File:** `components/contact/ContactFAQ.tsx`
+
+#### Purpose
+Four-question accordion below the contact section. Handles the final hesitations of visitors who scrolled past the form without submitting.
+
+#### Four FAQs and Their Objection Mapping
+
+| Question | Objection Addressed |
+|----------|---------------------|
+| How quickly will I get a response? | Response time anxiety — "will anyone read this?" |
+| I'm a healthcare professional — how do I join? | Redirect to waitlist (wrong contact intent) |
+| I represent a facility — can I request a demo? | Facility visitors don't know they can request demos |
+| Where is ProNurtureSphere based? | Trust and local relevance — "is this a Nigerian company?" |
+
+#### State Logic
+Identical to `WaitlistFAQ.tsx`: `openIndex: number | null`, toggle function closes open item on re-click.
+
+#### Bottom Prompt
+`"Still have questions? Email us directly"` with `mailto:uwa@pronurture.com.ng`.
+
+---
+
+### `/contact` Page
+
+**File:** `app/contact/page.tsx`  
+**Type:** Server Component  
+**Status:** ✅ Complete
+
+**SEO metadata:**
+- Title: "Contact Us — ProNurtureSphere"
+- Description: Optimised for "contact healthcare platform Nigeria" + "demo request"
+
+**Section order:**
+
+```
+1. ContactHero → Compact orientation (~40vh) — badge, H1, subheadline
+2. ContactMain → Two-column: contact details (left) + mailto form card (right)
+3. ContactFAQ  → 4-question accordion for objection handling
+```
+
+**Footer link:** `Footer.tsx` already contained `{ label: "Contact Us", href: "/contact" }` in the Company column — no update needed.
+
+---
+
 *Documentation maintained by Claude Code | ProNurtureSphere Limited*

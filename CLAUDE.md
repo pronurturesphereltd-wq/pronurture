@@ -104,7 +104,7 @@ colors: {
 | About | `/about` | ✅ Complete |
 | Blog / Resources | `/blog` | ✅ Complete |
 | Blog Post | `/blog/[slug]` | ✅ Complete |
-| Contact | `/contact` | 🔲 Not started |
+| Contact | `/contact` | ✅ Complete |
 | Waitlist / Early Access | `/waitlist` | ✅ Complete |
 | Sanity Studio | `/studio` | ✅ Complete |
 
@@ -439,3 +439,4 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-04 | Built complete Blog / Resources page — BlogHero, BlogFilters, BlogFeaturedPost, BlogGrid (9 articles), BlogNewsletterCTA — 5 components in components/blog/ | `/blog` |
 | 2026-06-04 | Built blog post template — ArticleHero (breadcrumb, H1, meta, featured image), ArticleBody (H2s, paragraphs, blockquote, bullet list), ArticleAuthorCard, ArticleRelatedPosts (3 cards) — 4 components + dynamic route | `/blog/[slug]` |
 | 2026-06-04 | Built complete Waitlist / Early Access page — WaitlistForm (two-column pitch + form card, Make.com webhook POST, success state with spam-folder note), WaitlistFAQ (4-question accordion) — 2 components in components/waitlist/ | `/waitlist` |
+| 2026-06-05 | Built complete Contact page — ContactHero (compact ~40vh, bg-brand-light), ContactMain (two-column: email card + social links left, mailto: form card right), ContactFAQ (4-question accordion) — 3 components in components/contact/ | `/contact` |
