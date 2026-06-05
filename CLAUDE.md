@@ -103,7 +103,7 @@ colors: {
 | For Healthcare Professionals | `/professionals` | ✅ Complete |
 | About | `/about` | ✅ Complete |
 | Blog / Resources | `/blog` | ✅ Complete |
-| Blog Post | `/blog/[slug]` | 🔲 Not started |
+| Blog Post | `/blog/[slug]` | ✅ Complete |
 | Contact | `/contact` | 🔲 Not started |
 | Waitlist / Early Access | `/waitlist` | 🔲 Not started |
 | Sanity Studio | `/studio` | ✅ Complete |
@@ -437,3 +437,4 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-03 | Built complete For Healthcare Professionals page — ProfessionalsHero, ProfessionalsPainPoints, ProfessionalsTransformation, ProfessionalsFeatures, ProfessionalsHowItWorks, ProfessionalsTestimonials, ProfessionalsFAQ (client), ProfessionalsCTA (client) — 8 components in components/professionals/ | `/professionals` |
 | 2026-06-03 | Built complete About page — AboutHero, AboutMission, AboutStory, AboutValues, AboutEcosystem, AboutLifecycle, AboutWhoWeServe, AboutTeam, AboutPSLArms, AboutCTA — 10 components in components/about/ | `/about` |
 | 2026-06-04 | Built complete Blog / Resources page — BlogHero, BlogFilters, BlogFeaturedPost, BlogGrid (9 articles), BlogNewsletterCTA — 5 components in components/blog/ | `/blog` |
+| 2026-06-04 | Built blog post template — ArticleHero (breadcrumb, H1, meta, featured image), ArticleBody (H2s, paragraphs, blockquote, bullet list), ArticleAuthorCard, ArticleRelatedPosts (3 cards) — 4 components + dynamic route | `/blog/[slug]` |

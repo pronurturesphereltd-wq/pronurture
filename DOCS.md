@@ -1816,8 +1816,176 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 ### Next pages to build (priority order)
 1. `/waitlist` — standalone waitlist page (the CTA destination — must exist before launch)
 2. `/contact` — Contact page
-3. `/blog/[slug]` — Individual blog post page (blog listing `/blog` is complete)
-4. Connect BlogGrid and BlogPreviewSection to live Sanity `post` collection via GROQ
+3. Connect BlogGrid, BlogPreviewSection, and blog/[slug] to live Sanity `post` collection via GROQ
+
+---
+
+## 8. Blog Post Page Components
+
+All components live in `components/blog/`. The page assembler is `app/blog/[slug]/page.tsx`.
+
+**Target audience:** Organic/SEO traffic + existing site visitors following a blog link  
+**Tone:** Educational, authoritative, expert — thought leadership for both personas  
+**Section framework:** Article reading flow (Orientation → Content → Credibility → Retention)
+
+---
+
+### 8.1 `components/blog/ArticleHero.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Above-the-fold article identity. Answers: what is this article? who wrote it? how long will it take? The breadcrumb gives readers a back-path to the blog listing.
+
+#### Elements
+
+| Element | Detail |
+|---------|--------|
+| Breadcrumb | Home → Resources & Insights → Article title (truncated) |
+| Category tag | `bg-brand-gold/20 text-brand-dark` pill — "Industry Insights" |
+| H1 | Full article title |
+| Author meta row | Avatar initials + author name · date · read time · share cue |
+| Featured image | Full-width `max-w-6xl` container, rounded-2xl, `h-64 sm:h-80 lg:h-[500px]` |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| Breadcrumb nav | Long-form content readers need a clear back-path. Without it, they hit back-button and may not return to the blog listing. |
+| `max-w-6xl` for image, `max-w-4xl` for text | Text column is narrower for reading comfort; image bleeds wider to fill the page impressively. Both are centred. |
+| `pt-28` (not `pt-24`) | Compensates for the fixed Navbar (80px) plus extra breathing room above the breadcrumb. |
+| Share cue in meta row | Passive brand signal — users who feel compelled to share see the affordance without a disruptive share-button row. |
+
+---
+
+### 8.2 `components/blog/ArticleBody.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+The full article prose with typographic hierarchy. Placeholder content is written on the Nigerian doctor shortage topic to match the featured article throughout the blog section.
+
+#### Typography System
+
+| Element | Classes | Purpose |
+|---------|---------|---------|
+| Intro paragraph | `text-lg leading-relaxed text-gray-700 font-medium` | Slightly heavier than body — draws reader in |
+| Body paragraphs | `text-base md:text-lg leading-relaxed text-gray-700` | Comfortable long-form reading weight |
+| H2 headings | `text-2xl md:text-3xl font-bold text-brand-dark` | Scannable section breaks for non-linear readers |
+| Blockquote | `border-l-4 border-brand-gold bg-brand-light rounded-r-xl py-5 pr-5 pl-6` | Pull-quote treatment isolates key insights |
+| Bullet list | Gold `bg-brand-gold` dot, bold title + gray body per item | Structured, scannable action items |
+| Tags row | `bg-brand-light text-brand-dark/70 border-brand-dark/10` pills | Contextualises the article for SEO and related-content navigation |
+
+#### Content Structure
+
+```
+Intro → The Numbers (H2) → Facility Impact (H2) → Pull quote → 
+Data Strategies (H2, with 5-item bullet list) → Technology Role (H2) → 
+Closing paragraph → Tags
+```
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| `max-w-3xl mx-auto` column | 60–65 characters per line — the typographically optimal reading measure. Wider = tiring to track horizontally. |
+| Gold bullet dots instead of default discs | Brand palette consistency — every visual element follows the brand colours, including list markers. |
+| `border-t border-brand-dark/10 pt-8` before closing | Signals "end of article" without a heavy divider. The visual breathing room primes the reader for the author bio below. |
+| Blockquote uses `bg-brand-light` fill | Matches the section background colour of the hero and author card sections — ties the article page's alternating rhythm together visually. |
+
+> ⚠️ **TODO:** Replace hardcoded JSX prose with `@portabletext/react` PortableText renderer wired to the Sanity `post.body` field.
+
+---
+
+### 8.3 `components/blog/ArticleAuthorCard.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Credibility signal placed immediately after the article ends. Readers who finish an article are the most receptive audience for trust signals — this is the moment to tell them who produced the content and why it is reliable.
+
+#### Elements
+
+| Element | Detail |
+|---------|--------|
+| Avatar | Deep green circle with gold "PT" initials — matches initials pattern from TestimonialsSection |
+| Name | "ProNurtureSphere Team" |
+| Role label | "Research & Editorial" in `text-brand-green` |
+| Bio | One sentence describing the editorial team's expertise mix |
+| "All Articles" link | Outlined pill button → `/blog` — drives return visits |
+
+#### Key Design Decisions
+
+| Decision | Why |
+|----------|-----|
+| White card on `bg-brand-light` section | Layered depth — consistent with FeaturesSection and BlogGrid patterns. |
+| `sm:flex-row` layout | On mobile: stacked (avatar above text). On sm+: horizontal (avatar left, text right, button right). Adapts to available space. |
+| "All Articles" link (not "Follow" or social) | No social profiles to link to yet. "All Articles" drives on-site engagement and is the highest-value next step for a content-led visitor. |
+
+> ⚠️ **TODO:** Accept author props from Sanity `author` collection (name, role, bio, photo). Replace initials avatar with real headshot using `<img>` or `next/image`.
+
+---
+
+### 8.4 `components/blog/ArticleRelatedPosts.tsx`
+
+**Type:** Server Component
+
+#### Purpose
+Prevents the "dead-end bounce" at the bottom of an article. Readers who finished the article have demonstrated intent — related posts convert that intent into further engagement.
+
+#### Card Pattern
+Identical structure and Tailwind classes to `BlogGrid.tsx` cards:
+- White `bg-white` card on `bg-brand-light` section
+- `hover:shadow-xl hover:-translate-y-1` lift effect
+- `group-hover:scale-105` image zoom
+- `group-hover:text-brand-green` title colour shift
+- `bg-brand-gold/20 text-brand-dark` category tag
+- `line-clamp-3` excerpt, `flex-1` for bottom-aligned "Read More →"
+
+#### Three Related Articles
+
+| # | Category | Title |
+|---|----------|-------|
+| 1 | For Employers | Retention Over Recruitment |
+| 2 | For Employers | Real Cost of an Empty Shift |
+| 3 | Industry Insights | Nigeria Needs a Healthcare Workforce Ecosystem |
+
+> ⚠️ **TODO:** Accept `relatedPosts` as a prop. Populate via Sanity GROQ query that finds posts with matching tags or category, excluding the current slug.
+
+---
+
+### `/blog/[slug]` — Individual Blog Post
+
+**File:** `app/blog/[slug]/page.tsx`  
+**Type:** Server Component (async — Next.js 15 requires `await params`)  
+**Status:** ✅ Complete (placeholder template)
+
+**Next.js 15 params pattern:**
+```ts
+interface BlogPostPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  // ...
+}
+```
+
+**Section order:**
+```
+1. ArticleHero        → Breadcrumb, category tag, H1, author meta, featured image
+2. ArticleBody        → Full prose with H2s, blockquote, bullet list, tags
+3. ArticleAuthorCard  → Avatar, name, bio, "All Articles" link
+4. ArticleRelatedPosts → 3 related cards (identical style to BlogGrid)
+5. BlogNewsletterCTA  → Newsletter email capture (reused from /blog listing)
+```
+
+**Sanity wiring guide (in page comments):**
+- GROQ query pattern for fetching a post by slug
+- `notFound()` call for missing slugs
+- `generateStaticParams` for build-time static generation
+- `generateMetadata` is already defined (returns placeholder values for now)
 
 ### Infrastructure
 - [ ] Add `app/api/waitlist/route.ts` — API route for waitlist form submissions
