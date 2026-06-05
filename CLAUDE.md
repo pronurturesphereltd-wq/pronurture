@@ -106,6 +106,8 @@ colors: {
 | Blog Post | `/blog/[slug]` | ✅ Complete |
 | Contact | `/contact` | ✅ Complete |
 | Waitlist / Early Access | `/waitlist` | ✅ Complete |
+| Privacy Policy | `/privacy` | ✅ Complete |
+| Terms of Service | `/terms` | ✅ Complete |
 | Sanity Studio | `/studio` | ✅ Complete |
 
 > Update the status column after each page is completed.
@@ -440,3 +442,6 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-04 | Built blog post template — ArticleHero (breadcrumb, H1, meta, featured image), ArticleBody (H2s, paragraphs, blockquote, bullet list), ArticleAuthorCard, ArticleRelatedPosts (3 cards) — 4 components + dynamic route | `/blog/[slug]` |
 | 2026-06-04 | Built complete Waitlist / Early Access page — WaitlistForm (two-column pitch + form card, Make.com webhook POST, success state with spam-folder note), WaitlistFAQ (4-question accordion) — 2 components in components/waitlist/ | `/waitlist` |
 | 2026-06-05 | Built complete Contact page — ContactHero (compact ~40vh, bg-brand-light), ContactMain (two-column: email card + social links left, mailto: form card right), ContactFAQ (4-question accordion) — 3 components in components/contact/ | `/contact` |
+| 2026-06-05 | Fixed Footer social URLs — LinkedIn corrected to https://www.linkedin.com/company/psl25/, X corrected to https://x.com/pronurture; ContactMain was already correct; no other social links found elsewhere | Footer.tsx |
+| 2026-06-05 | Built Privacy Policy page — preliminary legal content with 7 sections: Introduction, Information We Collect, How We Use Your Information, Data Storage & Security, Third-Party Services (HubSpot, Google, Make.com, Vercel), Your Rights, Contact Us; legal review notice banner; back link | `/privacy` |
+| 2026-06-05 | Built Terms of Service page — preliminary legal content with 8 sections: Introduction, Acceptance of Terms, Use of the Platform, Early Access Programme, Intellectual Property, Limitation of Liability, Changes to Terms, Contact Us; legal review notice banner; links to /privacy and /contact | `/terms` |

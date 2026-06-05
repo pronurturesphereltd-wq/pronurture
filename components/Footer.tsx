@@ -51,7 +51,7 @@ const footerColumns = [
 const socialLinks = [
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/company/pronurture",
+    href: "https://www.linkedin.com/company/psl25/",
     // LinkedIn icon SVG
     icon: (
       <svg
@@ -68,7 +68,7 @@ const socialLinks = [
   },
   {
     label: "X (Twitter)",
-    href: "https://twitter.com/pronurture",
+    href: "https://x.com/pronurture",
     // X / Twitter icon SVG
     icon: (
       <svg
