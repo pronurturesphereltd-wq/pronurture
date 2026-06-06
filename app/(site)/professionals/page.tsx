@@ -1,5 +1,5 @@
 /**
- * app/professionals/page.tsx — For Healthcare Professionals page (route: /professionals)
+ * app/(site)/professionals/page.tsx — For Healthcare Professionals page (route: /professionals)
  *
  * Target persona: Dr. Amarachi Bello — Doctor / Nurse / Pharmacist / Allied Health Professional
  * (CLAUDE.md Section 3 — warm, opportunity-focused, mobile-first, trust-building messaging)

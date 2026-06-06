@@ -1,91 +1,45 @@
 /**
  * ArticleRelatedPosts.tsx — Related articles section below the blog post
  *
- * Purpose: Reduces the "dead end" bounce that happens when a reader
- * finishes an article and has no clear next step. Related posts keep
- * engaged readers on-site and expose them to more PSL content — which
- * builds trust and warms them toward the platform signup.
+ * Receives 3 posts from the relatedPostsQuery in Sanity (the 3 most recent
+ * posts excluding the current one). Renders them in the same card style as
+ * BlogGrid for visual consistency across all blog surfaces.
  *
- * Card style: Identical to BlogGrid.tsx — same HTML structure, same
- * Tailwind classes, same hover effects — for visual consistency across
- * all blog surfaces. Described in DOCS.md as the canonical blog card pattern.
- *
- * Layout: 1-column (mobile) → 3-column (md+) — 3 cards is the right
- * number: enough variety to find relevance, few enough to not overwhelm
- * a reader who is already at the end of a long article.
- *
- * Content: 3 placeholder articles chosen to cross-promote to both
- * buyer personas. Replace with Sanity GROQ query for tag-matched articles
- * once real content is published.
- *
- * TODO: Accept relatedPosts as a prop from the parent page (populated by
- *       a Sanity GROQ query that fetches articles with overlapping tags).
+ * If fewer than 3 related posts exist (e.g. early in a blog's life), the grid
+ * renders however many are available — the flex layout adapts gracefully.
  */
 
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
+import type { SanityPost } from '@/sanity/lib/types'
+import { urlFor } from '@/sanity/lib/image'
+import BlogImagePlaceholder from './BlogImagePlaceholder'
 
-/** Related post card data — matches the BlogPost interface in BlogGrid.tsx */
-interface RelatedPost {
-  slug: string;
-  category: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  dateTime: string;
-  readTime: string;
-  imageAlt: string;
+interface ArticleRelatedPostsProps {
+  posts: SanityPost[]
 }
 
-/** Three articles chosen for topical relevance to the doctor-shortage feature */
-const relatedPosts: RelatedPost[] = [
-  {
-    slug: "retention-over-recruitment-keep-staff-japa-era",
-    category: "For Employers",
-    title: "Retention Over Recruitment: How to Keep Staff in a Japa Era",
-    excerpt:
-      "Practical strategies to reduce turnover and build a loyal clinical team in Nigeria's current healthcare environment.",
-    date: "May 15, 2026",
-    dateTime: "2026-05-15",
-    readTime: "7 min read",
-    imageAlt: "Healthcare team meeting in a Nigerian hospital",
-  },
-  {
-    slug: "real-cost-empty-shift-manual-rostering-bleeding-budget",
-    category: "For Employers",
-    title: "The Real Cost of an Empty Shift: Why Manual Rostering Is Bleeding Your Budget",
-    excerpt:
-      "A breakdown of the hidden costs of WhatsApp and spreadsheet scheduling for Nigerian healthcare facilities.",
-    date: "May 20, 2026",
-    dateTime: "2026-05-20",
-    readTime: "6 min read",
-    imageAlt: "Hospital administrator looking at spreadsheet on laptop",
-  },
-  {
-    slug: "nigeria-needs-healthcare-workforce-ecosystem-not-just-more-schools",
-    category: "Industry Insights",
-    title: "Why Nigeria Needs a Healthcare Workforce Ecosystem, Not Just More Schools",
-    excerpt:
-      "Training alone won't fix the crisis. Here's the case for an integrated, technology-enabled approach.",
-    date: "May 5, 2026",
-    dateTime: "2026-05-05",
-    readTime: "10 min read",
-    imageAlt: "Aerial view of a Nigerian teaching hospital campus",
-  },
-];
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
 
-/** Gold/20 pill — matches the unified category tag style used on all blog pages */
-const categoryTagClass = "bg-brand-gold/20 text-brand-dark";
 
-const ArticleRelatedPosts = () => {
+const ArticleRelatedPosts = ({ posts }: ArticleRelatedPostsProps) => {
+  if (posts.length === 0) return null
+
   return (
     <section
       className="py-14 lg:py-20"
-      style={{ backgroundColor: "#f5f5f0" }}
+      style={{ backgroundColor: '#f5f5f0' }}
       aria-label="Related articles"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* ── Section header ───────────────────────────────────────────────── */}
+        {/* Section header */}
         <div className="flex items-end justify-between gap-4 mb-8">
           <div>
             <p className="text-brand-green text-xs font-semibold uppercase tracking-widest mb-2">
@@ -95,8 +49,6 @@ const ArticleRelatedPosts = () => {
               Related Articles
             </h2>
           </div>
-
-          {/* "View all" — subtle escape path for high-engagement readers */}
           <Link
             href="/blog"
             className="
@@ -111,11 +63,11 @@ const ArticleRelatedPosts = () => {
           </Link>
         </div>
 
-        {/* ── Related post cards — 1-col mobile, 3-col md+ ─────────────────── */}
+        {/* Related post cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {relatedPosts.map((post) => (
+          {posts.map((post) => (
             <article
-              key={post.slug}
+              key={post._id}
               className="
                 group
                 bg-white rounded-2xl overflow-hidden
@@ -125,39 +77,32 @@ const ArticleRelatedPosts = () => {
                 flex flex-col
               "
             >
-              {/* ── Card image + category overlay ───────────────────────── */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={`https://placehold.co/400x240/103613/ffffff?text=${encodeURIComponent(post.category)}`}
-                  alt={post.imageAlt}
-                  className="
-                    w-full h-48 object-cover
-                    group-hover:scale-105
-                    transition-transform duration-500
-                  "
-                />
-                <div className="absolute top-4 left-4">
-                  <span className={`
-                    inline-block text-xs font-semibold
-                    px-3 py-1 rounded-full
-                    ${categoryTagClass}
-                  `}>
-                    {post.category}
-                  </span>
-                </div>
+              {/* Card image — real Sanity image when available, gradient placeholder otherwise */}
+              <div className="relative overflow-hidden h-48">
+                {post.mainImage?.asset ? (
+                  <Image
+                    src={urlFor(post.mainImage).width(600).auto('format').url()}
+                    alt={post.mainImage.alt ?? post.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(min-width: 1024px) 33vw, 100vw"
+                  />
+                ) : (
+                  <BlogImagePlaceholder
+                    title={post.title}
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
               </div>
 
-              {/* ── Card body ─────────────────────────────────────────────── */}
+              {/* Card body */}
               <div className="p-6 flex flex-col flex-1">
-
-                {/* Meta */}
                 <div className="flex items-center gap-2 text-brand-dark/40 text-xs mb-3">
-                  <time dateTime={post.dateTime}>{post.date}</time>
-                  <span aria-hidden="true">·</span>
-                  <span>{post.readTime}</span>
+                  <time dateTime={post.publishedAt}>
+                    {formatDate(post.publishedAt)}
+                  </time>
                 </div>
 
-                {/* Title */}
                 <h3 className="
                   text-brand-dark font-bold text-base leading-snug
                   mb-3
@@ -167,14 +112,12 @@ const ArticleRelatedPosts = () => {
                   {post.title}
                 </h3>
 
-                {/* Excerpt */}
                 <p className="text-brand-dark/60 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
-                  {post.excerpt}
+                  {post.excerpt ?? ''}
                 </p>
 
-                {/* Read More */}
                 <Link
-                  href={`/blog/${post.slug}`}
+                  href={`/blog/${post.slug.current}`}
                   className="
                     inline-flex items-center gap-1.5
                     text-brand-dark font-semibold text-sm
@@ -196,7 +139,6 @@ const ArticleRelatedPosts = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 </Link>
-
               </div>
             </article>
           ))}
@@ -204,7 +146,7 @@ const ArticleRelatedPosts = () => {
 
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ArticleRelatedPosts;
+export default ArticleRelatedPosts

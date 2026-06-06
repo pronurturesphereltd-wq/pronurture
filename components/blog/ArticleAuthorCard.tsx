@@ -1,40 +1,46 @@
 /**
  * ArticleAuthorCard.tsx — Author bio card below the article body
  *
- * Establishes the credibility of the content by putting a face and name
- * to the writing. Even a minimal bio ("ProNurtureSphere Team") with a
- * consistent avatar treatment signals that a real organisation produced
- * this content — important for building trust with first-time readers.
- *
- * Placed directly after the article body, before related posts, so the
- * reader who finished the article immediately understands who wrote it
- * and why it should be trusted.
+ * Receives the `author` object fetched from Sanity. Falls back to generic
+ * "ProNurtureSphere Team" copy when no author is linked to the post.
  *
  * Design: White card inside bg-brand-light section — layered depth effect
  * consistent with FeaturesSection and BlogGrid card patterns.
- *
- * TODO: Accept author props from Sanity GROQ query.
- *       The Sanity `author` collection schema already supports name, bio,
- *       role, photo, and social links.
  */
 
-import Link from "next/link";
+import Link from 'next/link'
+import type { SanityAuthor } from '@/sanity/lib/types'
 
-const ArticleAuthorCard = () => {
+interface ArticleAuthorCardProps {
+  author: SanityAuthor | null
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+}
+
+const ArticleAuthorCard = ({ author }: ArticleAuthorCardProps) => {
+  const name = author?.name ?? 'ProNurtureSphere Team'
+  const role = author?.role ?? 'Research & Editorial'
+
   return (
     <section
       className="py-10 lg:py-12"
-      style={{ backgroundColor: "#f5f5f0" }}
+      style={{ backgroundColor: '#f5f5f0' }}
       aria-label="About the author"
     >
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Section label */}
         <p className="text-brand-green text-xs font-semibold uppercase tracking-widest mb-5">
           Written By
         </p>
 
-        {/* Author card */}
         <div className="
           bg-white rounded-2xl
           border border-brand-dark/5
@@ -44,12 +50,7 @@ const ArticleAuthorCard = () => {
           gap-5
         ">
 
-          {/* ── Avatar ─────────────────────────────────────────────────────── */}
-          {/*
-           * Deep green circle with gold initials — matches the initials-avatar
-           * pattern used in TestimonialsSection for consistency.
-           * Replace with real <img> when author headshots are available.
-           */}
+          {/* Avatar — initials until real headshots are available */}
           <div className="
             w-16 h-16 rounded-full
             bg-brand-dark
@@ -57,16 +58,18 @@ const ArticleAuthorCard = () => {
             flex-shrink-0
             shadow-md
           ">
-            <span className="text-brand-gold font-bold text-xl">PT</span>
+            <span className="text-brand-gold font-bold text-xl">
+              {getInitials(name)}
+            </span>
           </div>
 
-          {/* ── Author info ──────────────────────────────────────────────── */}
+          {/* Author info */}
           <div className="flex-1 min-w-0">
             <p className="font-bold text-brand-dark text-lg leading-tight">
-              ProNurtureSphere Team
+              {name}
             </p>
             <p className="text-brand-green text-sm font-medium mt-0.5 mb-2">
-              Research &amp; Editorial
+              {role}
             </p>
             <p className="text-gray-600 text-sm leading-relaxed">
               The ProNurtureSphere editorial team brings together clinicians,
@@ -75,7 +78,7 @@ const ArticleAuthorCard = () => {
             </p>
           </div>
 
-          {/* ── View all articles link ────────────────────────────────────── */}
+          {/* View all articles link */}
           <div className="sm:flex-shrink-0 w-full sm:w-auto">
             <Link
               href="/blog"
@@ -107,7 +110,7 @@ const ArticleAuthorCard = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ArticleAuthorCard;
+export default ArticleAuthorCard

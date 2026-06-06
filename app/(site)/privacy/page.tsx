@@ -1,5 +1,5 @@
 /**
- * app/privacy/page.tsx — Privacy Policy page (route: /privacy)
+ * app/(site)/privacy/page.tsx — Privacy Policy page (route: /privacy)
  *
  * Purpose: Legal transparency page linked from the footer. Communicates
  * to visitors (healthcare professionals and facility administrators) how
@@ -9,7 +9,7 @@
  * professional review and finalise this policy before launch.
  *
  * Architecture: Pure Server Component — no interactivity needed.
- * Metadata exported for SSR SEO. Inherits Navbar + Footer from layout.tsx.
+ * Metadata exported for SSR SEO. Inherits Navbar + Footer from (site)/layout.tsx.
  */
 
 import Link from "next/link";

@@ -1,27 +1,25 @@
 /**
  * app/layout.tsx — Root Layout
  *
- * This is the outermost shell for every page on the site.
- * It provides:
+ * The outermost shell for every route on the site.
+ * Provides:
  * - DM Sans font (ProNurtureSphere brand typography) via next/font/google
  * - Global metadata for SEO
- * - Navbar (top of every page)
- * - Footer (bottom of every page)
  * - globals.css styles
+ * - html/body/font wrapper — nothing else
  *
- * The Navbar is transparent over the hero then turns white on scroll.
- * The {children} slot renders the page-specific content between them.
+ * Navbar and Footer are NOT here. They live in app/(site)/layout.tsx,
+ * which wraps only the public marketing pages. This keeps /studio and
+ * /api routes clean — they inherit only this bare shell.
  */
 
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 /**
  * DM Sans — ProNurtureSphere's primary brand font.
- * We expose it as a CSS variable (--font-dm-sans) so globals.css can
+ * Exposed as a CSS variable (--font-dm-sans) so globals.css can
  * reference it in --font-sans, applying it site-wide via Tailwind.
  */
 const dmSans = DM_Sans({
@@ -105,14 +103,7 @@ export default function RootLayout({
       className={`${dmSans.variable}`}
     >
       <body className="min-h-screen flex flex-col font-sans antialiased">
-        {/* Sticky Navbar — transparent over hero, white on scroll */}
-        <Navbar />
-
-        {/* Page content — flex-1 pushes Footer to the bottom */}
-        <main className="flex-1">{children}</main>
-
-        {/* Site-wide Footer */}
-        <Footer />
+        {children}
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 /**
- * app/about/page.tsx — About ProNurtureSphere page (route: /about)
+ * app/(site)/about/page.tsx — About ProNurtureSphere page (route: /about)
  *
  * Target audience: Both buyer personas + partners, media, and stakeholders.
  * This is a story page — purpose is to establish institutional identity, credibility,

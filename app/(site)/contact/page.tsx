@@ -1,5 +1,5 @@
 /**
- * app/contact/page.tsx — Contact page (route: /contact)
+ * app/(site)/contact/page.tsx — Contact page (route: /contact)
  *
  * Purpose: Primary inbound contact destination. Linked from:
  *   - Footer "Contact Us" link

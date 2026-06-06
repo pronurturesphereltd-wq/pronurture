@@ -1,5 +1,5 @@
 /**
- * app/employers/page.tsx — For Healthcare Employers page (route: /employers)
+ * app/(site)/employers/page.tsx — For Healthcare Employers page (route: /employers)
  *
  * Target persona: Dr. Adaeze Okafor — Hospital Administrator / Medical Director / HR Manager
  * (CLAUDE.md Section 3 — formal, data-driven, ROI-focused messaging)

@@ -1,5 +1,5 @@
 /**
- * app/waitlist/page.tsx — Waitlist / Early Access page (route: /waitlist)
+ * app/(site)/waitlist/page.tsx — Waitlist / Early Access page (route: /waitlist)
  *
  * This is the primary conversion destination for every CTA button across
  * the site. Every "Get Early Access" button in Navbar, HeroSection,

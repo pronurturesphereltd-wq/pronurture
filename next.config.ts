@@ -12,9 +12,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         // Placeholder image service used during development
-        // Replace with real CDN/storage domain once photography is sourced
         protocol: "https",
         hostname: "placehold.co",
+      },
+      {
+        // Sanity image CDN — serves all images uploaded via Sanity Studio
+        protocol: "https",
+        hostname: "cdn.sanity.io",
       },
     ],
   },

@@ -1,5 +1,5 @@
 /**
- * app/terms/page.tsx — Terms of Service page (route: /terms)
+ * app/(site)/terms/page.tsx — Terms of Service page (route: /terms)
  *
  * Purpose: Legal terms page linked from the footer. Sets out the conditions
  * under which visitors and registered users may use the ProNurtureSphere
@@ -9,7 +9,7 @@
  * professional review and finalise these terms before launch.
  *
  * Architecture: Pure Server Component — no interactivity needed.
- * Metadata exported for SSR SEO. Inherits Navbar + Footer from layout.tsx.
+ * Metadata exported for SSR SEO. Inherits Navbar + Footer from (site)/layout.tsx.
  */
 
 import Link from "next/link";
