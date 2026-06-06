@@ -2,7 +2,7 @@
 
 > This file is the single source of truth for all AI agents (Claude Code, etc.) working on this project.
 > It must be updated after every major feature or page is completed.
-> Last updated: 2026-05-27 | Status: Foundation Setup
+> Last updated: 2026-06-06 | Status: Active Development
 
 ---
 
@@ -153,7 +153,7 @@ Nigeria's health workforce faces staffing gaps, manual HR processes (WhatsApp, s
 | `professionalsPage` | Singleton | For Professionals page |
 | `aboutPage` | Singleton | About page content |
 | `siteSettings` | Singleton | Global config (logo, nav, footer) |
-| `post` | Collection | Blog articles |
+| `post` | Collection | Blog articles — fields: title, slug, author (ref), mainImage (image+hotspot+alt), publishedAt, excerpt, category (string, 4 options), body (blocks+images) |
 | `author` | Collection | Team/founders |
 | `service` | Collection | Platform features |
 | `testimonial` | Collection | User quotes |
@@ -235,7 +235,10 @@ export default ExampleComponent
 NEXT_PUBLIC_SANITY_PROJECT_ID=cfu3qevi
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2026-05-26
+SANITY_API_WRITE_TOKEN=<Editor-level token — server-only, never NEXT_PUBLIC_>
 ```
+
+`SANITY_API_WRITE_TOKEN` is used only by scripts (`seed:blog`, `update:categories`) that write to Sanity. Never expose it client-side.
 
 ---
 
@@ -244,27 +247,37 @@ NEXT_PUBLIC_SANITY_API_VERSION=2026-05-26
 ```
 pronurture/
 ├── app/                    # Next.js App Router pages
-│   ├── layout.tsx          # Root layout (Navbar + Footer)
-│   ├── page.tsx            # Homepage
+│   ├── layout.tsx          # Root layout — metadata, fonts, OG image config
+│   ├── (site)/             # Route group — all public pages share Navbar + Footer
+│   │   ├── layout.tsx      # (site) layout — renders <Navbar> + <Footer>
+│   │   ├── page.tsx        # Homepage
+│   │   ├── employers/      # For Employers page
+│   │   ├── professionals/  # For Professionals page
+│   │   ├── about/          # About page
+│   │   ├── blog/           # Blog listing + [slug] — wired to Sanity CMS
+│   │   ├── contact/        # Contact page
+│   │   ├── waitlist/       # Waitlist page
+│   │   ├── privacy/        # Privacy Policy page
+│   │   └── terms/          # Terms of Service page
 │   ├── api/                # Next.js Route Handlers (server-side API)
 │   │   └── waitlist/       # POST /api/waitlist — proxies to Make.com webhook
-│   ├── employers/          # For Employers page
-│   ├── professionals/      # For Professionals page
-│   ├── about/              # About page
-│   ├── blog/               # Blog listing + [slug]
-│   ├── contact/            # Contact page
-│   ├── waitlist/           # Waitlist page
-│   ├── privacy/            # Privacy Policy page
-│   ├── terms/              # Terms of Service page
 │   └── studio/             # Sanity Studio
 ├── components/             # Reusable UI components
 │   ├── Navbar.tsx
 │   ├── Footer.tsx
+│   ├── blog/               # Blog-specific components (all wired to Sanity)
 │   └── ...
 ├── sanity/                 # Sanity CMS config
 │   ├── schemaTypes/        # All 11 schemas
-│   ├── lib/                # Sanity client
+│   ├── lib/
+│   │   ├── client.ts       # Sanity read client (useCdn: true)
+│   │   ├── image.ts        # urlFor() image URL builder (@sanity/image-url)
+│   │   ├── queries.ts      # All GROQ queries (postsQuery, postBySlugQuery, etc.)
+│   │   └── types.ts        # TypeScript types for Sanity data (SanityPost, etc.)
 │   └── structure.ts        # Studio sidebar config
+├── scripts/                # One-off data scripts (run with npx tsx)
+│   ├── seed-blog.ts        # Seeds 10 blog posts (npm run seed:blog)
+│   └── update-post-categories.ts  # Patches category field (npm run update:categories)
 ├── public/
 │   └── brand-assets/       # Logo files, brand images
 ├── CLAUDE.md               # This file
@@ -454,3 +467,9 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-05 | Set up site-wide SEO — metadataBase + title template in layout.tsx; per-page metadata on all 9 routes; dynamic OG image (app/opengraph-image.tsx, 1200×630, ImageResponse); robots.ts (allow all, block /studio + /api); sitemap.ts (9 URLs with priorities); SVG favicon via icons field | SEO / All pages |
 | 2026-06-05 | Fixed OG image detection — corrected url from /og-image.png → /opengraph-image.png in openGraph.images; added app/twitter-image.tsx (re-exports same ImageResponse); added runtime='edge' to opengraph-image.tsx; changed twitter.images to structured object with url/width/height/alt | SEO |
 | 2026-06-05 | Updated all meta descriptions to 110–160 chars — root, homepage, employers, professionals, about, blog, contact, waitlist, privacy, terms | SEO / All pages |
+| 2026-06-06 | Moved all pages into `app/(site)/` route group with shared layout (Navbar + Footer); removed duplicate Navbar/Footer from root layout | Architecture |
+| 2026-06-06 | Wired blog to Sanity CMS — created `sanity/lib/queries.ts` (4 GROQ queries), `sanity/lib/types.ts`; updated blog list + post pages to fetch from Sanity; added `generateStaticParams` and `generateMetadata`; ISR revalidate 3600s | Blog `/blog`, `/blog/[slug]` |
+| 2026-06-06 | Created `components/blog/BlogImagePlaceholder.tsx` — 8 deterministic brand-color CSS gradient variants selected by title hash; replaces broken placeholder images across all blog surfaces | Blog components |
+| 2026-06-06 | Wired `mainImage` field — all 4 blog components render real Sanity image via `urlFor()` + `next/image` when `post.mainImage` exists, fall back to gradient placeholder otherwise; added `cdn.sanity.io` to `next/image` remotePatterns | Blog components, `next.config.ts` |
+| 2026-06-06 | Added `category` field to `post` schema (string, 4 options: for-professionals, for-employers, industry-insights, cpd-compliance); added to GROQ queries and TypeScript types; fixed `BlogGrid` filter to map display labels → slug values via `CATEGORY_SLUG` map | Sanity schema, Blog filters |
+| 2026-06-06 | Created `scripts/update-post-categories.ts` — patches category on all 10 seeded posts; patched drafts-exclusion bug (`!(_id in path("drafts.**"))` filter); all 10/10 posts now categorised | Scripts |

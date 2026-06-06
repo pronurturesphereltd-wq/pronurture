@@ -1,7 +1,7 @@
 # DOCS.md — ProNurtureSphere Component & Configuration Documentation
 
-> **Last updated:** 2026-06-03  
-> **Status:** Homepage + Employers + Professionals + About pages complete  
+> **Last updated:** 2026-06-06  
+> **Status:** All pages complete — Blog fully wired to Sanity CMS  
 > This is the living technical reference for the ProNurtureSphere codebase.  
 > Update this file after every new component, page, or config change.
 
@@ -110,18 +110,20 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "placehold.co",
+        hostname: "placehold.co",    // Dev placeholder images
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",   // All images uploaded via Sanity Studio
       },
     ],
   },
 };
 ```
 
-**Why `placehold.co`?**  
-`next/image` blocks all external image sources by default for security. `placehold.co` is used for placeholder images across all sections during development, before real photography of Nigerian healthcare professionals is sourced. Every `<Image src="https://placehold.co/..." />` in the codebase needs this permission.
+**`placehold.co`:** Used for placeholder images during development, before real photography is sourced.
 
-**When to update:**  
-Once real photography is uploaded (Sanity CDN, Vercel Blob, or a custom CDN), add that hostname here and remove `placehold.co`.
+**`cdn.sanity.io`:** Required for `next/image` to serve real images uploaded via Sanity Studio. Any `post.mainImage` uploaded in the CMS goes through this CDN. Without this entry, `next/image` would throw a configuration error when a real image is present.
 
 ---
 
@@ -804,7 +806,7 @@ Horizontal row of category filter pills below the hero. Helps visitors self-iden
 | Decision | Why |
 |----------|-----|
 | `overflow-x-auto` on wrapper | 5 pills risk wrapping on narrow screens. Horizontal scroll keeps them on one row without shrinking. |
-| Visual-only (no functional filtering yet) | Static blog page — real filtering requires either client-side state or server query params. Wiring this is a TODO once articles are in Sanity. |
+| Filter maps display label → Sanity slug | `BLOG_CATEGORIES` uses display labels ("For Professionals") but `post.category` stores slugs ("for-professionals"). `BlogGrid` uses a `CATEGORY_SLUG` lookup map to align both sides before comparing. |
 | `aria-pressed` on buttons | Communicates the active state to screen readers correctly, even before real filtering is implemented. |
 
 ---
@@ -882,11 +884,11 @@ All tags use `bg-brand-gold/20 text-brand-dark` — a unified gold-tint pill sty
 | Decision | Why |
 |----------|-----|
 | `line-clamp-3` on excerpt | Card heights must be consistent across the grid regardless of excerpt length. `flex-1` on the excerpt div + `flex flex-col` on the card pushes the "Read More" link to the card bottom. |
-| `encodeURIComponent` in placeholder URL | The `category` string in the placehold.co URL includes spaces and ampersands — encoding prevents broken image URLs. |
 | `flex flex-col flex-1` card structure | Makes all cards in a row the same height — required for a clean grid with bottom-aligned CTAs. |
 | 1-col → 2-col → 3-col breakpoints | Mobile-first; 2-col tablet avoids very wide cards before switching to the full 3-column desktop layout. |
+| `CATEGORY_SLUG` map for filter | `activeCategory` is a display label ("For Professionals"). Sanity stores the slug value ("for-professionals"). The map converts at comparison time so the GROQ query and the UI can each use their natural format. |
 
-> ⚠️ **TODO:** Replace the static `blogPosts` array with a GROQ query fetching from the Sanity `post` collection. The schema is already configured. Use `client.fetch()` in the page Server Component and pass articles as props.
+**Sanity wiring (complete):** Static `blogPosts` array removed. `BlogGrid` now accepts `posts: SanityPost[]` passed from the server-side `postsQuery` fetch. Card image: renders `next/image` via `urlFor()` when `post.mainImage` present; falls back to `BlogImagePlaceholder` gradient.
 
 ---
 
@@ -924,22 +926,30 @@ idle → (submit) → loading → success
 
 ### `/blog` Page
 
-**File:** `app/blog/page.tsx`  
-**Type:** Server Component  
-**Status:** ✅ Complete
+**File:** `app/(site)/blog/page.tsx`  
+**Type:** Server Component (async — fetches from Sanity)  
+**Status:** ✅ Complete — wired to Sanity CMS  
+**Revalidation:** `export const revalidate = 3600` (ISR — refetches from Sanity every hour)
 
 **SEO metadata:**
 - Title: "Resources & Insights — ProNurtureSphere"
 - Description: Platform description targeting both personas + SEO keywords
 
+**Data flow:**
+```ts
+const posts: SanityPost[] = await client.fetch(postsQuery)
+// → BlogFeaturedPost receives posts[0]
+// → BlogFilteredContent receives all posts (passes to BlogGrid)
+```
+
 **Section order:**
 
 ```
-1. BlogHero          → Compact orientation (~50vh) — badge, H1, subheadline
-2. BlogFilters       → Category pills — self-selection for both personas
-3. BlogFeaturedPost  → Full-width featured article — editorial centrepiece
-4. BlogGrid          → 9-article responsive card grid (1→2→3 columns)
-5. BlogNewsletterCTA → Newsletter email capture — retention CTA (deep green)
+1. BlogHero              → Compact orientation (~50vh)
+2. BlogFilters           → Category pills (via BlogFilteredContent client wrapper)
+3. BlogFeaturedPost      → Most recent post from Sanity — real image or gradient
+4. BlogGrid              → All posts from Sanity — filterable by category
+5. BlogNewsletterCTA     → Newsletter email capture
 ```
 
 ---
@@ -1790,7 +1800,7 @@ All schemas in `sanity/schemaTypes/`. Studio at `http://localhost:3000/studio` (
 | `professionalsPage` | Singleton | Professionals page content |
 | `aboutPage` | Singleton | About page content |
 | `siteSettings` | Singleton | Global config (logo, nav, contact) |
-| `post` | Collection | Blog articles |
+| `post` | Collection | Blog articles — `title`, `slug`, `author` (ref→author), `mainImage` (image+hotspot+alt), `publishedAt`, `excerpt`, `category` (string: for-professionals / for-employers / industry-insights / cpd-compliance), `body` (blocks+images) |
 | `author` | Collection | Team/author profiles |
 | `service` | Collection | Platform feature entries |
 | `testimonial` | Collection | User testimonials |
@@ -1808,9 +1818,9 @@ See previous DOCS.md entries for full field-level documentation of each schema.
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | `cfu3qevi` | Sanity client, `sanity.config.ts` |
 | `NEXT_PUBLIC_SANITY_DATASET` | `production` | Sanity client, `sanity.config.ts` |
 | `NEXT_PUBLIC_SANITY_API_VERSION` | `2026-05-26` | Sanity client |
-| `SANITY_API_READ_TOKEN` | (secret) | Server-side fetching, live preview |
+| `SANITY_API_WRITE_TOKEN` | (secret — Editor level) | `scripts/seed-blog.ts`, `scripts/update-post-categories.ts` |
 
-All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_READ_TOKEN` is server-only — never prefix it with `NEXT_PUBLIC_`.
+All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_WRITE_TOKEN` is server/script-only — never prefix it with `NEXT_PUBLIC_` and never import it in frontend code. Generate in Sanity manage console → API → Tokens, choose **Editor** permission level.
 
 ---
 
@@ -1820,14 +1830,20 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_REA
 
 - [ ] **Replace placeholder hero image** — source real photography of Nigerian healthcare professionals. Update `HeroSection.tsx` image `src` and `alt`.
 - [ ] **Replace placeholder testimonials** — collect real quotes from beta users. Update `TestimonialsSection.tsx` or connect to Sanity `testimonial` collection.
-- [ ] **Replace placeholder blog posts** — write real articles in Sanity Studio. Connect `BlogPreviewSection.tsx` to Sanity via GROQ query.
-- [ ] **Connect waitlist form** — create `app/api/waitlist/route.ts` and integrate with Mailchimp / Resend / ConvertKit.
+- [ ] **Upload real blog post images in Sanity Studio** — `post.mainImage` is wired and ready. Any image uploaded via Studio will automatically appear on the blog instead of the gradient placeholder.
 - [ ] **Replace placeholder stats** — update numbers in `SocialProofBar.tsx` and `StatsSection.tsx` with real data.
+- [ ] **Wire `BlogPreviewSection.tsx` on homepage** — still uses static data; connect to Sanity `postsQuery` like `/blog` page.
+- [ ] **Update `sitemap.ts`** — fetch and include live blog post slugs from Sanity (see Section 12.5).
+- [ ] **Replace placeholder team/founder photo** — update `AboutTeam.tsx` avatar. Add director names when confirmed.
 
-### Next pages to build (priority order)
-1. `/waitlist` — standalone waitlist page (the CTA destination — must exist before launch)
-2. `/contact` — Contact page
-3. Connect BlogGrid, BlogPreviewSection, and blog/[slug] to live Sanity `post` collection via GROQ
+### Completed ✅
+- [x] All 10 pages built and deployed
+- [x] Blog (`/blog` + `/blog/[slug]`) fully wired to Sanity CMS via GROQ
+- [x] `category` field on `post` schema — 4 options, all 10 seeded posts categorised
+- [x] Blog category filters working end-to-end (display label → slug → Sanity data)
+- [x] `mainImage` wired — real Sanity images render via `next/image`; gradient placeholder fallback
+- [x] Waitlist form connected to Make.com via `/api/waitlist` server route
+- [x] Full SEO — metadata, OG image, robots.txt, sitemap
 
 ---
 
@@ -1904,7 +1920,7 @@ Closing paragraph → Tags
 | `border-t border-brand-dark/10 pt-8` before closing | Signals "end of article" without a heavy divider. The visual breathing room primes the reader for the author bio below. |
 | Blockquote uses `bg-brand-light` fill | Matches the section background colour of the hero and author card sections — ties the article page's alternating rhythm together visually. |
 
-> ⚠️ **TODO:** Replace hardcoded JSX prose with `@portabletext/react` PortableText renderer wired to the Sanity `post.body` field.
+**Sanity wiring (complete):** Renders Sanity Portable Text via `<PortableText>` from `next-sanity`. Custom block renderers: `normal` → styled `<p>`, `h2`/`h3` → brand-dark headings, `blockquote` → gold left-border pull quote. Body typed as `ComponentProps<typeof PortableText>['value']` (derived from the component, no transitive imports needed).
 
 ---
 
@@ -1933,7 +1949,7 @@ Credibility signal placed immediately after the article ends. Readers who finish
 | `sm:flex-row` layout | On mobile: stacked (avatar above text). On sm+: horizontal (avatar left, text right, button right). Adapts to available space. |
 | "All Articles" link (not "Follow" or social) | No social profiles to link to yet. "All Articles" drives on-site engagement and is the highest-value next step for a content-led visitor. |
 
-> ⚠️ **TODO:** Accept author props from Sanity `author` collection (name, role, bio, photo). Replace initials avatar with real headshot using `<img>` or `next/image`.
+**Sanity wiring (complete):** Accepts `author: SanityAuthor | null`. Falls back to "ProNurtureSphere Team" / "Research & Editorial" when null. `getInitials()` derives 2-letter avatar from name. Photo: still uses initials avatar — replace with `next/image` when real headshots are available.
 
 ---
 
@@ -1961,15 +1977,16 @@ Identical structure and Tailwind classes to `BlogGrid.tsx` cards:
 | 2 | For Employers | Real Cost of an Empty Shift |
 | 3 | Industry Insights | Nigeria Needs a Healthcare Workforce Ecosystem |
 
-> ⚠️ **TODO:** Accept `relatedPosts` as a prop. Populate via Sanity GROQ query that finds posts with matching tags or category, excluding the current slug.
+**Sanity wiring (complete):** Accepts `posts: SanityPost[]`. Populated by `relatedPostsQuery` in `blog/[slug]/page.tsx` — 3 most recent posts excluding current slug. Returns `null` if empty. Card image: `next/image` via `urlFor()` when `mainImage` present, gradient placeholder otherwise.
 
 ---
 
 ### `/blog/[slug]` — Individual Blog Post
 
-**File:** `app/blog/[slug]/page.tsx`  
+**File:** `app/(site)/blog/[slug]/page.tsx`  
 **Type:** Server Component (async — Next.js 15 requires `await params`)  
-**Status:** ✅ Complete (placeholder template)
+**Status:** ✅ Complete — wired to Sanity CMS  
+**Revalidation:** `export const revalidate = 3600`
 
 **Next.js 15 params pattern:**
 ```ts
