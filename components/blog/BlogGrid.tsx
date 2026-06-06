@@ -36,16 +36,20 @@ function formatDate(iso: string): string {
 }
 
 
+/** Maps the display label used in BLOG_CATEGORIES to the slug value stored in Sanity */
+const CATEGORY_SLUG: Record<string, string> = {
+  'For Professionals': 'for-professionals',
+  'For Employers':     'for-employers',
+  'Industry Insights': 'industry-insights',
+  'CPD & Compliance':  'cpd-compliance',
+}
+
 const BlogGrid = ({ posts, activeCategory }: BlogGridProps) => {
   /** Filter posts — "All" bypasses filtering entirely */
   const filteredPosts =
     activeCategory === 'All'
       ? posts
-      : posts.filter(
-          (post) =>
-            (post as SanityPost & { category?: string }).category ===
-            activeCategory
-        )
+      : posts.filter((post) => post.category === CATEGORY_SLUG[activeCategory])
 
   const sectionLabel =
     activeCategory === 'All' ? 'All Articles' : activeCategory

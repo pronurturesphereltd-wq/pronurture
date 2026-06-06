@@ -49,6 +49,19 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      options: {
+        list: [
+          { value: 'for-professionals', title: 'For Professionals' },
+          { value: 'for-employers', title: 'For Employers' },
+          { value: 'industry-insights', title: 'Industry Insights' },
+          { value: 'cpd-compliance', title: 'CPD & Compliance' },
+        ],
+      },
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'array',

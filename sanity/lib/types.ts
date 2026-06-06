@@ -28,6 +28,7 @@ export interface SanityPost {
   slug: { current: string }
   publishedAt: string
   excerpt?: string
+  category?: string
   author: SanityAuthor | null
   mainImage?: SanityImage | null
 }

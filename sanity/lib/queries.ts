@@ -15,6 +15,7 @@ export const postsQuery = groq`
     slug,
     publishedAt,
     excerpt,
+    category,
     "author": author->{ name },
     mainImage { asset->{ _id, url }, alt }
   }
@@ -28,6 +29,7 @@ export const postBySlugQuery = groq`
     slug,
     publishedAt,
     excerpt,
+    category,
     body,
     "author": author->{ name, role },
     mainImage { asset->{ _id, url }, alt }
@@ -47,6 +49,7 @@ export const relatedPostsQuery = groq`
     slug,
     publishedAt,
     excerpt,
+    category,
     "author": author->{ name },
     mainImage { asset->{ _id, url }, alt }
   }
