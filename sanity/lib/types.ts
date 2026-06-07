@@ -8,6 +8,25 @@
  * exact PortableText value type at the usage site (see ArticleBody.tsx).
  */
 
+/** siteSettings singleton — returned by siteSettingsQuery */
+export interface SiteSettings {
+  siteName: string
+  tagline?: string
+  email?: string
+  phone?: string
+  socialLinks?: {
+    linkedin?: string
+    twitter?: string
+    facebook?: string
+    instagram?: string
+    youtube?: string
+  }
+  copyrightText?: string
+  footerTagline?: string
+  logo?: SanityImage | null
+  logoMono?: SanityImage | null
+}
+
 export interface SanityAuthor {
   name: string
   role?: string

@@ -14,6 +14,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import type { SiteSettings } from "@/sanity/lib/types";
 
 /** Footer navigation columns — structured for UX clarity */
 const footerColumns = [
@@ -47,11 +48,17 @@ const footerColumns = [
   },
 ];
 
-/** Social media links — LinkedIn is primary for B2B healthcare audience */
-const socialLinks = [
+interface FooterProps {
+  /** Dynamic values from Sanity siteSettings — all optional with hardcoded fallbacks */
+  settings?: Pick<SiteSettings, 'tagline' | 'copyrightText' | 'footerTagline' | 'socialLinks'>
+}
+
+/** Social icon definitions — only SVG markup, URLs come from Sanity */
+const socialIcons = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/company/psl25/",
+    key: "linkedin" as const,
+    defaultHref: "https://www.linkedin.com/company/psl25/",
     // LinkedIn icon SVG
     icon: (
       <svg
@@ -68,7 +75,8 @@ const socialLinks = [
   },
   {
     label: "X (Twitter)",
-    href: "https://x.com/pronurture",
+    key: "twitter" as const,
+    defaultHref: "https://x.com/pronurture",
     // X / Twitter icon SVG
     icon: (
       <svg
@@ -85,7 +93,11 @@ const socialLinks = [
   },
 ];
 
-const Footer = () => {
+const Footer = ({ settings }: FooterProps) => {
+  const tagline       = settings?.tagline       ?? "Nigeria's digital platform for healthcare workforce management. Staffing, rostering, payroll, and CPD in one place."
+  const copyrightText = settings?.copyrightText ?? '© 2026 ProNurtureSphere Limited. All rights reserved.'
+  const footerTagline = settings?.footerTagline ?? 'Empowering Nigerian Healthcare Workforce'
+
   return (
     <footer
       className="bg-brand-dark text-white"
@@ -110,16 +122,15 @@ const Footer = () => {
             </Link>
 
             <p className="text-white/70 text-sm leading-relaxed max-w-xs">
-              Nigeria&apos;s digital platform for healthcare workforce management.
-              Staffing, rostering, payroll, and CPD in one place.
+              {tagline}
             </p>
 
-            {/* Social links */}
+            {/* Social links — URLs from Sanity, fall back to defaults if not seeded */}
             <div className="flex gap-4 mt-6">
-              {socialLinks.map((social) => (
+              {socialIcons.map((social) => (
                 <a
                   key={social.label}
-                  href={social.href}
+                  href={settings?.socialLinks?.[social.key] ?? social.defaultHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Follow ProNurtureSphere on ${social.label}`}
@@ -169,10 +180,10 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-white/50 text-sm text-center sm:text-left">
-              © 2026 ProNurtureSphere Limited. All rights reserved.
+              {copyrightText}
             </p>
             <p className="text-white/40 text-xs text-center sm:text-right">
-              Empowering Nigerian Healthcare Workforce
+              {footerTagline}
             </p>
           </div>
         </div>

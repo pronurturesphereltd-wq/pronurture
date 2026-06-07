@@ -53,6 +53,28 @@ export default defineType({
         defineField({ name: 'youtube', title: 'YouTube', type: 'url' }),
       ],
     }),
+    defineField({
+      name: 'copyrightText',
+      title: 'Copyright Text',
+      type: 'string',
+      description: 'e.g. © 2026 ProNurtureSphere Limited. All rights reserved.',
+    }),
+    defineField({
+      name: 'footerTagline',
+      title: 'Footer Tagline',
+      type: 'string',
+      description: 'Short line shown at the bottom of the footer beneath the copyright.',
+    }),
+    defineField({
+      name: 'logoMono',
+      title: 'Logo (Mono / White)',
+      type: 'image',
+      options: { hotspot: false },
+      description: 'White version of the logo — used on dark backgrounds (e.g. footer).',
+      fields: [
+        defineField({ name: 'alt', title: 'Alt Text', type: 'string' }),
+      ],
+    }),
   ],
   preview: {
     select: { title: 'siteName', media: 'logo' },

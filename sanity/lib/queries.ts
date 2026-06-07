@@ -41,6 +41,21 @@ export const allPostSlugsQuery = groq`
   *[_type == "post"]{ "slug": slug.current }
 `
 
+/** Site-wide settings singleton — fetched in (site)/layout.tsx for Navbar + Footer */
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0] {
+    siteName,
+    tagline,
+    email,
+    phone,
+    socialLinks,
+    copyrightText,
+    footerTagline,
+    logo { asset->{ _id, url }, alt },
+    logoMono { asset->{ _id, url }, alt }
+  }
+`
+
 /** Three most recent posts excluding the current one — related posts section */
 export const relatedPostsQuery = groq`
   *[_type == "post" && slug.current != $currentSlug] | order(publishedAt desc) [0..2] {

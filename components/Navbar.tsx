@@ -27,7 +27,12 @@ const navLinks = [
   { label: "Blog", href: "/blog" },
 ];
 
-const Navbar = () => {
+interface NavbarProps {
+  /** Site name from Sanity siteSettings — falls back to hardcoded value if not yet seeded */
+  siteName?: string
+}
+
+const Navbar = ({ siteName = 'ProNurtureSphere' }: NavbarProps) => {
   /**
    * mobileOpen: controls the hamburger/mobile menu visibility.
    * Toggled by the hamburger button on small screens.
@@ -66,7 +71,7 @@ const Navbar = () => {
                 priority
               />
             </div>
-            <span className="text-brand-dark font-bold text-lg">ProNurtureSphere</span>
+            <span className="text-brand-dark font-bold text-lg">{siteName}</span>
           </Link>
 
           {/* ── Desktop Navigation Links ──────────────────────────────────── */}
