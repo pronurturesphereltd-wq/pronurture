@@ -56,3 +56,44 @@ export interface SanityPost {
 export interface SanityPostFull extends SanityPost {
   body?: unknown[]
 }
+
+/** Hero section fields from the homePage singleton */
+export interface HomepageHero {
+  headline?:    string
+  subheadline?: string
+  ctaText?:     string
+  ctaLink?:     string
+  image?:       SanityImage | null
+}
+
+/** One stat entry from homePage.stats[] */
+export interface HomepageStat {
+  _key:  string
+  value: string
+  label: string
+}
+
+/** Dereferenced testimonial from homePage.testimonials[]-> */
+export interface SanityTestimonial {
+  _id:           string
+  quote:         string
+  name:          string
+  role?:         string
+  organisation?: string
+}
+
+/** Dereferenced service document from homePage.featuredServices[]-> */
+export interface SanityService {
+  _id:               string
+  title:             string
+  slug?:             { current: string }
+  shortDescription?: string
+}
+
+/** homePage singleton shape — returned by homePageQuery */
+export interface HomePageData {
+  hero?:             HomepageHero   | null
+  stats?:            HomepageStat[] | null
+  testimonials?:     SanityTestimonial[] | null
+  featuredServices?: SanityService[] | null
+}

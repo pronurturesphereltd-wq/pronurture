@@ -56,6 +56,36 @@ export const siteSettingsQuery = groq`
   }
 `
 
+/** Homepage singleton — fetched in app/(site)/page.tsx to populate hero, stats, testimonials, services */
+export const homePageQuery = groq`
+  *[_id == "homePage"][0] {
+    hero {
+      headline,
+      subheadline,
+      ctaText,
+      ctaLink,
+      image { asset->{ _id, url }, alt }
+    },
+    "stats": stats[] { _key, value, label },
+    "testimonials": testimonials[]-> { _id, quote, name, role, organisation },
+    "featuredServices": featuredServices[]-> { _id, title, slug, shortDescription }
+  }
+`
+
+/** Three most recent posts — homepage blog preview section */
+export const recentPostsQuery = groq`
+  *[_type == "post"] | order(publishedAt desc) [0..2] {
+    _id,
+    title,
+    slug,
+    publishedAt,
+    excerpt,
+    category,
+    "author": author->{ name },
+    mainImage { asset->{ _id, url }, alt }
+  }
+`
+
 /** Three most recent posts excluding the current one — related posts section */
 export const relatedPostsQuery = groq`
   *[_type == "post" && slug.current != $currentSlug] | order(publishedAt desc) [0..2] {

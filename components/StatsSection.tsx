@@ -3,57 +3,52 @@
  *
  * Position: After Testimonials — reinforces the social proof with hard numbers.
  * Purpose: Large, bold numbers command attention and communicate scale.
- *          This section is distinct from SocialProofBar — it's more dramatic,
- *          full-width, with a dark green background for visual impact.
+ *          Distinct from SocialProofBar — more dramatic, dark green background.
+ *
+ * Data source: Sanity homePage.stats[] — same data as SocialProofBar, different
+ * visual treatment. Falls back to FALLBACK_STATS (which include sublabels for
+ * richer context) when Sanity returns null.
  *
  * Design decisions:
  * - Deep green background + white text — high contrast, authoritative
  * - Very large type (text-6xl/text-7xl) for maximum visual impact
  * - Gold accent on numbers — warm, premium contrast against deep green
- * - 4 stats that tell a coherent story about platform scale and reliability
  * - Subtle background pattern adds depth without distraction
  *
  * Per CLAUDE.md: "Stats and numbers (shifts filled, professionals registered,
  * hospitals served)" are key social proof elements.
  */
 
-/** Stat item data structure */
-interface StatItem {
-  value: string;       // The big number/metric
-  label: string;       // Short descriptor
-  sublabel?: string;   // Optional additional context
+import type { HomepageStat } from "@/sanity/lib/types"
+
+/** Extends HomepageStat with an optional sublabel for richer display context */
+interface StatDisplay extends HomepageStat {
+  sublabel?: string
 }
 
-const stats: StatItem[] = [
-  {
-    value: "500+",
-    label: "Healthcare Professionals",
-    sublabel: "Verified on platform",
-  },
-  {
-    value: "50+",
-    label: "Partner Facilities",
-    sublabel: "Hospitals, clinics & agencies",
-  },
-  {
-    value: "10,000+",
-    label: "Shifts Managed",
-    sublabel: "Across Nigeria",
-  },
-  {
-    value: "98%",
-    label: "Compliance Rate",
-    sublabel: "Regulatory adherence",
-  },
-];
+/** Fallback stats — include sublabels that give richer context in this darker section */
+const FALLBACK_STATS: StatDisplay[] = [
+  { _key: 'stat-1', value: "500+",    label: "Healthcare Professionals", sublabel: "Verified on platform" },
+  { _key: 'stat-2', value: "50+",     label: "Partner Facilities",       sublabel: "Hospitals, clinics & agencies" },
+  { _key: 'stat-3', value: "10,000+", label: "Shifts Managed",           sublabel: "Across Nigeria" },
+  { _key: 'stat-4', value: "98%",     label: "Compliance Rate",          sublabel: "Regulatory adherence" },
+]
 
-const StatsSection = () => {
+interface StatsSectionProps {
+  /** Stats from Sanity homePage.stats — falls back to FALLBACK_STATS if null or empty */
+  stats?: HomepageStat[] | null
+}
+
+const StatsSection = ({ stats }: StatsSectionProps) => {
+  // Sanity stats don't carry sublabels; sublabel renders as nothing when undefined
+  const displayStats: StatDisplay[] = (stats && stats.length > 0) ? stats : FALLBACK_STATS
+
   return (
     <section
       className="relative bg-brand-dark py-20 lg:py-28 overflow-hidden"
       aria-label="Platform impact statistics"
     >
-      {/* Background decoration — subtle grid for texture, same as hero */}
+      {/* Background decoration — subtle grid for texture */}
       <div
         className="absolute inset-0 opacity-5 pointer-events-none"
         style={{
@@ -77,16 +72,14 @@ const StatsSection = () => {
 
         {/* Stats grid — 2 columns on mobile, 4 on desktop */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
-          {stats.map((stat, index) => (
+          {displayStats.map((stat, index) => (
             <div
-              key={stat.label}
+              key={stat._key}
               className={`
                 text-center
-                ${
-                  /* Vertical dividers between stats on desktop */
-                  index < stats.length - 1
-                    ? "lg:border-r lg:border-white/10"
-                    : ""
+                ${index < displayStats.length - 1
+                  ? "lg:border-r lg:border-white/10"
+                  : ""
                 }
                 px-4
               `}
@@ -104,7 +97,7 @@ const StatsSection = () => {
                 {stat.label}
               </p>
 
-              {/* Sublabel — lighter weight, lower hierarchy */}
+              {/* Sublabel — present in fallback data, absent in Sanity stats */}
               {stat.sublabel && (
                 <p className="text-white/50 text-sm">
                   {stat.sublabel}
@@ -115,7 +108,7 @@ const StatsSection = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default StatsSection;
+export default StatsSection

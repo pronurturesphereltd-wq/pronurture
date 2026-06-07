@@ -9,6 +9,9 @@
     "lint": "eslint",
     "seed:blog": "npx tsx scripts/seed-blog.ts",
     "seed:settings": "npx tsx scripts/seed-site-settings.ts",
+    "seed:testimonials": "npx tsx scripts/seed-testimonials.ts",
+    "seed:services": "npx tsx scripts/seed-services.ts",
+    "seed:homepage": "npx tsx scripts/seed-homepage.ts",
     "update:categories": "npx tsx scripts/update-post-categories.ts"
   },
   "dependencies": {

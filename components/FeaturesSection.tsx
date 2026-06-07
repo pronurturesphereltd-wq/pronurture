@@ -3,107 +3,156 @@
  *
  * Position: After ProblemSection — this is the "solution reveal."
  * Purpose: Shows the 6 core platform capabilities that solve the problems above.
- *          Each card maps to a pain point identified in CLAUDE.md Section 5.
  *
- * Design decisions:
- * - id="features" so the "See How It Works" CTA from the hero can anchor-link here
- * - Off-white (#f5f5f0) background alternates with the white problem section
- * - 6 cards in a 2-column mobile, 3-column desktop grid (2x3 on desktop)
- * - Each card has: icon (brand dark bg, gold icon), title, description
- * - Cards use brand-dark on hover to maintain brand consistency
- * - Generous padding inside cards and white card backgrounds for premium feel
+ * Data source: Sanity homePage.featuredServices[]-> (dereferenced service documents).
+ * Icons are mapped from service._id to SVG elements — Sanity service documents
+ * don't carry icon SVGs directly, so a deterministic id → icon lookup table keeps
+ * brand-consistent visuals. Falls back to 6 hardcoded feature cards if null.
+ *
+ * id="features" is the anchor target for the "See How It Works" hero CTA.
  *
  * Per CLAUDE.md Section 12: Visual hierarchy — H2 for section, H3 for card titles.
  */
 
-/** Feature card data structure */
-interface Feature {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
+import type { SanityService } from "@/sanity/lib/types"
+
+/** Unified shape used in the card renderer — same for Sanity and hardcoded */
+interface FeatureCard {
+  id:          string
+  title:       string
+  description: string
+  icon:        React.ReactNode
 }
 
-const features: Feature[] = [
-  {
-    title: "Shift Posting & Booking",
-    description:
-      "Post shifts in minutes. Verified professionals apply, accept, and confirm — no phone calls, no WhatsApp chaos. Real-time visibility of who's working, where, and when.",
-    icon: (
-      // Calendar icon — represents scheduling
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-        <line x1="16" y1="2" x2="16" y2="6" />
-        <line x1="8" y1="2" x2="8" y2="6" />
-        <line x1="3" y1="10" x2="21" y2="10" />
-        <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
-      </svg>
-    ),
-  },
-  {
-    title: "Credential Verification",
-    description:
-      "Automated tracking of professional licences, MDCN/NMCN registration, and CPD certificates — with expiry alerts. Hire with confidence, stay compliant, and protect your facility.",
-    icon: (
-      // Shield check icon — represents verification and trust
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        <polyline points="9 12 11 14 15 10" />
-      </svg>
-    ),
-  },
-  {
-    title: "Payroll Management",
-    description:
-      "Timesheet data flows directly into payroll calculations — with support for ₦ currency, Nigerian PAYE tax, and pension contributions. No more manual reconciliation at month-end.",
-    icon: (
-      // Naira/coins icon — represents payroll
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M8 12h8M8 9h8M10 6v12M14 6v12" />
-      </svg>
-    ),
-  },
-  {
-    title: "Attendance & Timesheets",
-    description:
-      "Digital clock-in/out, automated timesheet generation, and supervisor approvals — all on mobile. Eliminate paper timesheets and payroll disputes instantly.",
-    icon: (
-      // Clock icon — represents attendance tracking
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" />
-        <polyline points="12 6 12 12 16 14" />
-      </svg>
-    ),
-  },
-  {
-    title: "CPD Training",
-    description:
-      "Short, accredited training modules for clinical and non-clinical staff. Track CPD hours against licence renewal requirements and generate compliance certificates automatically.",
-    icon: (
-      // Graduation cap icon — represents education and CPD
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
-        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-        <path d="M6 12v5c3 3 9 3 12 0v-5" />
-      </svg>
-    ),
-  },
-  {
-    title: "Workforce Analytics",
-    description:
-      "Real-time dashboards showing staffing gaps, shift fill rates, compliance scores, and cost-per-hire. Data-driven insights to plan ahead, reduce agency spend, and improve retention.",
-    icon: (
-      // Bar chart icon — represents analytics and reporting
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
-        <line x1="18" y1="20" x2="18" y2="10" />
-        <line x1="12" y1="20" x2="12" y2="4" />
-        <line x1="6" y1="20" x2="6" y2="14" />
-        <line x1="2" y1="20" x2="22" y2="20" />
-      </svg>
-    ),
-  },
-];
+// ── Reusable icon components ─────────────────────────────────────────────────
 
-const FeaturesSection = () => {
+const CalendarIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="3" y1="10" x2="21" y2="10" />
+    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+  </svg>
+)
+
+const UsersIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+)
+
+const NairaIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 12h8M8 9h8M10 6v12M14 6v12" />
+  </svg>
+)
+
+const ShieldIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <polyline points="9 12 11 14 15 10" />
+  </svg>
+)
+
+const GraduationIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+  </svg>
+)
+
+const BarChartIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <line x1="18" y1="20" x2="18" y2="10" />
+    <line x1="12" y1="20" x2="12" y2="4" />
+    <line x1="6" y1="20" x2="6" y2="14" />
+    <line x1="2" y1="20" x2="22" y2="20" />
+  </svg>
+)
+
+const ClockIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12 16 14" />
+  </svg>
+)
+
+/** Maps seeded service _id values to their brand-consistent SVG icons */
+const ICON_BY_SERVICE_ID: Record<string, React.ReactNode> = {
+  'service-smart-staff-rostering':   <CalendarIcon />,
+  'service-locum-agency-staffing':   <UsersIcon />,
+  'service-payroll-management':      <NairaIcon />,
+  'service-credential-verification': <ShieldIcon />,
+  'service-cpd-training-management': <GraduationIcon />,
+  'service-compliance-reporting':    <BarChartIcon />,
+}
+
+/** Converts a Sanity service document to the FeatureCard render shape */
+function serviceToCard(service: SanityService): FeatureCard {
+  return {
+    id:          service._id,
+    title:       service.title,
+    description: service.shortDescription ?? '',
+    icon:        ICON_BY_SERVICE_ID[service._id] ?? <CalendarIcon />,
+  }
+}
+
+/** Hardcoded fallback — shown when Sanity hasn't been seeded yet */
+const FALLBACK_FEATURES: FeatureCard[] = [
+  {
+    id:          'fallback-rostering',
+    title:       'Shift Posting & Booking',
+    description: 'Post shifts in minutes. Verified professionals apply, accept, and confirm — no phone calls, no WhatsApp chaos. Real-time visibility of who\'s working, where, and when.',
+    icon:        <CalendarIcon />,
+  },
+  {
+    id:          'fallback-verification',
+    title:       'Credential Verification',
+    description: 'Automated tracking of professional licences, MDCN/NMCN registration, and CPD certificates — with expiry alerts. Hire with confidence, stay compliant, and protect your facility.',
+    icon:        <ShieldIcon />,
+  },
+  {
+    id:          'fallback-payroll',
+    title:       'Payroll Management',
+    description: 'Timesheet data flows directly into payroll calculations — with support for ₦ currency, Nigerian PAYE tax, and pension contributions. No more manual reconciliation at month-end.',
+    icon:        <NairaIcon />,
+  },
+  {
+    id:          'fallback-timesheets',
+    title:       'Attendance & Timesheets',
+    description: 'Digital clock-in/out, automated timesheet generation, and supervisor approvals — all on mobile. Eliminate paper timesheets and payroll disputes instantly.',
+    icon:        <ClockIcon />,
+  },
+  {
+    id:          'fallback-cpd',
+    title:       'CPD Training',
+    description: 'Short, accredited training modules for clinical and non-clinical staff. Track CPD hours against licence renewal requirements and generate compliance certificates automatically.',
+    icon:        <GraduationIcon />,
+  },
+  {
+    id:          'fallback-analytics',
+    title:       'Workforce Analytics',
+    description: 'Real-time dashboards showing staffing gaps, shift fill rates, compliance scores, and cost-per-hire. Data-driven insights to plan ahead, reduce agency spend, and improve retention.',
+    icon:        <BarChartIcon />,
+  },
+]
+
+interface FeaturesSectionProps {
+  /** Dereferenced service documents from Sanity — null falls back to hardcoded cards */
+  featuredServices?: SanityService[] | null
+}
+
+const FeaturesSection = ({ featuredServices }: FeaturesSectionProps) => {
+  const displayFeatures: FeatureCard[] =
+    featuredServices && featuredServices.length > 0
+      ? featuredServices.map(serviceToCard)
+      : FALLBACK_FEATURES
+
   return (
     <section
       id="features" // Anchor target for "See How It Works" CTA in HeroSection
@@ -131,11 +180,10 @@ const FeaturesSection = () => {
         </div>
 
         {/* ── Feature Cards Grid ──────────────────────────────────────────── */}
-        {/* 1-column mobile → 2-column tablet → 3-column desktop (2x3 grid) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {features.map((feature) => (
+          {displayFeatures.map((feature) => (
             <div
-              key={feature.title}
+              key={feature.id}
               className="
                 group
                 bg-white rounded-2xl p-8
@@ -168,7 +216,7 @@ const FeaturesSection = () => {
           ))}
         </div>
 
-        {/* ── Bottom CTA — moves interested users toward conversion ─────── */}
+        {/* ── Bottom CTA ───────────────────────────────────────────────────── */}
         <div className="text-center mt-14">
           <p className="text-brand-dark/55 text-base mb-6">
             Everything you need to run a modern healthcare facility — available from day one.
@@ -190,7 +238,7 @@ const FeaturesSection = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default FeaturesSection;
+export default FeaturesSection

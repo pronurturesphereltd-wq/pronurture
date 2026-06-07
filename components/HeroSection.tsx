@@ -1,7 +1,7 @@
 /**
  * HeroSection.tsx — Homepage above-the-fold hero
  *
- * Design: Clean, light, professional layout inspired by florence.co.uk.
+ * Design: Clean, light, professional layout.
  * Background is off-white (#f5f5f0) — airy and premium, not heavy.
  * Deep green (#103613) appears only as accent: badge, image panel, buttons.
  *
@@ -10,17 +10,41 @@
  *   2. Who is it for? → Hospitals, clinics, and healthcare professionals
  *   3. Why should I care? → Smarter staffing, faster hiring, better operations
  *
+ * Data source: Sanity homePage.hero — falls back to hardcoded copy if null.
+ * When hero.image is uploaded to Sanity, urlFor() renders it at the correct
+ * dimensions; until then the branded placehold.co placeholder is shown.
+ *
  * Layout decisions:
  * - h-screen overflow-hidden — strictly viewport-height, nothing bleeds out
  * - pt-24 offsets fixed navbar (~80px); flex items-center centres in visible area
  * - Two-column grid: text left, image panel right (lg+)
  * - Right panel capped at max-h-[60vh] so it never pushes layout
- * - Trust badges moved below the fold to keep above-fold content compact
  */
 
-import Link from "next/link";
+import Link from "next/link"
+import type { HomepageHero } from "@/sanity/lib/types"
+import { urlFor } from "@/sanity/lib/image"
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  /** Hero content from Sanity homePage.hero — falls back to hardcoded if null */
+  hero?: HomepageHero | null
+}
+
+const HeroSection = ({ hero }: HeroSectionProps) => {
+  const subheadline = hero?.subheadline ??
+    "From digital rostering and payroll to verified locum staffing and CPD management — ProNurtureSphere gives Nigerian healthcare organisations one platform to manage their entire workforce."
+  const ctaText = hero?.ctaText ?? "Join the Waitlist"
+  const ctaLink = hero?.ctaLink ?? "/waitlist"
+
+  // Image: use Sanity asset if uploaded, otherwise branded placehold.co fallback
+  const desktopImageSrc = hero?.image
+    ? urlFor(hero.image).width(560).height(300).auto("format").url()
+    : "https://placehold.co/560x300/1a5c1a/ffffff?text=ProNurtureSphere+Platform"
+  const mobileImageSrc = hero?.image
+    ? urlFor(hero.image).width(400).height(220).auto("format").url()
+    : "https://placehold.co/400x220/1a5c1a/ffffff?text=ProNurtureSphere+Platform"
+  const imageAlt = hero?.image?.alt ?? "ProNurtureSphere workforce management platform dashboard"
+
   return (
     <section
       className="h-screen overflow-hidden pt-24 flex items-center"
@@ -41,25 +65,28 @@ const HeroSection = () => {
               </span>
             </div>
 
-            {/* H1 — smaller size so all 3 lines fit above the fold */}
+            {/* H1 — Sanity headline renders as one string; fallback preserves the
+                 designed 3-line break layout for the default hardcoded copy */}
             <h1 className="
               text-2xl md:text-3xl lg:text-4xl
               font-bold text-brand-dark
               leading-tight tracking-tight
               mb-3
             ">
-              Smarter Staffing.{" "}
-              <br className="hidden sm:block" />
-              Faster Hiring.{" "}
-              <br className="hidden sm:block" />
-              Better Healthcare Operations.
+              {hero?.headline ? hero.headline : (
+                <>
+                  Smarter Staffing.{" "}
+                  <br className="hidden sm:block" />
+                  Faster Hiring.{" "}
+                  <br className="hidden sm:block" />
+                  Better Healthcare Operations.
+                </>
+              )}
             </h1>
 
             {/* Subheadline — muted gray, smaller to conserve vertical space */}
             <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4 max-w-xl mx-auto lg:mx-0">
-              From digital rostering and payroll to verified locum staffing and
-              CPD management — ProNurtureSphere gives Nigerian healthcare organisations
-              one platform to manage their entire workforce.
+              {subheadline}
             </p>
 
             {/* ── CTA Buttons ─────────────────────────────────────────────── */}
@@ -67,7 +94,7 @@ const HeroSection = () => {
 
               {/* Primary CTA */}
               <Link
-                href="/waitlist"
+                href={ctaLink}
                 className="
                   inline-flex items-center justify-center
                   px-6 py-3 rounded-full
@@ -79,7 +106,7 @@ const HeroSection = () => {
                   shadow-md
                 "
               >
-                Join the Waitlist
+                {ctaText}
                 <svg
                   className="ml-2 w-4 h-4"
                   fill="none"
@@ -142,11 +169,11 @@ const HeroSection = () => {
                 aria-hidden="true"
               />
 
-              {/* Platform screenshot */}
+              {/* Platform screenshot — real Sanity image or placehold.co fallback */}
               <div className="relative rounded-xl overflow-hidden shadow-xl mb-3">
                 <img
-                  src="https://placehold.co/560x300/1a5c1a/ffffff?text=ProNurtureSphere+Platform"
-                  alt="ProNurtureSphere workforce management platform dashboard"
+                  src={desktopImageSrc}
+                  alt={imageAlt}
                   className="w-full h-auto block"
                 />
               </div>
@@ -183,8 +210,8 @@ const HeroSection = () => {
               />
               <div className="relative rounded-lg overflow-hidden">
                 <img
-                  src="https://placehold.co/400x220/1a5c1a/ffffff?text=ProNurtureSphere+Platform"
-                  alt="ProNurtureSphere workforce management platform dashboard"
+                  src={mobileImageSrc}
+                  alt={imageAlt}
                   className="w-full h-auto block rounded-lg"
                 />
               </div>
@@ -194,7 +221,7 @@ const HeroSection = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default HeroSection;
+export default HeroSection

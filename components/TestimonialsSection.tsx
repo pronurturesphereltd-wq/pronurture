@@ -6,62 +6,93 @@
  *          on a marketing site. Per CLAUDE.md Section 12: "People buy from businesses
  *          that other people trust."
  *
- * Design decisions:
- * - White background — clean, premium feel for quotes
- * - 3 cards representing different user types:
- *   1. Hospital Administrator (Employer persona — Dr. Adaeze type)
- *   2. Doctor (Professional persona — Dr. Amarachi type)
- *   3. Nurse (broadens professional audience)
- * - Large quotation mark SVG decoration adds visual interest
- * - Star ratings increase perceived quality
- * - Role + organisation adds credibility/specificity
- * - Cards use subtle shadow on hover for interactive feel
+ * Data source: Sanity homePage.testimonials[]-> (dereferenced testimonial documents).
+ * Falls back to hardcoded placeholder testimonials if Sanity returns null.
  *
- * Note: These are placeholder testimonials — replace with real quotes
- * once the beta launch is complete and verified testimonials are collected.
+ * Avatar colours are cycled deterministically by array index — brand-dark,
+ * brand-green, brand-gold — so each card always has a distinct colour without
+ * needing a colour field in the Sanity testimonial schema.
  */
 
-/** Testimonial data structure */
-interface Testimonial {
-  quote: string;
-  name: string;
-  role: string;
-  organisation: string;
-  initials: string;       // Used in avatar placeholder
-  avatarBg: string;       // Tailwind class for avatar background color
+import type { SanityTestimonial } from "@/sanity/lib/types"
+
+/** Unified display shape — normalises Sanity and hardcoded testimonial data */
+interface TestimonialDisplay {
+  _id:           string
+  quote:         string
+  name:          string
+  role?:         string
+  organisation?: string
+  initials:      string
+  avatarBg:      string
 }
 
-const testimonials: Testimonial[] = [
-  {
-    quote:
-      "Before ProNurtureSphere, filling an emergency locum shift meant 2 hours of WhatsApp messages and phone calls. Now it takes 15 minutes. The credential verification feature alone has removed so much risk from our hiring process.",
-    name: "Dr. Chidinma Eze",
-    role: "Medical Director",
-    organisation: "Sterling Health Hospital, Lagos",
-    initials: "CE",
-    avatarBg: "bg-brand-dark",
-  },
-  {
-    quote:
-      "I've worked locum shifts through three different platforms and ProNurtureSphere is the first one that actually paid on time, every time. The CPD modules are also the most relevant I've found for the Nigerian clinical context.",
-    name: "Dr. Emeka Okonkwo",
-    role: "General Practitioner",
-    organisation: "Locum Professional, Abuja",
-    initials: "EO",
-    avatarBg: "bg-brand-green",
-  },
-  {
-    quote:
-      "The payroll integration saves my HR team an entire day of reconciliation every month. Timesheets feed directly into payroll — no more manual data entry, no more disputes. This is exactly what Nigerian hospitals needed.",
-    name: "Nurse Funmilayo Adeyemi",
-    role: "Head of Nursing Services",
-    organisation: "Meridian Maternity Centre, Port Harcourt",
-    initials: "FA",
-    avatarBg: "bg-brand-gold",
-  },
-];
+/** Cycles through brand colours by array index */
+const AVATAR_COLORS = ['bg-brand-dark', 'bg-brand-green', 'bg-brand-gold'] as const
 
-const TestimonialsSection = () => {
+/** Derives two-letter initials — "Dr. Amaka Okonkwo" → "AO" */
+function getInitials(name: string): string {
+  return name
+    .replace(/^(Dr\.|Nurse|Prof\.)\s*/i, '')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+}
+
+/** Maps a Sanity testimonial to the display shape */
+function toDisplay(t: SanityTestimonial, index: number): TestimonialDisplay {
+  return {
+    ...t,
+    initials: getInitials(t.name),
+    avatarBg: AVATAR_COLORS[index % AVATAR_COLORS.length],
+  }
+}
+
+/** Hardcoded fallback — shown when Sanity hasn't been seeded yet */
+const FALLBACK_TESTIMONIALS: TestimonialDisplay[] = [
+  {
+    _id:          'fallback-chidinma',
+    quote:        "Before ProNurtureSphere, filling an emergency locum shift meant 2 hours of WhatsApp messages and phone calls. Now it takes 15 minutes. The credential verification feature alone has removed so much risk from our hiring process.",
+    name:         'Dr. Chidinma Eze',
+    role:         'Medical Director',
+    organisation: 'Sterling Health Hospital, Lagos',
+    initials:     'CE',
+    avatarBg:     'bg-brand-dark',
+  },
+  {
+    _id:          'fallback-emeka',
+    quote:        "I've worked locum shifts through three different platforms and ProNurtureSphere is the first one that actually paid on time, every time. The CPD modules are also the most relevant I've found for the Nigerian clinical context.",
+    name:         'Dr. Emeka Okonkwo',
+    role:         'General Practitioner',
+    organisation: 'Locum Professional, Abuja',
+    initials:     'EO',
+    avatarBg:     'bg-brand-green',
+  },
+  {
+    _id:          'fallback-funmilayo',
+    quote:        "The payroll integration saves my HR team an entire day of reconciliation every month. Timesheets feed directly into payroll — no more manual data entry, no more disputes. This is exactly what Nigerian hospitals needed.",
+    name:         'Nurse Funmilayo Adeyemi',
+    role:         'Head of Nursing Services',
+    organisation: 'Meridian Maternity Centre, Port Harcourt',
+    initials:     'FA',
+    avatarBg:     'bg-brand-gold',
+  },
+]
+
+interface TestimonialsSectionProps {
+  /** Dereferenced testimonials from Sanity — null falls back to hardcoded */
+  testimonials?: SanityTestimonial[] | null
+}
+
+const TestimonialsSection = ({ testimonials }: TestimonialsSectionProps) => {
+  const displayTestimonials: TestimonialDisplay[] =
+    testimonials && testimonials.length > 0
+      ? testimonials.map(toDisplay)
+      : FALLBACK_TESTIMONIALS
+
   return (
     <section
       className="bg-white py-20 lg:py-28"
@@ -87,11 +118,10 @@ const TestimonialsSection = () => {
         </div>
 
         {/* ── Testimonial Cards ───────────────────────────────────────────── */}
-        {/* 1-column mobile → 3-column desktop */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
+          {displayTestimonials.map((testimonial) => (
             <div
-              key={testimonial.name}
+              key={testimonial._id}
               className="
                 group
                 bg-brand-light rounded-2xl p-8
@@ -126,14 +156,14 @@ const TestimonialsSection = () => {
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
               </svg>
 
-              {/* Quote text — the actual testimonial content */}
+              {/* Quote text */}
               <blockquote className="text-brand-dark/75 leading-relaxed text-base flex-1 mb-8">
                 &ldquo;{testimonial.quote}&rdquo;
               </blockquote>
 
-              {/* Attribution — name, role, organisation */}
+              {/* Attribution */}
               <div className="flex items-center gap-4 pt-4 border-t border-brand-dark/10">
-                {/* Avatar placeholder — initials-based until profile photos are available */}
+                {/* Initials-based avatar — colours cycle by index */}
                 <div
                   className={`
                     ${testimonial.avatarBg} text-white
@@ -163,7 +193,7 @@ const TestimonialsSection = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default TestimonialsSection;
+export default TestimonialsSection
