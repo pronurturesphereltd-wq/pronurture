@@ -15,8 +15,24 @@
  */
 
 import Link from "next/link";
+import type { HomepageHero } from "@/sanity/lib/types";
 
-const EmployersHero = () => {
+const FALLBACK_HEADLINE    = "Build a Stronger Healthcare Team. Starting Today.";
+const FALLBACK_SUBHEADLINE = "ProNurtureSphere gives Nigerian hospitals, clinics, and health organisations one platform to hire verified professionals, manage CPD compliance, and develop your workforce — from first placement to continuous growth.";
+const FALLBACK_CTA_TEXT    = "Get Early Access";
+const FALLBACK_CTA_LINK    = "/waitlist";
+
+interface EmployersHeroProps {
+  /** Hero content from Sanity — falls back to hardcoded if null */
+  hero?: HomepageHero | null;
+}
+
+const EmployersHero = ({ hero }: EmployersHeroProps) => {
+  const headline    = hero?.headline    ?? FALLBACK_HEADLINE;
+  const subheadline = hero?.subheadline ?? FALLBACK_SUBHEADLINE;
+  const ctaText     = hero?.ctaText     ?? FALLBACK_CTA_TEXT;
+  const ctaLink     = hero?.ctaLink     ?? FALLBACK_CTA_LINK;
+
   return (
     <section
       className="h-screen overflow-hidden pt-24 flex items-center"
@@ -37,33 +53,27 @@ const EmployersHero = () => {
               </span>
             </div>
 
-            {/* H1 — the single most dominant element on the page */}
+            {/* H1 — from Sanity or fallback */}
             <h1 className="
               text-2xl md:text-3xl lg:text-4xl
               font-bold text-brand-dark
               leading-tight tracking-tight
               mb-4
             ">
-              Build a Stronger{" "}
-              <br className="hidden sm:block" />
-              Healthcare Team.{" "}
-              <br className="hidden sm:block" />
-              Starting Today.
+              {headline}
             </h1>
 
-            {/* Subheadline — supports H1 with specific platform context */}
+            {/* Subheadline — from Sanity or fallback */}
             <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6 max-w-xl mx-auto lg:mx-0">
-              ProNurtureSphere gives Nigerian hospitals, clinics, and health organisations
-              one platform to hire verified professionals, manage CPD compliance, and
-              develop your workforce — from first placement to continuous growth.
+              {subheadline}
             </p>
 
             {/* ── CTA Buttons ─────────────────────────────────────────────── */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
 
-              {/* Primary CTA — bg-brand-dark per spec */}
+              {/* Primary CTA — links to the Sanity ctaLink (defaults to /waitlist) */}
               <Link
-                href="/waitlist"
+                href={ctaLink}
                 className="
                   inline-flex items-center justify-center
                   px-6 py-3 rounded-full
@@ -75,7 +85,7 @@ const EmployersHero = () => {
                   shadow-md
                 "
               >
-                Get Early Access
+                {ctaText}
                 <svg
                   className="ml-2 w-4 h-4"
                   fill="none"

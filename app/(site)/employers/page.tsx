@@ -22,9 +22,15 @@
  * 7. EmployersFAQ  — Handles final objections (interactive accordion — client component)
  * 8. EmployersCTA  — Final email capture with trust badges (client component)
  *
- * This is a Server Component. All interactivity (accordion, form) is isolated
- * in the two 'use client' sub-components, keeping the page bundle lean.
+ * Sanity data is fetched via serverClient (bypasses CDN for freshness) and passed
+ * as props to wired sections with hardcoded fallbacks. Sections without CMS content
+ * (PainPoints, Transformation, HowItWorks, FAQ) remain fully static — editorial
+ * content there changes very rarely and is not high-value to wire.
+ *
+ * ISR revalidate: 60s — content propagates to Vercel within one minute of publishing.
  */
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "For Healthcare Employers",
@@ -32,6 +38,9 @@ export const metadata = {
     "Ditch spreadsheets and WhatsApp rosters. ProNurtureSphere gives Nigerian facilities shift posting, credential checks, rostering, and payroll in one place.",
 };
 
+import { serverClient } from "@/sanity/lib/client";
+import { employersPageQuery } from "@/sanity/lib/queries";
+import type { EmployersPageData } from "@/sanity/lib/types";
 import EmployersHero from "@/components/employers/EmployersHero";
 import EmployersPainPoints from "@/components/employers/EmployersPainPoints";
 import EmployersTransformation from "@/components/employers/EmployersTransformation";
@@ -41,32 +50,34 @@ import EmployersTestimonials from "@/components/employers/EmployersTestimonials"
 import EmployersFAQ from "@/components/employers/EmployersFAQ";
 import EmployersCTA from "@/components/employers/EmployersCTA";
 
-export default function EmployersPage() {
+export default async function EmployersPage() {
+  const data = await serverClient.fetch<EmployersPageData | null>(employersPageQuery);
+
   return (
     <>
       {/* 1. Hero — above the fold, "For Healthcare Facilities" audience targeting */}
-      <EmployersHero />
+      <EmployersHero hero={data?.hero} />
 
-      {/* 2. Pain points — empathy with staffing/admin/compliance frustrations */}
+      {/* 2. Pain points — empathy with staffing/admin/compliance frustrations (static) */}
       <EmployersPainPoints />
 
-      {/* 3. Transformation — before/after narrative pivot */}
+      {/* 3. Transformation — before/after narrative pivot (static) */}
       <EmployersTransformation />
 
-      {/* 4. Features — 6 benefit-led capability cards */}
-      <EmployersFeatures />
+      {/* 4. Features — 6 benefit-led capability cards from Sanity */}
+      <EmployersFeatures features={data?.features} />
 
-      {/* 5. How it works — 3 steps to counter implementation fear */}
+      {/* 5. How it works — 3 steps to counter implementation fear (static) */}
       <EmployersHowItWorks />
 
-      {/* 6. Testimonials — social proof from hospital administrators */}
-      <EmployersTestimonials />
+      {/* 6. Testimonials — social proof from hospital administrators from Sanity */}
+      <EmployersTestimonials testimonials={data?.testimonials} />
 
-      {/* 7. FAQ — resolves final objections (interactive, client component) */}
+      {/* 7. FAQ — resolves final objections (interactive, client component, static) */}
       <EmployersFAQ />
 
-      {/* 8. CTA — final email capture with trust badges (client component) */}
-      <EmployersCTA />
+      {/* 8. CTA — final email capture with trust badges, content from Sanity */}
+      <EmployersCTA cta={data?.cta} />
     </>
   );
 }

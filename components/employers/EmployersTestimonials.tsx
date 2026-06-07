@@ -13,37 +13,71 @@
  * Design: White background alternates with the off-white how-it-works section.
  * 2-column layout gives each testimonial more visual space than 3-column.
  *
- * Note: Placeholder testimonials — replace with verified quotes post-beta.
+ * Data source: employersPage.testimonials[]-> from Sanity via employersPageQuery.
+ * Falls back to FALLBACK_TESTIMONIALS when Sanity returns null.
+ * Initials are derived from the name field at render time.
  */
 
-interface Testimonial {
-  quote: string;
-  name: string;
-  role: string;
-  organisation: string;
-  initials: string;
+import type { SanityTestimonial } from "@/sanity/lib/types";
+
+/** Derives two-letter initials from a full name */
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0] ?? "")
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 }
 
-const testimonials: Testimonial[] = [
+interface DisplayTestimonial {
+  key:          string;
+  quote:        string;
+  name:         string;
+  role:         string;
+  organisation: string;
+  initials:     string;
+}
+
+const FALLBACK_TESTIMONIALS: DisplayTestimonial[] = [
   {
+    key:          "fallback-1",
     quote:
       "We went from managing locum staff through five different WhatsApp groups to one clean dashboard in under a week. The credential verification alone has saved us from two potentially serious regulatory incidents. I genuinely can't imagine going back.",
-    name: "Dr. Ngozi Anyanwu",
-    role: "Medical Director",
+    name:         "Dr. Ngozi Anyanwu",
+    role:         "Medical Director",
     organisation: "Bright Future Specialist Hospital, Abuja",
-    initials: "NA",
+    initials:     "NA",
   },
   {
+    key:          "fallback-2",
     quote:
       "Our HR team spent the first three days of every month reconciling timesheets and chasing payroll data. Now it's done automatically. The compliance tracking has also made our inspection preparation almost effortless. This is exactly what Nigerian hospital management needed.",
-    name: "Mrs. Adaeze Obiechina",
-    role: "Chief HR Officer",
+    name:         "Mrs. Adaeze Obiechina",
+    role:         "Chief HR Officer",
     organisation: "Crestview Diagnostics & Maternity, Lagos",
-    initials: "AO",
+    initials:     "AO",
   },
 ];
 
-const EmployersTestimonials = () => {
+interface EmployersTestimonialsProps {
+  /** Testimonials from Sanity — falls back to hardcoded if null */
+  testimonials?: SanityTestimonial[] | null;
+}
+
+const EmployersTestimonials = ({ testimonials }: EmployersTestimonialsProps) => {
+  const displayTestimonials: DisplayTestimonial[] =
+    testimonials && testimonials.length > 0
+      ? testimonials.map((t) => ({
+          key:          t._id,
+          quote:        t.quote,
+          name:         t.name,
+          role:         t.role         ?? "",
+          organisation: t.organisation ?? "",
+          initials:     getInitials(t.name),
+        }))
+      : FALLBACK_TESTIMONIALS;
+
   return (
     <section
       className="bg-white py-20 lg:py-28"
@@ -68,9 +102,9 @@ const EmployersTestimonials = () => {
         {/* ── Testimonial Cards ───────────────────────────────────────────── */}
         {/* 2-column desktop — wider cards for longer employer testimonials */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {testimonials.map((testimonial) => (
+          {displayTestimonials.map((testimonial) => (
             <div
-              key={testimonial.name}
+              key={testimonial.key}
               className="
                 bg-brand-light rounded-2xl p-8 lg:p-10
                 border border-brand-dark/5

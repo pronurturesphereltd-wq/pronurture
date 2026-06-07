@@ -13,9 +13,11 @@
  *     3. Return a real JSON response the client can read and act on
  *
  * Request body (JSON):
- *   { name, email, userType }                     — always present
+ *   { name, email, userType }                     — full waitlist form
  *   { ..., profession }   when userType === "Healthcare Professional"
  *   { ..., facilityType } when userType === "Healthcare Facility / Employer"
+ *   { email, source }     — quick-capture forms (e.g. employers/professionals CTA)
+ *                           name is optional; source tags the origin for CRM segmentation
  *
  * Responses:
  *   200  { success: true }
@@ -42,12 +44,13 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, email, userType, profession, facilityType } = body;
+    const { name, email, userType, profession, facilityType, source } = body;
 
     /** ── Server-side validation ────────────────────────────────────────── */
-    if (!name || !name.trim()) {
+    // name is optional — quick-capture forms (employer/professionals CTA) only collect email
+    if (name !== undefined && name !== null && !name.trim()) {
       return NextResponse.json(
-        { success: false, error: "Name is required." },
+        { success: false, error: "Name cannot be blank." },
         { status: 400 }
       );
     }
@@ -69,16 +72,17 @@ export async function POST(request: Request) {
 
     /** ── Build the forwarding payload ──────────────────────────────────── */
     const payload: Record<string, string> = {
-      name: name.trim(),
       email: email.trim(),
       userType: userType || "Other",
       /**
-       * Only include profession / facilityType when they carry a real value.
+       * Only include optional fields when they carry a real value.
        * This keeps the Make.com payload clean — downstream automation can
        * reliably check for field presence rather than empty strings.
        */
-      ...(profession ? { profession } : {}),
-      ...(facilityType ? { facilityType } : {}),
+      ...(name         ? { name: name.trim() } : {}),
+      ...(profession   ? { profession }         : {}),
+      ...(facilityType ? { facilityType }       : {}),
+      ...(source       ? { source }             : {}),
     };
 
     /** ── Forward to Make.com webhook (server-side, no CORS) ────────────── */

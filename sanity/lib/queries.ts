@@ -99,3 +99,19 @@ export const relatedPostsQuery = groq`
     mainImage { asset->{ _id, url }, alt }
   }
 `
+
+/** Employers page singleton — fetched in app/(site)/employers/page.tsx */
+export const employersPageQuery = groq`
+  *[_id == "employersPage"][0] {
+    hero {
+      headline,
+      subheadline,
+      ctaText,
+      ctaLink,
+      image { asset->{ _id, url }, alt }
+    },
+    "features": features[] { _key, title, subtitle, description },
+    "testimonials": testimonials[]-> { _id, quote, name, role, organisation },
+    cta { headline, body, buttonText, buttonLink }
+  }
+`

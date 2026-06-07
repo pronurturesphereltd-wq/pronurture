@@ -19,20 +19,36 @@
  * idle → loading → success/error submission state machine.
  * Pattern is identical to WaitlistSection.tsx — keeps UX consistent.
  *
- * TODO: Connect form to /api/waitlist (or CRM) with source: 'employers' tag.
+ * Data source: employersPage.cta via employersPageQuery — falls back to
+ * hardcoded content if Sanity returns null.
  */
 
 import { useState, FormEvent } from "react";
+import type { EmployerCTA } from "@/sanity/lib/types";
 
-const EmployersCTA = () => {
+const FALLBACK_HEADLINE    = "Ready to Build a Stronger Team?";
+const FALLBACK_BODY        = "Join healthcare facilities across Nigeria already on the ProNurtureSphere waitlist. Early access is free — no credit card, no commitment, just smarter workforce management from day one.";
+const FALLBACK_BUTTON_TEXT = "Get Early Access";
+
+interface EmployersCTAProps {
+  /** CTA section content from Sanity — falls back to hardcoded if null */
+  cta?: EmployerCTA | null;
+}
+
+const EmployersCTA = ({ cta }: EmployersCTAProps) => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const headline    = cta?.headline   ?? FALLBACK_HEADLINE;
+  const bodyText    = cta?.body       ?? FALLBACK_BODY;
+  const buttonLabel = cta?.buttonText ?? FALLBACK_BUTTON_TEXT;
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email || !email.includes("@")) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email.trim())) {
       setStatus("error");
       setErrorMessage("Please enter a valid email address.");
       return;
@@ -42,20 +58,26 @@ const EmployersCTA = () => {
     setErrorMessage("");
 
     try {
-      /**
-       * TODO: Replace simulated delay with real API call:
-       * await fetch('/api/waitlist', {
-       *   method: 'POST',
-       *   headers: { 'Content-Type': 'application/json' },
-       *   body: JSON.stringify({ email, source: 'employers' }),
-       * });
-       */
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setStatus("success");
-      setEmail("");
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email:    email.trim(),
+          source:   "employers",
+          userType: "Healthcare Facility / Employer",
+        }),
+      });
+      const data: { success: boolean; error?: string } = await response.json();
+      if (data.success) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setErrorMessage(data.error || "Something went wrong. Please try again.");
+      }
     } catch {
       setStatus("error");
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage("Something went wrong. Please check your connection and try again.");
     }
   };
 
@@ -93,16 +115,14 @@ const EmployersCTA = () => {
           Get Early Access
         </p>
 
-        {/* Headline */}
+        {/* Headline — from Sanity or fallback */}
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
-          Ready to Build a Stronger Team?
+          {headline}
         </h2>
 
-        {/* Supporting text */}
+        {/* Supporting text — from Sanity or fallback */}
         <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
-          Join healthcare facilities across Nigeria already on the ProNurtureSphere waitlist.
-          Early access is free — no credit card, no commitment, just smarter workforce
-          management from day one.
+          {bodyText}
         </p>
 
         {/* ── Email Form ───────────────────────────────────────────────────── */}
@@ -199,7 +219,7 @@ const EmployersCTA = () => {
                   Submitting...
                 </span>
               ) : (
-                "Get Early Access"
+                buttonLabel
               )}
             </button>
           </form>

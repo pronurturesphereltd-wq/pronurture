@@ -97,3 +97,27 @@ export interface HomePageData {
   testimonials?:     SanityTestimonial[] | null
   featuredServices?: SanityService[] | null
 }
+
+/** Feature item from employersPage.features[] — inline object with _key */
+export interface EmployerFeature {
+  _key:         string
+  title:        string
+  subtitle?:    string
+  description?: string
+}
+
+/** CTA section from employersPage.cta */
+export interface EmployerCTA {
+  headline?:   string
+  body?:       string
+  buttonText?: string
+  buttonLink?: string
+}
+
+/** employersPage singleton shape — returned by employersPageQuery */
+export interface EmployersPageData {
+  hero?:         HomepageHero        | null
+  features?:     EmployerFeature[]   | null
+  testimonials?: SanityTestimonial[] | null
+  cta?:          EmployerCTA         | null
+}

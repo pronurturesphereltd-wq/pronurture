@@ -12,6 +12,7 @@
     "seed:testimonials": "npx tsx scripts/seed-testimonials.ts",
     "seed:services": "npx tsx scripts/seed-services.ts",
     "seed:homepage": "npx tsx scripts/seed-homepage.ts",
+    "seed:employers": "npx tsx scripts/seed-employers-page.ts",
     "update:categories": "npx tsx scripts/update-post-categories.ts"
   },
   "dependencies": {
