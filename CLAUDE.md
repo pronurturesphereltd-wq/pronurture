@@ -2,7 +2,7 @@
 
 > This file is the single source of truth for all AI agents (Claude Code, etc.) working on this project.
 > It must be updated after every major feature or page is completed.
-> Last updated: 2026-06-06 | Status: Active Development
+> Last updated: 2026-06-07 | Status: Active Development
 
 ---
 
@@ -160,17 +160,25 @@ Nigeria's health workforce faces staffing gaps, manual HR processes (WhatsApp, s
 | `faq` | Collection | FAQs |
 | `partner` | Collection | Partner logos/links |
 
-### Sanity Client (use this pattern)
+### Sanity Clients (`sanity/lib/client.ts`)
+
+Two clients are exported — use the right one for the context:
+
 ```ts
-// sanity/lib/client.ts
-import { createClient } from 'next-sanity'
-export const client = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
-  useCdn: true,
+// CDN client — for client-side or non-critical reads (useCdn: true)
+export const client = createClient({ projectId, dataset, apiVersion, useCdn: true })
+
+// Server client — for SSR page fetches on Vercel (useCdn: false, perspective: published)
+// Bypasses the Sanity CDN so pages always receive the latest published content.
+// Use this in all async page.tsx Server Components.
+export const serverClient = createClient({
+  projectId, dataset, apiVersion,
+  useCdn: false,
+  perspective: 'published',
 })
 ```
+
+**Rule:** Always use `serverClient` in `page.tsx` server components. The CDN client can serve stale responses that don't match what was just published in Studio.
 
 ---
 
@@ -277,6 +285,9 @@ pronurture/
 │   └── structure.ts        # Studio sidebar config
 ├── scripts/                # One-off data scripts (run with npx tsx)
 │   ├── seed-blog.ts        # Seeds 10 blog posts (npm run seed:blog)
+│   ├── seed-testimonials.ts  # Seeds 3 testimonial documents (npm run seed:testimonials)
+│   ├── seed-services.ts      # Seeds 6 service documents (npm run seed:services)
+│   ├── seed-homepage.ts      # Seeds homePage singleton with hero/stats/refs (npm run seed:homepage)
 │   └── update-post-categories.ts  # Patches category field (npm run update:categories)
 ├── public/
 │   └── brand-assets/       # Logo files, brand images
@@ -473,3 +484,8 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-06 | Wired `mainImage` field — all 4 blog components render real Sanity image via `urlFor()` + `next/image` when `post.mainImage` exists, fall back to gradient placeholder otherwise; added `cdn.sanity.io` to `next/image` remotePatterns | Blog components, `next.config.ts` |
 | 2026-06-06 | Added `category` field to `post` schema (string, 4 options: for-professionals, for-employers, industry-insights, cpd-compliance); added to GROQ queries and TypeScript types; fixed `BlogGrid` filter to map display labels → slug values via `CATEGORY_SLUG` map | Sanity schema, Blog filters |
 | 2026-06-06 | Created `scripts/update-post-categories.ts` — patches category on all 10 seeded posts; patched drafts-exclusion bug (`!(_id in path("drafts.**"))` filter); all 10/10 posts now categorised | Scripts |
+| 2026-06-07 | Seeded Sanity content: 3 testimonial documents (Dr. Amaka Okonkwo, Blessing Adeyemi, Emeka Nwosu), 6 service documents (rostering, locum/agency, payroll, credential verification, CPD, compliance reporting), homePage singleton (hero, 4 stats, 6 service refs, 3 testimonial refs) | Sanity content seeding |
+| 2026-06-07 | Added `homePageQuery` (hero + stats + testimonials[]-> + featuredServices[]->) and `recentPostsQuery` to `sanity/lib/queries.ts`; added 5 TypeScript types to `sanity/lib/types.ts`: `HomepageHero`, `HomepageStat`, `SanityTestimonial`, `SanityService`, `HomePageData` | Sanity queries & types |
+| 2026-06-07 | Added `serverClient` to `sanity/lib/client.ts` — `useCdn: false`, `perspective: 'published'`; for SSR page fetches to bypass CDN cache and always serve latest published content | Sanity client |
+| 2026-06-07 | Wired homepage to Sanity CMS — `app/(site)/page.tsx` made async with `Promise.all` fetch; HeroSection, SocialProofBar, StatsSection, FeaturesSection, TestimonialsSection, BlogPreviewSection updated to accept optional Sanity props with `FALLBACK_*` hardcoded constants; ProblemSection, AudienceSection, WaitlistSection remain fully static | Homepage `/` |
+| 2026-06-07 | Changed `revalidate` from 3600 → 60 on homepage and blog page; both pages switched to `serverClient` — Sanity content now propagates to Vercel within 60 seconds of publishing | Homepage `/`, Blog `/blog` |

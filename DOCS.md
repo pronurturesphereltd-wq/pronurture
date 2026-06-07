@@ -1,7 +1,7 @@
 # DOCS.md — ProNurtureSphere Component & Configuration Documentation
 
-> **Last updated:** 2026-06-06  
-> **Status:** All pages complete — Blog fully wired to Sanity CMS  
+> **Last updated:** 2026-06-07  
+> **Status:** All pages complete — Homepage and Blog both wired to Sanity CMS  
 > This is the living technical reference for the ProNurtureSphere codebase.  
 > Update this file after every new component, page, or config change.
 
@@ -336,7 +336,12 @@ Social links are in the `socialLinks` array, each with a `label`, `href`, and in
 The above-the-fold section of the homepage. Must answer three questions in under 3 seconds: **What is this? Who is it for? Why should I care?** Drives two conversion paths: direct signup (waitlist) and soft conversion (explore features).
 
 #### Props
-None.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `hero` | `HomepageHero \| null \| undefined` | Sanity `homePage.hero` data. Optional — component falls back to hardcoded content when null. |
+
+**Sanity data used:** `hero.headline` (H1 text), `hero.subheadline`, `hero.ctaText`, `hero.ctaLink`, `hero.image` (via `urlFor()` for desktop + mobile variants). Hardcoded multi-line H1 with `<br>` breaks renders when `hero.headline` is null.
 
 #### Layout
 Two-column grid on desktop (lg+), stacked vertically on mobile:
@@ -382,18 +387,22 @@ A dot-grid pattern at 5% opacity is applied via `background-image: radial-gradie
 Establishes immediate credibility in the first scroll position after the hero. Uses key metrics instead of client logos (product is pre-launch, so logos aren't yet available).
 
 #### Props
-None.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `stats` | `HomepageStat[] \| null \| undefined` | Sanity `homePage.stats[]`. Optional — falls back to `FALLBACK_STATS` when null. |
 
 #### Data Structure
 
 ```ts
-interface Stat {
-  value: string;   // "500+"
-  label: string;   // "Healthcare Professionals"
+interface HomepageStat {
+  _key: string;  // Sanity key (used as React key instead of index)
+  value: string; // "500+"
+  label: string; // "Healthcare Professionals"
 }
 ```
 
-Stats are defined in the `stats` array at the top of the file. Edit this array to update the numbers when real data is available.
+`FALLBACK_STATS` is defined in the component. When Sanity stats are present, they replace the fallback; when absent (null or empty array), the hardcoded fallback renders unchanged.
 
 #### Current Stats
 
@@ -472,17 +481,30 @@ Icons use amber/warning tones (`bg-amber-50 text-amber-600`) by default — ambe
 The solution reveal — presents the 6 core ProNurtureSphere platform features that solve the problems shown above. Anchored at `id="features"` so the hero's "See How It Works" CTA can scroll-link here.
 
 #### Props
-None.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `featuredServices` | `SanityService[] \| null \| undefined` | Dereferenced service documents from Sanity `homePage.featuredServices[]->`. Optional — falls back to `FALLBACK_FEATURES` when null. |
 
 #### Data Structure
 
 ```ts
-interface Feature {
+interface SanityService {
+  _id: string;               // Used for icon lookup in ICON_BY_SERVICE_ID map
+  title: string;
+  slug?: { current: string };
+  shortDescription?: string;
+}
+
+interface FeatureCard {    // Internal render shape
+  id: string;
   title: string;
   description: string;
-  icon: React.ReactNode;  // Inline SVG
+  icon: React.ReactNode;   // Looked up by _id from ICON_BY_SERVICE_ID
 }
 ```
+
+**Icon mapping:** `ICON_BY_SERVICE_ID` is a `Record<string, React.ReactNode>` keyed by the known seeded `_id` values (e.g. `'service-smart-staff-rostering'`). A `<CalendarIcon />` default handles any unknown ID. This avoids storing SVG data in Sanity.
 
 #### Six Feature Cards
 
@@ -585,20 +607,31 @@ interface AudienceColumn {
 Social proof from real users. Per CLAUDE.md: "People buy from businesses that other people trust." Placed after the Audience split to reinforce each persona's decision with peer validation.
 
 #### Props
-None.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `testimonials` | `SanityTestimonial[] \| null \| undefined` | Dereferenced testimonial documents from Sanity `homePage.testimonials[]->`. Optional — falls back to `FALLBACK_TESTIMONIALS` when null. |
 
 #### Data Structure
 
 ```ts
-interface Testimonial {
+interface SanityTestimonial {
+  _id: string;
   quote: string;
   name: string;
-  role: string;
-  organisation: string;
-  initials: string;    // Two-letter avatar until real headshots are available
-  avatarBg: string;    // Tailwind class e.g. "bg-brand-dark"
+  role?: string;
+  organisation?: string;
+}
+
+interface TestimonialDisplay extends SanityTestimonial {
+  initials: string;    // Derived via getInitials() — strips "Dr./Nurse/Prof." prefix
+  avatarBg: string;    // Cycled by index: bg-brand-dark → bg-brand-green → bg-brand-gold
 }
 ```
+
+`toDisplay(t, index)` maps `SanityTestimonial` → `TestimonialDisplay`. `getInitials("Dr. Amaka Okonkwo")` → `"AO"`.
+
+**Seeded testimonials:** 3 documents in Sanity — Dr. Amaka Okonkwo (Medical Director, Lagos), Blessing Adeyemi (Nurse, Abuja), Dr. Emeka Nwosu (GP, Port Harcourt).
 
 #### Three Testimonials (Placeholder — Replace Post-Launch)
 
@@ -641,17 +674,20 @@ Three testimonials cover three distinct user archetypes — hospital administrat
 Reinforces the social proof from TestimonialsSection with hard numbers. Large, bold figures on a deep green background create a dramatic, high-confidence visual moment.
 
 #### Props
-None.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `stats` | `HomepageStat[] \| null \| undefined` | Same Sanity `homePage.stats[]` data passed from page.tsx — shared with SocialProofBar. Optional — falls back to `FALLBACK_STATS` when null. |
 
 #### Data Structure
 
 ```ts
-interface StatItem {
-  value: string;
-  label: string;
-  sublabel?: string;  // Optional secondary descriptor
+interface StatDisplay extends HomepageStat {
+  sublabel?: string;  // Present in FALLBACK_STATS, absent in Sanity data (renders nothing)
 }
 ```
+
+Sanity stats don't carry sublabels — the field is omitted and the sublabel row simply doesn't render. The `FALLBACK_STATS` include sublabels (e.g. "Verified on platform") for richer context when Sanity is unpopulated.
 
 #### Four Stats
 
@@ -683,22 +719,27 @@ interface StatItem {
 Demonstrates thought leadership, provides SEO value through internal links, and educates visitors who aren't yet ready to sign up. The "educate before selling" tactic.
 
 #### Props
-None.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `posts` | `SanityPost[] \| null \| undefined` | 3 most recent posts from `recentPostsQuery`, fetched in page.tsx. Optional — falls back to `FALLBACK_POSTS` when null. |
 
 #### Data Structure
 
 ```ts
-interface BlogPost {
+interface BlogDisplayPost {
+  id: string;
   slug: string;
-  category: string;
+  categorySlug?: string;  // e.g. "for-employers" (Sanity slug value)
   title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  imagePlaceholder: string;
+  excerpt?: string;
+  date: string;           // Formatted via formatDate(iso) → "8 May 2026"
+  mainImage?: SanityImage | null;
   imageAlt: string;
 }
 ```
+
+**Image handling:** `next/image` via `urlFor()` at 400×250 when `post.mainImage` exists; `BlogImagePlaceholder` gradient otherwise. **Category display:** `CATEGORY_LABEL` maps slug → badge text; `CATEGORY_STYLE` maps badge text → Tailwind classes.
 
 #### Category Tag Colour Map
 
@@ -929,7 +970,7 @@ idle → (submit) → loading → success
 **File:** `app/(site)/blog/page.tsx`  
 **Type:** Server Component (async — fetches from Sanity)  
 **Status:** ✅ Complete — wired to Sanity CMS  
-**Revalidation:** `export const revalidate = 3600` (ISR — refetches from Sanity every hour)
+**Revalidation:** `export const revalidate = 60` (ISR — refetches from Sanity within 60s)
 
 **SEO metadata:**
 - Title: "Resources & Insights — ProNurtureSphere"
@@ -937,7 +978,7 @@ idle → (submit) → loading → success
 
 **Data flow:**
 ```ts
-const posts: SanityPost[] = await client.fetch(postsQuery)
+const posts: SanityPost[] = await serverClient.fetch(postsQuery)
 // → BlogFeaturedPost receives posts[0]
 // → BlogFilteredContent receives all posts (passes to BlogGrid)
 ```
@@ -1268,9 +1309,32 @@ Uses a 1-second simulated delay (same as WaitlistSection). **TODO:** Replace wit
 
 ### `/` — Homepage
 
-**File:** `app/page.tsx`  
-**Type:** Server Component  
-**Status:** ✅ Complete  
+**File:** `app/(site)/page.tsx`  
+**Type:** Async Server Component — fetches from Sanity  
+**Status:** ✅ Complete — wired to Sanity CMS  
+**Revalidation:** `export const revalidate = 60` (ISR — refreshes from Sanity within 60s)
+
+**Data fetching:**
+```ts
+const [homePage, recentPosts] = await Promise.all([
+  serverClient.fetch<HomePageData | null>(homePageQuery),
+  serverClient.fetch<SanityPost[]>(recentPostsQuery),
+])
+```
+Uses `serverClient` (`useCdn: false`) to bypass Sanity CDN cache and always serve the latest published content.
+
+**Props threading:**
+| Component | Prop | Source |
+|-----------|------|--------|
+| `HeroSection` | `hero` | `homePage?.hero` |
+| `SocialProofBar` | `stats` | `homePage?.stats` |
+| `FeaturesSection` | `featuredServices` | `homePage?.featuredServices` |
+| `TestimonialsSection` | `testimonials` | `homePage?.testimonials` |
+| `StatsSection` | `stats` | `homePage?.stats` |
+| `BlogPreviewSection` | `posts` | `recentPosts` |
+| `ProblemSection` | — | Hardcoded (no Sanity data) |
+| `AudienceSection` | — | Hardcoded (no Sanity data) |
+| `WaitlistSection` | — | Hardcoded (no Sanity data) |
 
 **Section order (conversion-funnel logic):**
 
@@ -1828,16 +1892,18 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_WRI
 
 ### Immediate (before launch)
 
-- [ ] **Replace placeholder hero image** — source real photography of Nigerian healthcare professionals. Update `HeroSection.tsx` image `src` and `alt`.
-- [ ] **Replace placeholder testimonials** — collect real quotes from beta users. Update `TestimonialsSection.tsx` or connect to Sanity `testimonial` collection.
+- [ ] **Replace placeholder hero image** — source real photography of Nigerian healthcare professionals. Upload via Sanity Studio → homePage → hero → image field. `HeroSection.tsx` is wired and will render it automatically.
+- [ ] **Replace placeholder testimonials with real quotes** — edit the 3 seeded testimonial documents in Sanity Studio with verified quotes from actual beta users. Fake testimonials damage credibility.
 - [ ] **Upload real blog post images in Sanity Studio** — `post.mainImage` is wired and ready. Any image uploaded via Studio will automatically appear on the blog instead of the gradient placeholder.
-- [ ] **Replace placeholder stats** — update numbers in `SocialProofBar.tsx` and `StatsSection.tsx` with real data.
-- [ ] **Wire `BlogPreviewSection.tsx` on homepage** — still uses static data; connect to Sanity `postsQuery` like `/blog` page.
+- [ ] **Update stats with real numbers** — edit the `homePage` singleton in Sanity Studio → stats array. Both `SocialProofBar` and `StatsSection` read from Sanity and will reflect the changes immediately.
 - [ ] **Update `sitemap.ts`** — fetch and include live blog post slugs from Sanity (see Section 12.5).
 - [ ] **Replace placeholder team/founder photo** — update `AboutTeam.tsx` avatar. Add director names when confirmed.
 
 ### Completed ✅
 - [x] All 10 pages built and deployed
+- [x] Homepage (`/`) fully wired to Sanity CMS — HeroSection, SocialProofBar, FeaturesSection, TestimonialsSection, StatsSection, BlogPreviewSection all read from Sanity with hardcoded fallbacks
+- [x] Sanity content seeded — homePage singleton (hero, 4 stats, 6 service refs, 3 testimonial refs), 6 service documents, 3 testimonial documents
+- [x] `serverClient` added (`useCdn: false`, `perspective: 'published'`) — homepage and blog use it for SSR fetches; content propagates within 60s of publishing
 - [x] Blog (`/blog` + `/blog/[slug]`) fully wired to Sanity CMS via GROQ
 - [x] `category` field on `post` schema — 4 options, all 10 seeded posts categorised
 - [x] Blog category filters working end-to-end (display label → slug → Sanity data)
