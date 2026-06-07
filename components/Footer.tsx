@@ -15,6 +15,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { SiteSettings } from "@/sanity/lib/types";
+import { urlFor } from "@/sanity/lib/image";
 
 /** Footer navigation columns — structured for UX clarity */
 const footerColumns = [
@@ -50,7 +51,7 @@ const footerColumns = [
 
 interface FooterProps {
   /** Dynamic values from Sanity siteSettings — all optional with hardcoded fallbacks */
-  settings?: Pick<SiteSettings, 'tagline' | 'copyrightText' | 'footerTagline' | 'socialLinks'>
+  settings?: Pick<SiteSettings, 'tagline' | 'copyrightText' | 'footerTagline' | 'socialLinks' | 'logoMono'>
 }
 
 /** Social icon definitions — only SVG markup, URLs come from Sanity */
@@ -109,12 +110,12 @@ const Footer = ({ settings }: FooterProps) => {
 
           {/* ── Brand Column ─────────────────────────────────────────────── */}
           <div className="lg:col-span-1">
-            {/* White Mono logo — correct for dark green background */}
+            {/* Mono logo — uses Sanity asset when uploaded, local SVG otherwise */}
             <Link href="/" aria-label="ProNurtureSphere home">
               <div className="relative h-8 w-40 mb-6">
                 <Image
-                  src="/brand-assets/White Mono.svg"
-                  alt="ProNurtureSphere Limited"
+                  src={settings?.logoMono ? urlFor(settings.logoMono).width(120).auto('format').url() : "/brand-assets/White Mono.svg"}
+                  alt={settings?.logoMono?.alt ?? "ProNurtureSphere Limited"}
                   fill
                   className="object-contain object-left"
                 />

@@ -31,8 +31,8 @@ export default async function SiteLayout({
 
   return (
     <>
-      {/* Sticky top navigation — siteName sourced from Sanity */}
-      <Navbar siteName={settings?.siteName} />
+      {/* Sticky top navigation — siteName + logo sourced from Sanity */}
+      <Navbar siteName={settings?.siteName} logo={settings?.logo} />
 
       {/* Page content — flex-1 pushes Footer to the bottom of the viewport */}
       <main className="flex-1">{children}</main>

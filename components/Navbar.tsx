@@ -17,6 +17,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { urlFor } from "@/sanity/lib/image";
+import type { SanityImage } from "@/sanity/lib/types";
 
 /** Navigation links shared between desktop and mobile menus */
 const navLinks = [
@@ -30,9 +32,11 @@ const navLinks = [
 interface NavbarProps {
   /** Site name from Sanity siteSettings — falls back to hardcoded value if not yet seeded */
   siteName?: string
+  /** Full-colour logo from Sanity — falls back to local SVG if not uploaded */
+  logo?: SanityImage | null
 }
 
-const Navbar = ({ siteName = 'ProNurtureSphere' }: NavbarProps) => {
+const Navbar = ({ siteName = 'ProNurtureSphere', logo }: NavbarProps) => {
   /**
    * mobileOpen: controls the hamburger/mobile menu visibility.
    * Toggled by the hamburger button on small screens.
@@ -61,11 +65,11 @@ const Navbar = ({ siteName = 'ProNurtureSphere' }: NavbarProps) => {
 
           {/* ── Logo ─────────────────────────────────────────────────────── */}
           <Link href="/" className="flex-shrink-0 flex items-center gap-3" aria-label="ProNurtureSphere home">
-            {/* Always show Full Color Logo on white navbar background */}
+            {/* Full-colour logo — uses Sanity asset when uploaded, local SVG otherwise */}
             <div className="relative h-8 w-10">
               <Image
-                src="/brand-assets/Full Color Logo.svg"
-                alt="ProNurtureSphere Limited"
+                src={logo ? urlFor(logo).width(120).auto('format').url() : "/brand-assets/Full Color Logo.svg"}
+                alt={logo?.alt ?? "ProNurtureSphere Limited"}
                 fill
                 className="object-contain object-left"
                 priority
