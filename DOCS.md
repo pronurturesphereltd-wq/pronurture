@@ -1,7 +1,7 @@
 # DOCS.md — ProNurtureSphere Component & Configuration Documentation
 
 > **Last updated:** 2026-06-07  
-> **Status:** All pages complete — Homepage and Blog both wired to Sanity CMS  
+> **Status:** All pages complete — Homepage, Employers, Professionals, About, Blog all wired to Sanity CMS; Navbar and Footer wired to siteSettings  
 > This is the living technical reference for the ProNurtureSphere codebase.  
 > Update this file after every new component, page, or config change.
 
@@ -205,11 +205,14 @@ Waitlist      → bg-brand-dark   (deep green)
 ### 3.1 `components/Navbar.tsx`
 
 **Type:** `'use client'` (Client Component)  
-**Renders in:** `app/layout.tsx` — appears on every page  
+**Renders in:** `app/(site)/layout.tsx` — appears on every public page  
 **File:** `components/Navbar.tsx`
 
 #### Purpose
-Sticky top navigation bar. Transparent with a white logo when floating over the dark hero section; transitions to a white background with the full-colour logo once the user scrolls.
+Sticky top navigation bar. Always white with the full-colour logo and a `shadow-sm` border. Accepts optional `settings` prop from Sanity `siteSettings` — nav links, logo URLs, and site name editable from Studio.
+
+#### Sanity wiring
+Accepts `settings?: SanitySettings | null` passed from `app/(site)/layout.tsx`. Falls back to hardcoded nav links and logo paths when null. Fields used: `settings.fullColorLogoUrl`, `settings.navLinks[]`, `settings.siteName`.
 
 #### Props
 None. This component manages its own state internally.
@@ -284,11 +287,14 @@ Three `<span>` bars animate into an X using `rotate-45`, `opacity-0`, and `-rota
 ### 3.2 `components/Footer.tsx`
 
 **Type:** Server Component  
-**Renders in:** `app/layout.tsx` — appears on every page  
+**Renders in:** `app/(site)/layout.tsx` — appears on every public page  
 **File:** `components/Footer.tsx`
 
 #### Purpose
-Site-wide footer providing navigation, social links, legal notice, and brand closure on a deep green background.
+Site-wide footer providing navigation, social links, legal notice, and brand closure on a deep green background. Accepts optional `settings` prop from Sanity `siteSettings`.
+
+#### Sanity wiring
+Accepts `settings?: SanitySettings | null` passed from `app/(site)/layout.tsx`. Falls back to hardcoded values when null. Fields used: `settings.whiteMonoLogoUrl`, `settings.footerTagline`, `settings.socialLinks[]` (label, url, platform), `settings.copyrightText`.
 
 #### Props
 None.
@@ -1029,24 +1035,20 @@ idle → (submit) → loading → success
 #### Form Validation
 Client-side only (for now): checks that `email` is truthy and contains `@`. Server-side validation should be added in the API route.
 
-#### API Integration (Placeholder)
-Currently uses a 1-second `setTimeout` to simulate a network request:
+#### API Integration
+POSTs `{ email }` to `/api/waitlist` — the Next.js route handler validates server-side and forwards to Make.com. Returns `{ success: true }` on delivery; shows inline error on failure without a reload.
 
-```ts
-await new Promise((resolve) => setTimeout(resolve, 1000));
-```
-
-**To connect to a real backend:**
 ```ts
 const response = await fetch('/api/waitlist', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ email }),
 });
-if (!response.ok) throw new Error('Server error');
+const data = await response.json();
+if (!data.success) throw new Error(data.error ?? 'Server error');
 ```
 
-See `app/api/waitlist/route.ts` (to be created) for the API route.
+See `app/api/waitlist/route.ts` (Section 11.1) for full route documentation.
 
 #### Key Design Decisions
 
@@ -1356,73 +1358,128 @@ This order follows the **Problem → Solution → Proof → Action** persuasion 
 
 ### `/employers` — For Healthcare Employers
 
-**File:** `app/employers/page.tsx`  
-**Type:** Server Component  
-**Status:** ✅ Complete
+**File:** `app/(site)/employers/page.tsx`  
+**Type:** Async Server Component — fetches from Sanity  
+**Status:** ✅ Complete — wired to Sanity CMS  
+**Revalidation:** `export const revalidate = 60`
+
+**Data fetching:**
+```ts
+const data = await serverClient.fetch<EmployersPageData | null>(employersPageQuery)
+```
+
+**Props threading:**
+| Component | Prop | Source |
+|-----------|------|--------|
+| `EmployersHero` | `hero` | `data?.hero` |
+| `EmployersFeatures` | `features` | `data?.features` |
+| `EmployersTestimonials` | `testimonials` | `data?.testimonials` |
+| `EmployersCTA` | `cta` | `data?.cta` |
+| `EmployersPainPoints` | — | Hardcoded |
+| `EmployersTransformation` | — | Hardcoded |
+| `EmployersHowItWorks` | — | Hardcoded |
+| `EmployersFAQ` | — | Hardcoded |
 
 **Section order (AIDA framework):**
 
 ```
 1. EmployersHero           → Attention — above the fold, "For Healthcare Facilities"
-2. EmployersPainPoints     → Interest  — empathy with Dr. Adaeze's daily frustrations
-3. EmployersTransformation → Desire    — Before/After narrative pivot (deep green)
-4. EmployersFeatures       → Desire    — 6 benefit-led platform capability cards
-5. EmployersHowItWorks     → Desire    — 3 steps to remove implementation fear
-6. EmployersTestimonials   → Desire    — social proof from hospital administrators only
-7. EmployersFAQ            → Action    — resolves final objections (client component)
-8. EmployersCTA            → Action    — email capture + trust badges (client component)
+2. EmployersPainPoints     → Interest  — empathy with Dr. Adaeze's daily frustrations (static)
+3. EmployersTransformation → Desire    — Before/After narrative pivot (static)
+4. EmployersFeatures       → Desire    — 6 benefit-led platform capability cards (Sanity)
+5. EmployersHowItWorks     → Desire    — 3 steps to remove implementation fear (static)
+6. EmployersTestimonials   → Desire    — social proof from hospital administrators (Sanity)
+7. EmployersFAQ            → Action    — resolves final objections (static, client component)
+8. EmployersCTA            → Action    — email capture POSTs to /api/waitlist with source:'employers' (Sanity)
 ```
+
+**Icon strategy:** `ICON_BY_FEATURE_KEY` in `EmployersFeatures.tsx` maps Sanity feature `_key` values (feat-1..feat-6) to inline SVG `ReactNode`s. Icons never stored in Sanity CMS.
 
 ---
 
 ### `/professionals` — For Healthcare Professionals
 
-**File:** `app/professionals/page.tsx`  
-**Type:** Server Component  
-**Status:** ✅ Complete
+**File:** `app/(site)/professionals/page.tsx`  
+**Type:** Async Server Component — fetches from Sanity  
+**Status:** ✅ Complete — wired to Sanity CMS  
+**Revalidation:** `export const revalidate = 60`
 
 **Target persona:** Dr. Amarachi Bello — Doctor / Nurse / Pharmacist / Allied Health Professional  
 **Tone:** Warm, opportunity-focused, encouraging, mobile-first. Uses "you" language throughout.  
 **Section framework:** AIDA (Attention → Interest → Desire → Action)
 
+**Data fetching:**
+```ts
+const data = await serverClient.fetch<ProfessionalsPageData | null>(professionalsPageQuery)
+```
+
+**Props threading:**
+| Component | Prop | Source |
+|-----------|------|--------|
+| `ProfessionalsHero` | `hero` | `data?.hero` |
+| `ProfessionalsFeatures` | `features` | `data?.features` |
+| `ProfessionalsTestimonials` | `testimonials` | `data?.testimonials` |
+| `ProfessionalsCTA` | `cta` | `data?.cta` |
+| `ProfessionalsPainPoints` | — | Hardcoded |
+| `ProfessionalsTransformation` | — | Hardcoded |
+| `ProfessionalsHowItWorks` | — | Hardcoded |
+| `ProfessionalsFAQ` | — | Hardcoded |
+
 **Section order:**
 
 ```
 1. ProfessionalsHero           → Attention — above the fold, "For Healthcare Professionals"
-2. ProfessionalsPainPoints     → Interest  — empathy with Dr. Amarachi's daily frustrations
-3. ProfessionalsTransformation → Desire    — Before/After narrative pivot (deep green)
-4. ProfessionalsFeatures       → Desire    — 6 benefit-led platform capability cards
-5. ProfessionalsHowItWorks     → Desire    — 3 steps to remove complexity and trust barriers
-6. ProfessionalsTestimonials   → Desire    — social proof from Nigerian doctors and nurses
-7. ProfessionalsFAQ            → Action    — resolves final hesitations (client component)
-8. ProfessionalsCTA            → Action    — email capture + trust badges (client component)
+2. ProfessionalsPainPoints     → Interest  — empathy with Dr. Amarachi's daily frustrations (static)
+3. ProfessionalsTransformation → Desire    — Before/After narrative pivot (static)
+4. ProfessionalsFeatures       → Desire    — 6 benefit-led platform capability cards (Sanity)
+5. ProfessionalsHowItWorks     → Desire    — 3 steps to remove complexity and trust barriers (static)
+6. ProfessionalsTestimonials   → Desire    — social proof from Nigerian doctors and nurses (Sanity)
+7. ProfessionalsFAQ            → Action    — resolves final hesitations (static, client component)
+8. ProfessionalsCTA            → Action    — email capture POSTs to /api/waitlist with source:'professionals' (Sanity)
 ```
+
+**Icon strategy:** Same `ICON_BY_FEATURE_KEY` pattern as Employers — SVGs in component keyed by Sanity `_key`.
 
 ---
 
 ### `/about` — About ProNurtureSphere
 
-**File:** `app/about/page.tsx`  
-**Type:** Server Component  
-**Status:** ✅ Complete
+**File:** `app/(site)/about/page.tsx`  
+**Type:** Async Server Component — fetches from Sanity  
+**Status:** ✅ Complete — wired to Sanity CMS  
+**Revalidation:** `export const revalidate = 60`
 
 **Target audience:** Both personas + partners, media, stakeholders  
 **Tone:** Mission-driven, institutional, authentic. Story page — NOT a conversion page.  
 **Section framework:** Narrative arc (Who → Why → What → How → Who We Serve → People → Operations → Action)
 
+**Data fetching:**
+```ts
+const data = await serverClient.fetch<AboutPageData | null>(aboutPageQuery)
+```
+
+**Props threading:**
+| Component | Prop | Source |
+|-----------|------|--------|
+| `AboutMission` | `mission` | `data?.mission` (`body` blocks + `vision` string) |
+| `AboutStory` | `story` | `data?.story` (`headline`, `body` blocks, `image`) |
+| `AboutValues` | `values` | `data?.values` (7 objects with `_key`, `title`, `description`) |
+| `AboutTeam` | `team` | `data?.team` (`team[0]` → founder card) |
+| `AboutHero`, `AboutEcosystem`, `AboutLifecycle`, `AboutWhoWeServe`, `AboutPSLArms`, `AboutCTA` | — | Hardcoded (structural content) |
+
 **Section order:**
 
 ```
-1. AboutHero          → Above the fold — page identity, H1, founding photograph
-2. AboutMission       → Mission (green) + Vision (light) two-column
-3. AboutStory         → Origin narrative + pull quote + founding stats
-4. AboutValues        → 7 core values card grid
-5. AboutEcosystem     → 4-pillar ecosystem model (green bg)
-6. AboutLifecycle     → 7-stage professional lifecycle model
-7. AboutWhoWeServe    → 3 audience groups: professionals, institutions, communities
-8. AboutTeam          → Founder card + 6 director role cards
-9. AboutPSLArms       → 6 operating arms of PSL
-10. AboutCTA          → Dual CTA: "Get Early Access" + "Contact Us"
+1. AboutHero          → Above the fold — page identity, H1, founding photograph (static)
+2. AboutMission       → Mission PortableText (green panel) + Vision string (light panel) (Sanity)
+3. AboutStory         → PortableText body + optional image; pull quote + stats always static (Sanity)
+4. AboutValues        → 7 values from Sanity; ICON_BY_VALUE_KEY maps _key val-1..val-7 → SVG (Sanity)
+5. AboutEcosystem     → 4-pillar ecosystem model (static)
+6. AboutLifecycle     → 7-stage professional lifecycle model (static)
+7. AboutWhoWeServe    → 3 audience groups (static)
+8. AboutTeam          → team[0] as founder card (name, role, bio, LinkedIn, photo via urlFor); 6 director role cards always static (Sanity for founder)
+9. AboutPSLArms       → 6 operating arms of PSL (static)
+10. AboutCTA          → Dual CTA: "Get Early Access" + "Contact Us" (static)
 ```
 
 ---
@@ -1671,13 +1728,23 @@ Above-the-fold hero for the `/about` page. Establishes organisational identity f
 #### Purpose
 Presents mission and vision as two equal, visually contrasted statements. Placed immediately after the hero so the organisational north star is established before the story begins.
 
+#### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `mission` | `AboutMissionData \| null \| undefined` | Sanity `aboutPage.mission`. Optional — falls back to hardcoded blockquotes. |
+
+**Sanity data used:**
+- `mission.body` — rendered via `PortableText` from `next-sanity` with custom `missionBodyComponents` (white text, `text-lg md:text-xl leading-relaxed font-light`, left deep-green panel)
+- `mission.vision` — plain string rendered as `<blockquote>` in the right off-white panel
+
 #### Key Design Decisions
 
 | Decision | Why |
 |----------|-----|
 | Deep green left / off-white right | Green = roots/foundation (mission). Light = aspiration/future (vision). Colour carries meaning. |
-| `<blockquote>` element | Semantic HTML — mission/vision statements are quotations from the organisation's founding charter. |
-| No body copy, just the statements | Both statements are long enough to stand alone. Adding explanatory text would dilute them. |
+| PortableText on left, plain string on right | Mission is long-form prose; vision is a single focused statement. Different types suit their content. |
+| `<blockquote>` element for vision | Semantic HTML — vision is a quotation from the organisation's founding charter. |
 
 ---
 
@@ -1686,25 +1753,38 @@ Presents mission and vision as two equal, visually contrasted statements. Placed
 **Type:** Server Component
 
 #### Purpose
-The origin narrative. Answers "why does this organisation exist?" with five paragraphs of authentic, locally-grounded prose. A pull quote isolates the central founding insight. Two stat cards give the story institutional weight.
+The origin narrative. Answers "why does this organisation exist?" with prose from Sanity. A pull quote isolates the central founding insight. Two stat cards give the story institutional weight.
+
+#### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `story` | `AboutStoryData \| null \| undefined` | Sanity `aboutPage.story`. Optional — falls back to 5 hardcoded paragraphs. |
+
+**Sanity data used:**
+- `story.headline` → H2 (fallback: "Why We Built ProNurtureSphere.")
+- `story.body` → rendered via `PortableText` with `storyBodyComponents` (`text-brand-dark/70 text-base md:text-lg leading-relaxed`)
+- `story.image` → if present, rendered via `next/image` + `urlFor()` at top of right column before the pull quote
+
+**Always static (not in Sanity):** Pull quote ("Healthcare professionals are trained but not nurtured..."), stat cards (72k+, 1:8k). These are foundational brand statements and don't need Studio editing.
 
 #### Key Content
 
-| Element | Detail |
-|---------|--------|
-| H2 | "Why We Built ProNurtureSphere." |
-| Narrative | 5 paragraphs: problem (demand-supply gap) → employer pain → professional pain → founding decision → platform solution |
-| Pull quote | "Healthcare professionals are trained but not nurtured into sustainable excellence." |
-| Stat card 1 | 72k+ nurses with lapsed licences annually |
-| Stat card 2 | 1:8,000 doctor-to-patient ratio vs 1:600 WHO recommendation |
+| Element | Detail | Source |
+|---------|--------|--------|
+| H2 | "Why We Built ProNurtureSphere." | Sanity `story.headline` |
+| Narrative | 3 blocks: Nigeria talent/systems gap → PSL founding question → what became the product | Sanity `story.body` PortableText |
+| Pull quote | "Healthcare professionals are trained but not nurtured into sustainable excellence." | Always static |
+| Stat card 1 | 72k+ nurses with lapsed licences annually | Always static |
+| Stat card 2 | 1:8,000 doctor-to-patient ratio vs 1:600 WHO recommendation | Always static |
 
 #### Key Design Decisions
 
 | Decision | Why |
 |----------|-----|
 | 3:2 column split (prose left, quote right) | Prose gets the majority space — it is the content. The pull quote is accent, not equal weight. |
-| Stats sourced from real data context | Specific numbers beat vague claims. These figures contextualise the scale of the problem PSL was founded to address. |
-| Pull quote on `bg-brand-dark` with gold left border | The visual treatment isolates the most important insight on the entire About page — it must stand apart from the prose. |
+| Stats and pull quote always static | These are founding-brand statements not subject to editorial update — removing them from Sanity avoids accidental edits that would undermine the brand narrative. |
+| Pull quote on `bg-brand-dark` with gold left border | Isolates the most important insight on the About page — must stand apart from prose. |
 
 ---
 
@@ -1715,17 +1795,19 @@ The origin narrative. Answers "why does this organisation exist?" with five para
 #### Purpose
 Makes organisational character concrete and scannable. Seven values in a card grid — each with an icon, title, and 1–2 sentence description.
 
-#### Seven Values
+#### Seven Values (Seeded in Sanity — _key val-1..val-7)
 
-| Value | Core Message |
-|-------|-------------|
-| Compassion | Empathy, dignity, respect for human life |
-| Excellence | Evidence-based, clinical competence, international standards |
-| Integrity | Ethical practice, transparency, regulatory compliance |
-| Nurturing Leadership | Developing people, not just professionals |
-| Innovation | Forward-thinking: education + technology integrated |
-| Equity & Inclusion | Access regardless of geography or background |
-| Collaboration | Strategic partnerships that multiply impact |
+| _key | Title | Core Message |
+|------|-------|-------------|
+| val-1 | Built for Nigeria | MDCN/NHIS/PAYE structures — every feature fits Nigerian healthcare realities |
+| val-2 | Trust Through Verification | No shortcuts on credentials — every professional verified before accepting shifts |
+| val-3 | Professional Dignity | Reliable pay, clear contracts, career development — not WhatsApp negotiations |
+| val-4 | Transparency | Facilities see who they're hiring; professionals see exactly what they'll earn |
+| val-5 | Continuous Growth | CPD integrated into workflow — not a checkbox |
+| val-6 | System Thinking | Staffing, payroll, compliance, training as one system — not four problems |
+| val-7 | Patient-Centred Outcomes | Every product decision traces back to better patient care in Nigeria |
+
+**Sanity wiring:** `ICON_BY_VALUE_KEY: Record<string, ReactNode>` in `AboutValues.tsx` maps each `_key` (val-1..val-7) to an inline SVG icon. The `values?` prop accepts `AboutValue[] | null`; `FALLBACK_VALUES` mirrors the seeded content. `import type { ReactNode } from "react"` — React.ReactNode TypeScript bug fixed.
 
 ---
 
@@ -1797,23 +1879,34 @@ Names all three audiences explicitly so each visitor can identify themselves. Th
 
 **Type:** Server Component
 
+#### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `team` | `AboutTeamMember[] \| null \| undefined` | Sanity `aboutPage.team[]`. `team[0]` is used as the founder card. Optional — falls back to hardcoded constants. |
+
 #### Purpose
 Establishes human credibility with a prominent founder card and 6 director role cards. Names for director roles are intentionally absent — will be added when leadership is publicly confirmed.
 
 #### Founder Card
 
-| Element | Content |
-|---------|---------|
-| Name | Iziegbe Asemota |
-| Title | Founder & CEO, ProNurtureSphere Limited |
-| Bio | Founded PSL on the conviction that the workforce crisis requires a complete ecosystem — education, deployment, mentorship, and technology. |
-| Avatar | Placeholder `placehold.co/160x160/103613/c09e5a?text=IA` |
+| Element | Source | Content |
+|---------|--------|---------|
+| Name | Sanity `team[0].name` | Iziegbe Asemota |
+| Title | Sanity `team[0].role` | Founder & CEO, ProNurtureSphere Limited |
+| Bio | Sanity `team[0].bio` | Founder narrative |
+| Avatar | `urlFor(team[0].image)` if set, else `placehold.co` with derived initials | Real photo or `IA` placeholder |
+| LinkedIn | Sanity `team[0].linkedin` — rendered as link only when truthy | `https://linkedin.com/company/psl25` |
 
-#### Six Director Roles (names TBC)
+**LinkedIn link:** Rendered with LinkedIn SVG icon below the role label when `founder.linkedin` is present in Sanity. Uses `rel="noopener noreferrer"` and `aria-label` for accessibility.
+
+**Avatar fallback:** `placehold.co/160x160/103613/c09e5a?text={initials}` — initials derived from name by splitting on spaces (strips Dr./Nurse/Prof. prefix).
+
+#### Six Director Roles (names TBC — always static)
 
 Director of Clinical Services · Director of Education & Training · Director of Workforce & Staffing Solutions · Director of Operations & Compliance · Director of Partnerships & Global Development · Director of Homecare & Wellness Services
 
-> ⚠️ Replace placeholder avatar with real founder photograph before launch. Add director names when confirmed.
+> ⚠️ Replace placeholder avatar with real founder photograph before launch. Upload via Sanity Studio → aboutPage → team → image field. Add director names when confirmed.
 
 ---
 
@@ -1853,7 +1946,91 @@ Final dual-action CTA. Serves both audiences explicitly named in the subtext. De
 
 ---
 
-## 5. Sanity CMS Schemas
+## 5. Sanity Architecture Patterns
+
+These patterns are used consistently across all wired pages. Follow them exactly when adding new Sanity-backed sections.
+
+### 5.1 Two Clients
+
+| Client | File | `useCdn` | When to use |
+|--------|------|----------|-------------|
+| `client` | `sanity/lib/client.ts` | `true` | Client-side reads; non-critical; tolerates brief staleness |
+| `serverClient` | `sanity/lib/client.ts` | `false` | All `page.tsx` server components — always serves latest published content |
+
+**Rule:** Always use `serverClient` in `page.tsx`. The CDN client can serve stale responses that don't match what was just published in Studio.
+
+### 5.2 ISR Revalidation
+
+```ts
+export const revalidate = 60  // at top of page.tsx
+```
+
+All wired pages revalidate every 60 seconds. Content published in Studio propagates to Vercel within ~60s.
+
+### 5.3 Optional Props + FALLBACK_* Constants
+
+Every wired component accepts `prop?: SanityType | null`. A `FALLBACK_*` constant mirrors the seeded content and renders when Sanity returns null. This means:
+- The page renders identically if Sanity is unreachable
+- Hard reloads during Studio maintenance don't break the live site
+- Developing without internet access still works
+
+```ts
+const FALLBACK_HEADLINE = "Fill Shifts in Minutes, Not Hours"
+const EmployersHero = ({ hero }: { hero?: HeroData | null }) => {
+  const headline = hero?.headline ?? FALLBACK_HEADLINE
+  // ...
+}
+```
+
+### 5.4 ICON_BY_KEY Pattern
+
+Icons (SVG `ReactNode`s) are never stored in Sanity CMS. Instead, a `Record<string, ReactNode>` in the component maps Sanity `_key` values to inline SVGs:
+
+```ts
+const ICON_BY_VALUE_KEY: Record<string, ReactNode> = {
+  'val-1': <svg>...</svg>,  // Built for Nigeria
+  'val-2': <svg>...</svg>,  // Trust Through Verification
+  // ...
+}
+// Usage:
+const icon = ICON_BY_VALUE_KEY[value._key] ?? <DefaultIcon />
+```
+
+This pattern is used in: `FeaturesSection`, `EmployersFeatures`, `ProfessionalsFeatures`, `AboutValues`.
+
+### 5.5 urlFor() for Images
+
+```ts
+import { urlFor } from "@/sanity/lib/image"
+// ...
+const src = urlFor(post.mainImage).width(400).height(250).fit("crop").url()
+```
+
+Always provide `.width().height().fit("crop")` for predictable layout. Pass the full `SanityImage` object (not just the URL) — it contains asset reference + hotspot data. Only render `<Image>` when the field is non-null; otherwise show the `BlogImagePlaceholder` gradient or `placehold.co` fallback.
+
+### 5.6 PortableText
+
+All rich-text fields (blog body, homepage mission body, story body) use `PortableText` from `next-sanity`:
+
+```ts
+import { PortableText } from "next-sanity"
+import type { ComponentProps } from "react"
+type PortableTextValue = ComponentProps<typeof PortableText>["value"]
+
+const myComponents: ComponentProps<typeof PortableText>["components"] = {
+  block: {
+    normal: ({ children }) => <p className="text-brand-dark/70 leading-relaxed">{children}</p>,
+  },
+}
+// ...
+<PortableText value={body as PortableTextValue} components={myComponents} />
+```
+
+Import from `next-sanity`, not `@portabletext/react` (the latter is a transitive dep, not in `package.json`).
+
+---
+
+## 6. Sanity CMS Schemas
 
 All schemas in `sanity/schemaTypes/`. Studio at `http://localhost:3000/studio` (local) or `/studio` (production).
 
@@ -1892,23 +2069,31 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_WRI
 
 ### Immediate (before launch)
 
-- [ ] **Replace placeholder hero image** — source real photography of Nigerian healthcare professionals. Upload via Sanity Studio → homePage → hero → image field. `HeroSection.tsx` is wired and will render it automatically.
-- [ ] **Replace placeholder testimonials with real quotes** — edit the 3 seeded testimonial documents in Sanity Studio with verified quotes from actual beta users. Fake testimonials damage credibility.
-- [ ] **Upload real blog post images in Sanity Studio** — `post.mainImage` is wired and ready. Any image uploaded via Studio will automatically appear on the blog instead of the gradient placeholder.
-- [ ] **Update stats with real numbers** — edit the `homePage` singleton in Sanity Studio → stats array. Both `SocialProofBar` and `StatsSection` read from Sanity and will reflect the changes immediately.
+- [ ] **Replace placeholder hero image** — source real photography of Nigerian healthcare professionals. Upload via Sanity Studio → homePage → hero → image. `HeroSection.tsx` is wired and will render it automatically.
+- [ ] **Replace placeholder testimonials with real quotes** — edit the 3 seeded `testimonial` documents in Sanity Studio with verified quotes from actual beta users. Fake testimonials damage credibility.
+- [ ] **Upload real blog post images in Sanity Studio** — `post.mainImage` is wired. Any image uploaded renders automatically via `next/image` instead of the gradient placeholder.
+- [ ] **Update stats with real numbers** — edit `homePage` singleton in Studio → stats array. Both `SocialProofBar` and `StatsSection` will reflect changes within 60 seconds.
 - [ ] **Update `sitemap.ts`** — fetch and include live blog post slugs from Sanity (see Section 12.5).
-- [ ] **Replace placeholder team/founder photo** — update `AboutTeam.tsx` avatar. Add director names when confirmed.
+- [ ] **Upload founder photo** — Sanity Studio → aboutPage → team → team-1 → image. `AboutTeam.tsx` renders it via `urlFor()` automatically.
+- [ ] **Add director names** — add to director role cards in `AboutTeam.tsx` when leadership is confirmed.
+- [ ] **Update `metadataBase`** — change from `pronurture.vercel.app` to `pronurture.com.ng` when custom domain is live (also update `app/sitemap.ts` and `app/robots.ts`).
 
 ### Completed ✅
 - [x] All 10 pages built and deployed
-- [x] Homepage (`/`) fully wired to Sanity CMS — HeroSection, SocialProofBar, FeaturesSection, TestimonialsSection, StatsSection, BlogPreviewSection all read from Sanity with hardcoded fallbacks
-- [x] Sanity content seeded — homePage singleton (hero, 4 stats, 6 service refs, 3 testimonial refs), 6 service documents, 3 testimonial documents
-- [x] `serverClient` added (`useCdn: false`, `perspective: 'published'`) — homepage and blog use it for SSR fetches; content propagates within 60s of publishing
-- [x] Blog (`/blog` + `/blog/[slug]`) fully wired to Sanity CMS via GROQ
-- [x] `category` field on `post` schema — 4 options, all 10 seeded posts categorised
-- [x] Blog category filters working end-to-end (display label → slug → Sanity data)
-- [x] `mainImage` wired — real Sanity images render via `next/image`; gradient placeholder fallback
-- [x] Waitlist form connected to Make.com via `/api/waitlist` server route
+- [x] All pages moved into `app/(site)/` route group with shared Navbar + Footer layout
+- [x] Homepage (`/`) fully wired to Sanity CMS — HeroSection, SocialProofBar, FeaturesSection, TestimonialsSection, StatsSection, BlogPreviewSection all read from Sanity with hardcoded fallbacks; `revalidate=60`
+- [x] Employers page (`/employers`) fully wired to Sanity CMS — EmployersHero, EmployersFeatures, EmployersTestimonials, EmployersCTA; `revalidate=60`; EmployersCTA POSTs to `/api/waitlist` with `source:'employers'`
+- [x] Professionals page (`/professionals`) fully wired to Sanity CMS — same pattern; ProfessionalsCTA POSTs with `source:'professionals'`
+- [x] About page (`/about`) fully wired to Sanity CMS — AboutMission (PortableText), AboutStory (PortableText), AboutValues (ICON_BY_VALUE_KEY), AboutTeam (founder from Sanity, LinkedIn link); `revalidate=60`
+- [x] Blog (`/blog` + `/blog/[slug]`) fully wired to Sanity CMS via GROQ; `revalidate=60`
+- [x] Navbar and Footer wired to `siteSettings` Sanity singleton — logos, nav links, social links, copyright, footer tagline editable from Studio
+- [x] Sanity content seeded — homePage, employersPage, professionalsPage, aboutPage, siteSettings singletons; 10 posts, 6 services, 3 testimonials, 1 author; all posts categorised
+- [x] `serverClient` (`useCdn: false`, `perspective: 'published'`) used in all wired `page.tsx` files
+- [x] `ICON_BY_KEY` pattern for SVG icons — icons never stored in Sanity; keyed by `_key` in component
+- [x] Optional props + `FALLBACK_*` constants on all wired components — pages render identically if Sanity is unreachable
+- [x] `category` field on `post` schema — 4 options; blog filters working end-to-end
+- [x] `mainImage` wired across all blog surfaces — `next/image` via `urlFor()` with gradient placeholder fallback
+- [x] Waitlist form connected to Make.com via `/api/waitlist` server route — real JSON response, no CORS restriction
 - [x] Full SEO — metadata, OG image, robots.txt, sitemap
 
 ---

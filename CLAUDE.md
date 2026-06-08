@@ -151,7 +151,7 @@ Nigeria's health workforce faces staffing gaps, manual HR processes (WhatsApp, s
 | `homePage` | Singleton | Homepage content |
 | `employersPage` | Singleton | For Employers page |
 | `professionalsPage` | Singleton | For Professionals page |
-| `aboutPage` | Singleton | About page content |
+| `aboutPage` | Singleton | About page content — `mission` (body: blocks, vision: text), `values[]` (_key, title, description — no icon field, SVGs stored in component), `team[]` (_key, name, role, bio, linkedin, image), `story` (headline, body: blocks, image) |
 | `siteSettings` | Singleton | Global config (logo, nav, footer) |
 | `post` | Collection | Blog articles — fields: title, slug, author (ref), mainImage (image+hotspot+alt), publishedAt, excerpt, category (string, 4 options), body (blocks+images) |
 | `author` | Collection | Team/founders |
@@ -246,7 +246,7 @@ NEXT_PUBLIC_SANITY_API_VERSION=2026-05-26
 SANITY_API_WRITE_TOKEN=<Editor-level token — server-only, never NEXT_PUBLIC_>
 ```
 
-`SANITY_API_WRITE_TOKEN` is used only by scripts (`seed:blog`, `update:categories`) that write to Sanity. Never expose it client-side.
+`SANITY_API_WRITE_TOKEN` is used only by scripts in `scripts/` that write to Sanity (all `seed:*` and `update:*` commands). Never expose it client-side or prefix with `NEXT_PUBLIC_`.
 
 ---
 
@@ -278,17 +278,21 @@ pronurture/
 ├── sanity/                 # Sanity CMS config
 │   ├── schemaTypes/        # All 11 schemas
 │   ├── lib/
-│   │   ├── client.ts       # Sanity read client (useCdn: true)
+│   │   ├── client.ts       # Two clients: client (useCdn: true) + serverClient (useCdn: false, perspective: published — use in all page.tsx Server Components)
 │   │   ├── image.ts        # urlFor() image URL builder (@sanity/image-url)
-│   │   ├── queries.ts      # All GROQ queries (postsQuery, postBySlugQuery, etc.)
-│   │   └── types.ts        # TypeScript types for Sanity data (SanityPost, etc.)
+│   │   ├── queries.ts      # All GROQ queries — homePageQuery, employersPageQuery, professionalsPageQuery, aboutPageQuery, postsQuery, postBySlugQuery, relatedPostsQuery, recentPostsQuery
+│   │   └── types.ts        # TypeScript types — SanityPost, SanityImage, SanityAuthor, HomePageData, EmployersPageData, ProfessionalsPageData, AboutPageData + all child types
 │   └── structure.ts        # Studio sidebar config
 ├── scripts/                # One-off data scripts (run with npx tsx)
-│   ├── seed-blog.ts        # Seeds 10 blog posts (npm run seed:blog)
-│   ├── seed-testimonials.ts  # Seeds 3 testimonial documents (npm run seed:testimonials)
-│   ├── seed-services.ts      # Seeds 6 service documents (npm run seed:services)
-│   ├── seed-homepage.ts      # Seeds homePage singleton with hero/stats/refs (npm run seed:homepage)
-│   └── update-post-categories.ts  # Patches category field (npm run update:categories)
+│   ├── seed-blog.ts               # Seeds 10 blog posts (npm run seed:blog)
+│   ├── seed-testimonials.ts       # Seeds 3 testimonial documents (npm run seed:testimonials)
+│   ├── seed-services.ts           # Seeds 6 service documents (npm run seed:services)
+│   ├── seed-homepage.ts           # Seeds homePage singleton — hero, stats, service refs, testimonial refs (npm run seed:homepage)
+│   ├── seed-employers-page.ts     # Seeds employersPage singleton (npm run seed:employers)
+│   ├── seed-professionals-page.ts # Seeds professionalsPage singleton (npm run seed:professionals)
+│   ├── seed-about-page.ts         # Seeds aboutPage singleton (npm run seed:about)
+│   ├── seed-site-settings.ts      # Seeds siteSettings singleton — logos, nav, social, footer (npm run seed:settings)
+│   └── update-post-categories.ts  # Patches category field on all seeded posts (npm run update:categories)
 ├── public/
 │   └── brand-assets/       # Logo files, brand images
 ├── CLAUDE.md               # This file
@@ -489,3 +493,10 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-07 | Added `serverClient` to `sanity/lib/client.ts` — `useCdn: false`, `perspective: 'published'`; for SSR page fetches to bypass CDN cache and always serve latest published content | Sanity client |
 | 2026-06-07 | Wired homepage to Sanity CMS — `app/(site)/page.tsx` made async with `Promise.all` fetch; HeroSection, SocialProofBar, StatsSection, FeaturesSection, TestimonialsSection, BlogPreviewSection updated to accept optional Sanity props with `FALLBACK_*` hardcoded constants; ProblemSection, AudienceSection, WaitlistSection remain fully static | Homepage `/` |
 | 2026-06-07 | Changed `revalidate` from 3600 → 60 on homepage and blog page; both pages switched to `serverClient` — Sanity content now propagates to Vercel within 60 seconds of publishing | Homepage `/`, Blog `/blog` |
+| 2026-06-07 | Seeded Sanity content: employersPage singleton (hero, 6 features with _key feat-1..feat-6, 2 testimonials, CTA text); professionalsPage singleton (hero, 6 features, 2 testimonials, CTA text); added seed:employers + seed:professionals scripts | Sanity content seeding |
+| 2026-06-07 | Wired Employers page to Sanity CMS — EmployersHero, EmployersFeatures, EmployersTestimonials, EmployersCTA accept optional Sanity props with FALLBACK_* constants; ICON_BY_FEATURE_KEY maps _key → inline SVG; page.tsx async + revalidate=60 + serverClient; EmployersCTA POSTs to /api/waitlist with source:'employers' | `/employers` |
+| 2026-06-07 | Wired Professionals page to Sanity CMS — ProfessionalsHero, ProfessionalsFeatures, ProfessionalsTestimonials, ProfessionalsCTA accept optional Sanity props with FALLBACK_* constants; ICON_BY_FEATURE_KEY maps _key → inline SVG; page.tsx async + revalidate=60 + serverClient; ProfessionalsCTA POSTs to /api/waitlist with source:'professionals' | `/professionals` |
+| 2026-06-07 | Wired siteSettings to Navbar and Footer — both accept optional SanitySettings props with hardcoded fallbacks; siteName, fullColorLogoUrl, whiteMonoLogoUrl, navLinks[], socialLinks[], copyrightText, footerTagline all editable from Sanity Studio | Navbar.tsx, Footer.tsx |
+| 2026-06-07 | Seeded Sanity content: aboutPage singleton (mission 3 PortableText blocks + vision string, 7 values val-1..val-7, founder team member Iziegbe Asemota, story 3 blocks); added seed:about script | Sanity content seeding |
+| 2026-06-07 | Wired About page to Sanity CMS — AboutMission (PortableText body + plain-text vision), AboutStory (PortableText body + optional urlFor() image), AboutValues (ICON_BY_VALUE_KEY maps _key val-1..val-7 → inline SVG, 7 values from Sanity), AboutTeam (team[0] as founder card, LinkedIn link rendered when present, urlFor() for photo); page.tsx async + revalidate=60 + serverClient | `/about` |
+| 2026-06-07 | Updated aboutPage schema — removed orphaned mission.headline, added mission.vision (text, rows: 3), removed values[].icon (image type — SVGs stored in ICON_BY_VALUE_KEY keyed by _key); all 4 wired About components accept optional props with FALLBACK_* constants; fixed React.ReactNode TypeScript bugs in AboutValues, AboutTeam, AboutWhoWeServe, AboutPSLArms | Sanity schema, About components |
