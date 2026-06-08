@@ -11,16 +11,42 @@
  *         placeholder avatar image, founder tag. Director cards are smaller,
  *         role-only cards that signal organisational maturity without needing names.
  *
+ * Data source: aboutPage.team[] via aboutPageQuery.
+ * Uses team[0] as the founder card. Falls back to hardcoded constants if Sanity
+ * returns null. Director role cards are always static (no names yet).
+ *
+ * If the founder has a linkedin URL in Sanity, a LinkedIn link is rendered
+ * below their role label.
+ *
  * TODO: Replace placeholder avatar with real founder photograph before launch.
  *       Add director names when the leadership team is confirmed.
  */
 
 import Image from "next/image";
+import type { ReactNode } from "react";
+import type { AboutTeamMember } from "@/sanity/lib/types";
+import { urlFor } from "@/sanity/lib/image";
 
+// ---------------------------------------------------------------------------
+// Hardcoded fallbacks — shown when Sanity returns null / empty team
+// ---------------------------------------------------------------------------
+const FALLBACK_FOUNDER_NAME  = "Iziegbe Asemota"
+const FALLBACK_FOUNDER_ROLE  = "Founder & CEO"
+const FALLBACK_FOUNDER_BIO   =
+  "Iziegbe Asemota founded ProNurtureSphere with a clear conviction — " +
+  "that Nigeria’s healthcare workforce crisis cannot be solved by training alone. " +
+  "It requires a complete ecosystem: structured education, ethical deployment, " +
+  "continuous mentorship, and technology that connects it all. " +
+  "ProNurtureSphere is that ecosystem."
+const FALLBACK_FOUNDER_INITIALS = "IA"
+
+// ---------------------------------------------------------------------------
+// Director role cards — always static; names to be added post-launch
+// ---------------------------------------------------------------------------
 interface DirectorRole {
   title: string;
   department: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }
 
 const directorRoles: DirectorRole[] = [
@@ -39,7 +65,7 @@ const directorRoles: DirectorRole[] = [
     icon: (
       <svg className="w-5 h-5 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
       </svg>
     ),
   },
@@ -81,7 +107,33 @@ const directorRoles: DirectorRole[] = [
   },
 ];
 
-const AboutTeam = () => {
+interface AboutTeamProps {
+  /** Team members from Sanity — team[0] is used as the founder card */
+  team?: AboutTeamMember[] | null;
+}
+
+const AboutTeam = ({ team }: AboutTeamProps) => {
+  // Use the first team member as the founder; fall back to hardcoded constants
+  const founder = team?.[0] ?? null
+
+  const founderName     = founder?.name    ?? FALLBACK_FOUNDER_NAME
+  const founderRole     = founder?.role    ?? FALLBACK_FOUNDER_ROLE
+  const founderBio      = founder?.bio     ?? FALLBACK_FOUNDER_BIO
+  const founderLinkedIn = founder?.linkedin ?? null
+
+  // Derive initials from the name for the avatar fallback
+  const founderInitials = founderName
+    .split(" ")
+    .map((n) => n[0] ?? "")
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || FALLBACK_FOUNDER_INITIALS
+
+  // Build the avatar image URL — real Sanity photo or placeholder
+  const avatarSrc = founder?.image
+    ? urlFor(founder.image).width(160).height(160).fit("crop").url()
+    : `https://placehold.co/160x160/103613/c09e5a?text=${founderInitials}`
+
   return (
     <section
       className="bg-white py-20 lg:py-28"
@@ -102,8 +154,8 @@ const AboutTeam = () => {
         {/* ── Founder Card ────────────────────────────────────────────────── */}
         {/*
          * Full-width on mobile, two-column on desktop.
-         * Left: deep green panel with avatar placeholder and founding tag.
-         * Right: name, title, and full bio paragraph.
+         * Left: deep green panel with avatar and founding tag.
+         * Right: name, title, LinkedIn link (if set), and full bio paragraph.
          * The founder card is intentionally larger than director cards — founders
          * carry the most institutional trust weight on an About page.
          */}
@@ -134,11 +186,11 @@ const AboutTeam = () => {
               aria-hidden="true"
             />
 
-            {/* Avatar placeholder */}
+            {/* Avatar — real Sanity photo or initials placeholder */}
             <div className="relative w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-brand-gold/40 shadow-lg mb-5">
               <Image
-                src="https://placehold.co/160x160/103613/c09e5a?text=IA"
-                alt="Iziegbe Asemota, Founder and CEO of ProNurtureSphere"
+                src={avatarSrc}
+                alt={`${founderName}, ${founderRole} of ProNurtureSphere`}
                 width={160}
                 height={160}
                 className="w-full h-full object-cover"
@@ -148,7 +200,7 @@ const AboutTeam = () => {
             {/* Founder badge */}
             <span className="relative inline-flex items-center gap-2 bg-brand-gold/20 border border-brand-gold/30 rounded-full px-4 py-1.5 text-brand-gold text-xs font-semibold uppercase tracking-widest">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-gold" aria-hidden="true" />
-              Founder & CEO
+              Founder &amp; CEO
             </span>
           </div>
 
@@ -158,23 +210,37 @@ const AboutTeam = () => {
             style={{ backgroundColor: "#f5f5f0" }}
           >
 
-            {/* Name */}
+            {/* Name — from Sanity or fallback */}
             <h3 className="text-brand-dark font-bold text-2xl lg:text-3xl mb-1">
-              Iziegbe Asemota
+              {founderName}
             </h3>
 
-            {/* Title */}
-            <p className="text-brand-green text-sm font-semibold uppercase tracking-widest mb-6">
-              Founder & CEO, ProNurtureSphere Limited
+            {/* Role — from Sanity or fallback */}
+            <p className="text-brand-green text-sm font-semibold uppercase tracking-widest mb-1">
+              {founderRole}, ProNurtureSphere Limited
             </p>
 
-            {/* Bio */}
+            {/* LinkedIn link — rendered only when linkedin URL is present in Sanity */}
+            {founderLinkedIn && (
+              <a
+                href={founderLinkedIn}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-brand-green/70 text-xs font-medium hover:text-brand-dark transition-colors mb-5"
+                aria-label={`${founderName} on LinkedIn`}
+              >
+                {/* LinkedIn icon — same as Footer pattern */}
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+                LinkedIn
+              </a>
+            )}
+
+            {/* Bio — from Sanity or fallback; spacing adjusted when LinkedIn link present */}
+            {!founderLinkedIn && <div className="mb-6" />}
             <p className="text-brand-dark/70 text-base leading-relaxed">
-              Iziegbe Asemota founded ProNurtureSphere with a clear conviction —
-              that Nigeria&apos;s healthcare workforce crisis cannot be solved by training alone.
-              It requires a complete ecosystem: structured education, ethical deployment,
-              continuous mentorship, and technology that connects it all.
-              ProNurtureSphere is that ecosystem.
+              {founderBio}
             </p>
 
             {/* Gold divider */}

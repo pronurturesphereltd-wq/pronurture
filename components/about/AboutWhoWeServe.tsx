@@ -16,10 +16,12 @@
  * but is more narrative and descriptive — this is an About page, not a conversion page.
  */
 
+import type { ReactNode } from "react";
+
 interface AudienceGroup {
   title: string;
   audiences: string[];
-  icon: React.ReactNode;
+  icon: ReactNode;
 }
 
 const groups: AudienceGroup[] = [

@@ -145,3 +145,41 @@ export interface ProfessionalsPageData {
   testimonials?: SanityTestimonial[]    | null
   cta?:          ProfessionalCTA        | null
 }
+
+/** One value item from aboutPage.values[] */
+export interface AboutValue {
+  _key:         string
+  title:        string
+  description?: string
+}
+
+/** One team member from aboutPage.team[] */
+export interface AboutTeamMember {
+  _key:      string
+  name:      string
+  role?:     string
+  bio?:      string
+  linkedin?: string
+  image?:    SanityImage | null
+}
+
+/** Story section data from aboutPage.story */
+export interface AboutStoryData {
+  headline?: string
+  body?:     unknown[]
+  image?:    SanityImage | null
+}
+
+/** Mission section data from aboutPage.mission */
+export interface AboutMissionData {
+  body?:   unknown[]
+  vision?: string
+}
+
+/** aboutPage singleton shape — returned by aboutPageQuery */
+export interface AboutPageData {
+  mission?: AboutMissionData  | null
+  values?:  AboutValue[]      | null
+  team?:    AboutTeamMember[] | null
+  story?:   AboutStoryData    | null
+}

@@ -131,3 +131,13 @@ export const professionalsPageQuery = groq`
     cta { headline, body, buttonText, buttonLink }
   }
 `
+
+/** About page singleton — fetched in app/(site)/about/page.tsx */
+export const aboutPageQuery = groq`
+  *[_id == "aboutPage"][0] {
+    "mission": mission { body, vision },
+    "values": values[] { _key, title, description },
+    "team": team[] { _key, name, role, bio, linkedin, "image": image { asset->{ _id, url }, alt } },
+    "story": story { headline, body, "image": image { asset->{ _id, url }, alt } }
+  }
+`

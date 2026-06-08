@@ -10,8 +10,9 @@ export default defineType({
       title: 'Mission',
       type: 'object',
       fields: [
-        defineField({ name: 'headline', title: 'Headline', type: 'string' }),
-        defineField({ name: 'body', title: 'Body', type: 'array', of: [{ type: 'block' }] }),
+        // headline removed — never rendered in the component
+        defineField({ name: 'body', title: 'Mission Body', type: 'array', of: [{ type: 'block' }] }),
+        defineField({ name: 'vision', title: 'Vision Statement', type: 'text', rows: 3 }),
       ],
     }),
     defineField({
@@ -40,12 +41,7 @@ export default defineType({
           fields: [
             defineField({ name: 'title', title: 'Value Title', type: 'string' }),
             defineField({ name: 'description', title: 'Description', type: 'text', rows: 2 }),
-            defineField({
-              name: 'icon',
-              title: 'Icon',
-              type: 'image',
-              fields: [defineField({ name: 'alt', title: 'Alt Text', type: 'string' })],
-            }),
+            // icon removed — SVGs live in ICON_BY_VALUE_KEY in AboutValues.tsx keyed by _key
           ],
           preview: { select: { title: 'title', subtitle: 'description' } },
         },

@@ -17,12 +17,14 @@
  * not conversion pressure.
  */
 
+import type { ReactNode } from "react";
+
 interface PSLArm {
   name: string;
   tagline: string;
   description: string;
   accentColor: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }
 
 const arms: PSLArm[] = [
