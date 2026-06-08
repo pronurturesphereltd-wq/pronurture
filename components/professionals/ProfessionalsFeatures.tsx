@@ -6,92 +6,132 @@
  *          Per CLAUDE.md Section 12: visual hierarchy demands benefit titles be the
  *          dominant element — users care about outcomes first, features second.
  *
+ * Data source: professionalsPage.features[] from Sanity via professionalsPageQuery.
+ * Falls back to FALLBACK_FEATURES when Sanity returns null.
+ *
+ * Icons are NOT stored in Sanity — SVGs live in ICON_BY_FEATURE_KEY keyed by
+ * the Sanity _key values set in the seed script (pfeat-1 through pfeat-6).
+ * This avoids storing raw SVG markup in the CMS while keeping icons editable in code.
+ *
  * Anchored at id="features" — connects to any internal anchor navigation.
- *
- * Design: White background. Brand-dark/gold icon containers.
- *         brand-light card backgrounds inside the white section create subtle depth —
- *         the same layering pattern from EmployersFeatures and FeaturesSection.
- *
- * Target persona: Dr. Amarachi — show me what I get, not just what it does.
  */
 
-interface Feature {
-  icon: React.ReactNode;
-  title: string;
-  category: string;
-  description: string;
-}
+import Link from "next/link";
+import type { ReactNode } from "react";
+import type { ProfessionalFeature } from "@/sanity/lib/types";
 
-const features: Feature[] = [
+// ---------------------------------------------------------------------------
+// Icon map — keyed by the _key values set in scripts/seed-professionals-page.ts
+// ---------------------------------------------------------------------------
+const ICON_BY_FEATURE_KEY: Record<string, ReactNode> = {
+  "pfeat-1": (
+    // Calendar — shift matching and booking
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+    </svg>
+  ),
+  "pfeat-2": (
+    // Wallet / payment — fast and reliable payments
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+      <path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg>
+  ),
+  "pfeat-3": (
+    // User / profile — digital professional identity
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
+    </svg>
+  ),
+  "pfeat-4": (
+    // Graduation cap — CPD and licence renewal
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+      <path d="M6 12v5c3 3 9 3 12 0v-5" />
+    </svg>
+  ),
+  "pfeat-5": (
+    // Bar chart — earnings dashboard
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+      <line x1="18" y1="20" x2="18" y2="10" />
+      <line x1="12" y1="20" x2="12" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="14" />
+      <line x1="2" y1="20" x2="22" y2="20" />
+    </svg>
+  ),
+  "pfeat-6": (
+    // Star — ratings and reviews
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  ),
+};
+
+// Shown for any feature whose _key isn't in ICON_BY_FEATURE_KEY
+const DEFAULT_ICON = (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <line x1="12" y1="16" x2="12.01" y2="16" />
+  </svg>
+);
+
+// ---------------------------------------------------------------------------
+// Hardcoded fallback — shown when Sanity returns null / empty
+// _key values mirror the seed script so icons resolve correctly
+// ---------------------------------------------------------------------------
+const FALLBACK_FEATURES: ProfessionalFeature[] = [
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-      </svg>
-    ),
-    title: "Find Shifts That Fit Your Life",
-    category: "Locum Shift Marketplace",
-    description:
-      "Browse verified locum shifts by specialty, date, location, and rate. Apply in minutes and get confirmation fast — no phone calls, no middlemen, no wasted journeys.",
+    _key:        "pfeat-1",
+    title:       "Find Verified Shifts",
+    subtitle:    "Locum & Shift Matching",
+    description: "Browse and book verified locum shifts at hospitals and clinics near you. No agencies, no delays.",
   },
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-    ),
-    title: "Get Paid Without the Chase",
-    category: "Fast, Reliable Payments",
-    description:
-      "Employers commit to payment terms before you start. Your timesheets are logged automatically and your rate is agreed upfront — payment follows on schedule, every time.",
+    _key:        "pfeat-2",
+    title:       "Get Paid Quickly",
+    subtitle:    "Fast & Reliable Payments",
+    description: "Timesheets are approved digitally and payments processed automatically — no chasing invoices.",
   },
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-      </svg>
-    ),
-    title: "CPD That Actually Counts",
-    category: "Accredited CPD Courses",
-    description:
-      "Complete MDCN/NMCN-recognised CPD modules designed for Nigerian clinical practice. Track your credits, download certificates, and stay licence-ready — affordably.",
+    _key:        "pfeat-3",
+    title:       "Build Your Profile",
+    subtitle:    "Digital Professional Identity",
+    description: "Upload your credentials once. MDCN, NMCN, and PCN verifications stay live so employers can trust you instantly.",
   },
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-      </svg>
-    ),
-    title: "Build Your Professional Profile",
-    category: "Verified Digital Profile",
-    description:
-      "Create a verified digital profile that showcases your credentials, employment history, and CPD achievements — a professional identity employers can trust at a glance.",
+    _key:        "pfeat-4",
+    title:       "Complete Accredited CPD",
+    subtitle:    "CPD & Licence Renewal",
+    description: "Access short, accredited modules that count toward your licence renewal — completed on your phone, at your own pace.",
   },
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      </svg>
-    ),
-    title: "Track Your Licences & Renewals",
-    category: "Credential Tracking",
-    description:
-      "Get automatic reminders before your practising licence, indemnity, or specialist certificates expire. Never get caught off guard by a renewal deadline again.",
+    _key:        "pfeat-5",
+    title:       "Track Your Earnings",
+    subtitle:    "Earnings Dashboard",
+    description: "See all your shifts, hours, and payments in one dashboard. Download payslips and tax summaries anytime.",
   },
   {
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.069A1 1 0 0121 8.869V15.13a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-      </svg>
-    ),
-    title: "Learn From Nigeria's Best Clinicians",
-    category: "Webinars & Live Events",
-    description:
-      "Join live clinical webinars and on-demand events from respected Nigerian healthcare practitioners — practical learning that improves patient care and earns CPD credits.",
+    _key:        "pfeat-6",
+    title:       "Grow Your Reputation",
+    subtitle:    "Ratings & Reviews",
+    description: "Build a verified track record with employer ratings that make you the first choice for future shifts.",
   },
 ];
 
-const ProfessionalsFeatures = () => {
+interface ProfessionalsFeaturesProps {
+  /** Platform features from Sanity — falls back to hardcoded if null */
+  features?: ProfessionalFeature[] | null;
+}
+
+const ProfessionalsFeatures = ({ features }: ProfessionalsFeaturesProps) => {
+  const displayFeatures =
+    features && features.length > 0 ? features : FALLBACK_FEATURES;
+
   return (
     <section
       id="features"
@@ -101,48 +141,82 @@ const ProfessionalsFeatures = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── Section Header ──────────────────────────────────────────────── */}
-        <div className="text-center mb-14">
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <p className="text-brand-green text-sm font-semibold uppercase tracking-widest mb-4">
             Platform Features
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-dark leading-tight mb-5">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-dark leading-tight mb-6">
             Everything You Need to Grow Your Career.
           </h2>
-          <p className="text-brand-dark/60 text-lg max-w-2xl mx-auto">
+          <p className="text-brand-dark/60 text-lg leading-relaxed">
             One platform for shifts, payments, CPD, and career development — built for
             Nigerian healthcare professionals.
           </p>
         </div>
 
         {/* ── Feature Cards Grid ──────────────────────────────────────────── */}
-        {/* 3-column on desktop, 2-column on tablet, 1-column on mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => (
+        {/* 1-column mobile → 2-column tablet → 3-column desktop (2×3 layout) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {displayFeatures.map((feature) => (
             <div
-              key={feature.title}
-              className="group bg-brand-light rounded-2xl p-7 border border-brand-dark/5 hover:border-brand-dark/15 hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+              key={feature._key}
+              className="
+                group
+                bg-brand-light rounded-2xl p-8
+                border border-brand-dark/5
+                hover:border-brand-dark/20 hover:shadow-xl hover:-translate-y-1
+                transition-all duration-300 ease-out
+              "
             >
-              {/* Icon container — brand-dark/gold combination consistent across all feature sections */}
-              <div className="w-11 h-11 rounded-xl bg-brand-dark flex items-center justify-center mb-5 text-brand-gold group-hover:scale-110 transition-transform duration-300">
-                {feature.icon}
+              {/* Icon — dark green container, gold icon for brand consistency */}
+              <div className="
+                inline-flex items-center justify-center
+                w-12 h-12 rounded-xl mb-5
+                bg-brand-dark text-brand-gold
+                group-hover:scale-110
+                transition-transform duration-300
+              ">
+                {ICON_BY_FEATURE_KEY[feature._key] ?? DEFAULT_ICON}
               </div>
 
-              {/* Category — small secondary context below the icon */}
-              <p className="text-brand-green text-xs font-semibold uppercase tracking-wider mb-2">
-                {feature.category}
-              </p>
-
-              {/* Benefit title — bold, outcome-focused, the dominant text element in the card */}
-              <h3 className="text-brand-dark font-bold text-lg leading-snug mb-3">
+              {/* Benefit title — the outcome, not the feature name */}
+              <h3 className="text-base font-bold text-brand-dark mb-1 leading-snug">
                 {feature.title}
               </h3>
 
-              {/* Description — specific, ends with a concrete outcome per CLAUDE.md coding standards */}
-              <p className="text-brand-dark/60 text-sm leading-relaxed">
+              {/* Feature category — smaller, secondary context label */}
+              {feature.subtitle && (
+                <p className="text-brand-green text-xs font-semibold mb-3 uppercase tracking-wide">
+                  {feature.subtitle}
+                </p>
+              )}
+
+              <p className="text-brand-dark/60 leading-relaxed text-sm">
                 {feature.description}
               </p>
             </div>
           ))}
+        </div>
+
+        {/* ── Bottom CTA ──────────────────────────────────────────────────── */}
+        <div className="text-center mt-14">
+          <p className="text-brand-dark/50 text-base mb-6">
+            All features included. No per-module pricing. Free to join during early access.
+          </p>
+          <Link
+            href="/waitlist"
+            className="
+              inline-flex items-center justify-center
+              px-8 py-4 rounded-full
+              bg-brand-dark text-white
+              text-base font-bold
+              cursor-pointer transition-all duration-200
+              hover:bg-brand-green hover:scale-105
+              focus:outline-none focus:ring-2 focus:ring-brand-dark focus:ring-offset-2
+            "
+          >
+            Get Early Access →
+          </Link>
         </div>
       </div>
     </section>

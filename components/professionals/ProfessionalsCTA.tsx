@@ -17,21 +17,36 @@
  * idle → loading → success/error state machine.
  * Pattern is identical to EmployersCTA for consistent conversion UX.
  *
- * TODO: Connect form to /api/waitlist with source: 'professionals' tag to
- *       distinguish professional signups from employer signups in the CRM.
+ * Data source: professionalsPage.cta via professionalsPageQuery — falls back to
+ * hardcoded content if Sanity returns null.
  */
 
 import { useState, FormEvent } from "react";
+import type { ProfessionalCTA } from "@/sanity/lib/types";
 
-const ProfessionalsCTA = () => {
+const FALLBACK_HEADLINE    = "Ready to Take Control of Your Career?";
+const FALLBACK_BODY        = "Join hundreds of Nigerian healthcare professionals already using ProNurtureSphere to find shifts, get paid, and grow their careers — on their own terms.";
+const FALLBACK_BUTTON_TEXT = "Get Early Access";
+
+interface ProfessionalsCTAProps {
+  /** CTA section content from Sanity — falls back to hardcoded if null */
+  cta?: ProfessionalCTA | null;
+}
+
+const ProfessionalsCTA = ({ cta }: ProfessionalsCTAProps) => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const headline    = cta?.headline   ?? FALLBACK_HEADLINE;
+  const bodyText    = cta?.body       ?? FALLBACK_BODY;
+  const buttonLabel = cta?.buttonText ?? FALLBACK_BUTTON_TEXT;
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email || !email.includes("@")) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email.trim())) {
       setStatus("error");
       setErrorMessage("Please enter a valid email address.");
       return;
@@ -41,20 +56,26 @@ const ProfessionalsCTA = () => {
     setErrorMessage("");
 
     try {
-      /**
-       * TODO: Replace simulated delay with real API call:
-       * await fetch('/api/waitlist', {
-       *   method: 'POST',
-       *   headers: { 'Content-Type': 'application/json' },
-       *   body: JSON.stringify({ email, source: 'professionals' }),
-       * });
-       */
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setStatus("success");
-      setEmail("");
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email:    email.trim(),
+          source:   "professionals",
+          userType: "Healthcare Professional",
+        }),
+      });
+      const data: { success: boolean; error?: string } = await response.json();
+      if (data.success) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setErrorMessage(data.error || "Something went wrong. Please try again.");
+      }
     } catch {
       setStatus("error");
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage("Something went wrong. Please check your connection and try again.");
     }
   };
 
@@ -92,15 +113,14 @@ const ProfessionalsCTA = () => {
           Get Early Access
         </p>
 
-        {/* Headline — empowering, career-ownership tone for Dr. Amarachi */}
+        {/* Headline — from Sanity or fallback */}
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
-          Ready to Take Control of Your Career?
+          {headline}
         </h2>
 
-        {/* Supporting text — social proof + removes cost barrier in one sentence */}
+        {/* Supporting text — from Sanity or fallback */}
         <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
-          Join hundreds of Nigerian healthcare professionals already on ProNurtureSphere.
-          Early access is free — start finding verified shifts and accredited CPD today.
+          {bodyText}
         </p>
 
         {/* ── Email Form ───────────────────────────────────────────────────── */}
@@ -197,7 +217,7 @@ const ProfessionalsCTA = () => {
                   Submitting...
                 </span>
               ) : (
-                "Get Early Access"
+                buttonLabel
               )}
             </button>
           </form>
@@ -215,7 +235,7 @@ const ProfessionalsCTA = () => {
           </p>
         )}
 
-        {/* Privacy reassurance — "No spam" directly addresses the #1 email objection */}
+        {/* Privacy reassurance */}
         <p className="mt-5 text-white/40 text-xs">
           🔒 No spam, ever. Your email is only used for ProNurtureSphere early access updates.
         </p>

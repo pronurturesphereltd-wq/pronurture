@@ -14,11 +14,30 @@
  * "500+ Verified Professionals" stat card signals safety-in-numbers and community trust.
  *
  * h-screen + pt-24 ensures full hero fits above the fold with the fixed Navbar.
+ *
+ * Data source: professionalsPage.hero from Sanity via professionalsPageQuery.
+ * Falls back to FALLBACK_* constants when Sanity returns null.
  */
 
 import Link from "next/link";
+import type { HomepageHero } from "@/sanity/lib/types";
 
-const ProfessionalsHero = () => {
+const FALLBACK_HEADLINE    = "Your Skills Are in Demand. We Make Sure You Get Paid for Them.";
+const FALLBACK_SUBHEADLINE = "ProNurtureSphere connects Nigerian doctors, nurses, pharmacists, and allied health professionals with verified employers, flexible locum shifts, and accredited CPD — all in one place.";
+const FALLBACK_CTA_TEXT    = "Get Early Access";
+const FALLBACK_CTA_LINK    = "/waitlist";
+
+interface ProfessionalsHeroProps {
+  /** Hero content from Sanity — falls back to hardcoded if null */
+  hero?: HomepageHero | null;
+}
+
+const ProfessionalsHero = ({ hero }: ProfessionalsHeroProps) => {
+  const headline    = hero?.headline    ?? FALLBACK_HEADLINE;
+  const subheadline = hero?.subheadline ?? FALLBACK_SUBHEADLINE;
+  const ctaText     = hero?.ctaText     ?? FALLBACK_CTA_TEXT;
+  const ctaLink     = hero?.ctaLink     ?? FALLBACK_CTA_LINK;
+
   return (
     <section
       className="h-screen overflow-hidden pt-24 flex items-center"
@@ -39,33 +58,27 @@ const ProfessionalsHero = () => {
               </span>
             </div>
 
-            {/* H1 — opportunity-focused, warm tone for Dr. Amarachi persona */}
+            {/* H1 — from Sanity or fallback */}
             <h1 className="
               text-2xl md:text-3xl lg:text-4xl
               font-bold text-brand-dark
               leading-tight tracking-tight
               mb-4
             ">
-              Your Skills Are in Demand.{" "}
-              <br className="hidden sm:block" />
-              We Make Sure You{" "}
-              <br className="hidden sm:block" />
-              Get Paid for Them.
+              {headline}
             </h1>
 
-            {/* Subheadline — names all professional types to maximise relatability */}
+            {/* Subheadline — from Sanity or fallback */}
             <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6 max-w-xl mx-auto lg:mx-0">
-              ProNurtureSphere connects Nigerian doctors, nurses, pharmacists, and allied
-              health professionals with verified employers, flexible locum shifts, and
-              accredited CPD — all in one place.
+              {subheadline}
             </p>
 
             {/* ── CTA Buttons ─────────────────────────────────────────────── */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
 
-              {/* Primary CTA — bg-brand-dark per brief spec */}
+              {/* Primary CTA — links to the Sanity ctaLink (defaults to /waitlist) */}
               <Link
-                href="/waitlist"
+                href={ctaLink}
                 className="
                   inline-flex items-center justify-center
                   px-6 py-3 rounded-full
@@ -77,7 +90,7 @@ const ProfessionalsHero = () => {
                   shadow-md
                 "
               >
-                Get Early Access
+                {ctaText}
                 <svg
                   className="ml-2 w-4 h-4"
                   fill="none"
@@ -103,7 +116,7 @@ const ProfessionalsHero = () => {
                   focus:outline-none focus:ring-2 focus:ring-brand-dark focus:ring-offset-2
                 "
               >
-                See Available Shifts
+                See How It Works
               </Link>
             </div>
           </div>

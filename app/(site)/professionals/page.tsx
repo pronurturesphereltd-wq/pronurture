@@ -22,9 +22,15 @@
  * 7. ProfessionalsFAQ  — Resolves final hesitations (interactive accordion — client)
  * 8. ProfessionalsCTA  — Final email capture with trust badges (client component)
  *
- * This is a Server Component. All interactivity (accordion, form) is isolated
- * in the two 'use client' sub-components, keeping the page JS bundle lean.
+ * Sanity data is fetched via serverClient (bypasses CDN for freshness) and passed
+ * as props to wired sections with hardcoded fallbacks. Sections without CMS content
+ * (PainPoints, Transformation, HowItWorks, FAQ) remain fully static — editorial
+ * content there changes very rarely and is not high-value to wire.
+ *
+ * ISR revalidate: 60s — content propagates to Vercel within one minute of publishing.
  */
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "For Healthcare Professionals",
@@ -32,6 +38,9 @@ export const metadata = {
     "Find verified locum shifts, complete accredited CPD, and grow your healthcare career — built for Nigerian doctors, nurses, and allied health professionals.",
 };
 
+import { serverClient } from "@/sanity/lib/client";
+import { professionalsPageQuery } from "@/sanity/lib/queries";
+import type { ProfessionalsPageData } from "@/sanity/lib/types";
 import ProfessionalsHero from "@/components/professionals/ProfessionalsHero";
 import ProfessionalsPainPoints from "@/components/professionals/ProfessionalsPainPoints";
 import ProfessionalsTransformation from "@/components/professionals/ProfessionalsTransformation";
@@ -41,32 +50,34 @@ import ProfessionalsTestimonials from "@/components/professionals/ProfessionalsT
 import ProfessionalsFAQ from "@/components/professionals/ProfessionalsFAQ";
 import ProfessionalsCTA from "@/components/professionals/ProfessionalsCTA";
 
-export default function ProfessionalsPage() {
+export default async function ProfessionalsPage() {
+  const data = await serverClient.fetch<ProfessionalsPageData | null>(professionalsPageQuery);
+
   return (
     <>
       {/* 1. Hero — above the fold, "For Healthcare Professionals" audience targeting */}
-      <ProfessionalsHero />
+      <ProfessionalsHero hero={data?.hero} />
 
-      {/* 2. Pain points — empathy with Dr. Amarachi's payment, CPD, and trust frustrations */}
+      {/* 2. Pain points — empathy with Dr. Amarachi's payment, CPD, and trust frustrations (static) */}
       <ProfessionalsPainPoints />
 
-      {/* 3. Transformation — before/after narrative pivot (deep green) */}
+      {/* 3. Transformation — before/after narrative pivot (deep green) (static) */}
       <ProfessionalsTransformation />
 
-      {/* 4. Features — 6 benefit-led capability cards */}
-      <ProfessionalsFeatures />
+      {/* 4. Features — 6 benefit-led capability cards from Sanity */}
+      <ProfessionalsFeatures features={data?.features} />
 
-      {/* 5. How it works — 3 steps to remove complexity and trust barriers */}
+      {/* 5. How it works — 3 steps to remove complexity and trust barriers (static) */}
       <ProfessionalsHowItWorks />
 
-      {/* 6. Testimonials — peer social proof from Nigerian doctors and nurses */}
-      <ProfessionalsTestimonials />
+      {/* 6. Testimonials — peer social proof from Nigerian doctors and nurses from Sanity */}
+      <ProfessionalsTestimonials testimonials={data?.testimonials} />
 
-      {/* 7. FAQ — resolves final hesitations (interactive accordion, client component) */}
+      {/* 7. FAQ — resolves final hesitations (interactive accordion, client component, static) */}
       <ProfessionalsFAQ />
 
-      {/* 8. CTA — final email capture with trust badges (client component) */}
-      <ProfessionalsCTA />
+      {/* 8. CTA — final email capture with trust badges, content from Sanity */}
+      <ProfessionalsCTA cta={data?.cta} />
     </>
   );
 }

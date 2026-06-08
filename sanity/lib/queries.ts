@@ -115,3 +115,19 @@ export const employersPageQuery = groq`
     cta { headline, body, buttonText, buttonLink }
   }
 `
+
+/** Professionals page singleton — fetched in app/(site)/professionals/page.tsx */
+export const professionalsPageQuery = groq`
+  *[_id == "professionalsPage"][0] {
+    hero {
+      headline,
+      subheadline,
+      ctaText,
+      ctaLink,
+      image { asset->{ _id, url }, alt }
+    },
+    "features": features[] { _key, title, subtitle, description },
+    "testimonials": testimonials[]-> { _id, quote, name, role, organisation },
+    cta { headline, body, buttonText, buttonLink }
+  }
+`

@@ -22,14 +22,10 @@ const heroField = defineField({
 const featureItem = {
   type: 'object' as const,
   fields: [
-    defineField({ name: 'title', title: 'Title', type: 'string' }),
-    defineField({ name: 'description', title: 'Description', type: 'text', rows: 2 }),
-    defineField({
-      name: 'icon',
-      title: 'Icon',
-      type: 'image',
-      fields: [defineField({ name: 'alt', title: 'Alt Text', type: 'string' })],
-    }),
+    defineField({ name: 'title',       title: 'Title',               type: 'string' }),
+    defineField({ name: 'subtitle',    title: 'Subtitle / Category', type: 'string' }),
+    defineField({ name: 'description', title: 'Description',         type: 'text', rows: 2 }),
+    // icon removed — SVG icons are mapped in code via ICON_BY_FEATURE_KEY
   ],
   preview: { select: { title: 'title', subtitle: 'description' } },
 }

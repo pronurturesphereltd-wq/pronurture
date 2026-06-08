@@ -121,3 +121,27 @@ export interface EmployersPageData {
   testimonials?: SanityTestimonial[] | null
   cta?:          EmployerCTA         | null
 }
+
+/** Feature item from professionalsPage.features[] — inline object with _key */
+export interface ProfessionalFeature {
+  _key:         string
+  title:        string
+  subtitle?:    string
+  description?: string
+}
+
+/** CTA section from professionalsPage.cta */
+export interface ProfessionalCTA {
+  headline?:   string
+  body?:       string
+  buttonText?: string
+  buttonLink?: string
+}
+
+/** professionalsPage singleton shape — returned by professionalsPageQuery */
+export interface ProfessionalsPageData {
+  hero?:         HomepageHero           | null
+  features?:     ProfessionalFeature[]  | null
+  testimonials?: SanityTestimonial[]    | null
+  cta?:          ProfessionalCTA        | null
+}
