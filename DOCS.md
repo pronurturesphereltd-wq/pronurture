@@ -2844,4 +2844,217 @@ Change `BASE_URL` in `app/sitemap.ts` and `metadataBase` in `app/layout.tsx`. Al
 
 ---
 
+---
+
+## 13. Blog Post Engagement — Comments & Reactions
+
+Added 2026-06-08. All files documented below.
+
+---
+
+### 13.1 `sanity/schemaTypes/comment.ts`
+
+**Type:** Sanity document schema (collection)
+
+#### Purpose
+Stores reader comments submitted via the blog post page. Comments are held with `approved: false` until manually approved in Sanity Studio, preventing any comment from appearing publicly without a review step.
+
+#### Fields
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| `name` | string | yes | Displayed publicly on the post |
+| `email` | string | yes | Never returned to the frontend — moderation use only |
+| `body` | text (rows: 4) | yes | The comment text |
+| `post` | reference → post | yes | Which post this comment belongs to |
+| `approved` | boolean | — | Default `false`. Set to `true` in Studio to publish |
+
+**Studio preview:** Shows `✓ Name` (approved) or `⏳ Name` (pending) + first 80 chars of body.
+
+#### Moderation flow
+1. Reader submits via the form on `/blog/[slug]`
+2. Comment appears in Sanity Studio → Content → Comment with `approved: false`
+3. Studio editor reviews and sets `approved: true`
+4. Comment appears on the post within the next ISR cycle (3600s)
+
+---
+
+### 13.2 `post` schema — `likes` and `dislikes` fields
+
+Two `number` fields added to the existing `post` schema, both with `initialValue: 0`. These are incremented via `/api/reactions` and should not be edited manually in Studio (description warns against it). Legacy seeded posts with no value start at `0` via `setIfMissing` in the patch operation.
+
+---
+
+### 13.3 `sanity/lib/queries.ts` additions
+
+**`commentsQuery`** — fetches approved comments for a given post slug:
+```groq
+*[_type == "comment" && post->slug.current == $slug && approved == true]
+| order(_createdAt asc) {
+  _id, name, body, _createdAt
+}
+```
+Email is intentionally excluded from the projection — it must never reach the frontend.
+
+**`postBySlugQuery`** — now includes `likes` and `dislikes` fields.
+
+---
+
+### 13.4 `sanity/lib/types.ts` additions
+
+| Type | Shape |
+|------|-------|
+| `BlogComment` | `{ _id, name, body, _createdAt }` — matches `commentsQuery` projection |
+| `SanityPostFull.likes` | `number \| undefined` |
+| `SanityPostFull.dislikes` | `number \| undefined` |
+
+---
+
+### 13.5 `app/api/comments/route.ts`
+
+**Method:** POST  
+**Route:** `/api/comments`
+
+**Request body:**
+```json
+{ "name": "Dr. Adaeze", "email": "adaeze@example.com", "body": "Great article.", "postSlug": "my-post" }
+```
+
+**Logic:**
+1. Validates all four fields are present
+2. Validates email with `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
+3. Fetches the post `_id` from Sanity by slug (needed for the reference)
+4. Creates a `comment` document with `approved: false`
+5. Returns `{ success: true }` or `{ success: false, error: "..." }`
+
+**Security:** Uses `SANITY_API_WRITE_TOKEN` (server-only, never NEXT_PUBLIC_). Email never returned in any response.
+
+---
+
+### 13.6 `app/api/reactions/route.ts`
+
+**Method:** POST  
+**Route:** `/api/reactions`
+
+**Request body:**
+```json
+{ "postId": "abc123", "type": "like" }
+```
+`type` must be `"like"` or `"dislike"`.
+
+**Logic:**
+1. Validates `postId` and `type` present; validates `type` is one of the two allowed values
+2. Uses `patch(postId).setIfMissing({ likes: 0, dislikes: 0 }).inc({ [field]: 1 }).commit()`
+3. Returns `{ success: true, likes: N, dislikes: N }` with fresh counts from the committed document
+
+**Security:** Uses `SANITY_API_WRITE_TOKEN` server-only.
+
+---
+
+### 13.7 `components/blog/ReactionButtons.tsx`
+
+**Type:** `'use client'`
+
+#### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `postId` | `string` | Sanity post `_id` — sent to `/api/reactions` as `postId` |
+| `initialLikes` | `number` | Server-fetched count — hydrates initial state |
+| `initialDislikes` | `number` | Server-fetched count — hydrates initial state |
+
+#### State
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `likes` | `number` | `initialLikes` | Updated from API response after vote |
+| `dislikes` | `number` | `initialDislikes` | Updated from API response after vote |
+| `voted` | `'like' \| 'dislike' \| null` | `null` | Restored from localStorage on mount |
+| `loading` | `boolean` | `false` | Prevents double-click |
+
+#### localStorage key
+`pronurture_reaction_{postId}` — stores `'like'` or `'dislike'` after a vote is cast. Read on mount via `useEffect`. On SSR this effect does not run, so the initial hydration always shows unvoted state.
+
+#### Vote styles
+
+| State | Like button | Dislike button |
+|-------|-------------|----------------|
+| Unvoted | Outline, `brand-dark/30` border | Outline, `gray-300` border |
+| Like voted | `bg-brand-dark text-white` (solid) | Outline, disabled |
+| Dislike voted | Outline, disabled | `bg-red-100 text-red-700 border-red-300` |
+
+#### Accessibility
+- `aria-label` includes the current count
+- `aria-pressed` reflects voted state
+- Keyboard focus ring on both buttons
+
+---
+
+### 13.8 `components/blog/CommentSection.tsx`
+
+**Type:** `'use client'`
+
+#### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `postSlug` | `string` | Sent to `/api/comments` as `postSlug` |
+| `initialComments` | `BlogComment[]` | Approved comments fetched server-side on page load |
+
+#### State machine
+
+```
+idle → (submit) → loading → success
+                           ↘ error → (user types) → idle
+```
+
+- **success:** Form replaced with green confirmation: "Your comment has been submitted and is awaiting moderation."
+- **error:** Inline red message below the form. Clears when user types (calls `clearError()`).
+- **loading:** Submit button disabled and shows spinner + "Submitting…".
+
+#### Comment display
+- Each approved comment shows an initial-letter avatar (`bg-brand-dark`), name, formatted date, and body text.
+- `whitespace-pre-line` preserves paragraph breaks in comment body.
+- `formatDate(iso)` → `"8 June 2026"` via `toLocaleDateString('en-GB', ...)`.
+
+#### Key design decisions
+
+| Decision | Why |
+|----------|-----|
+| `initialComments` from server | Comments rendered on first paint — no client-side fetch needed for SSR output. New comments only appear after moderation + revalidation. |
+| Email `(kept private)` label | Explicit reassurance addresses the most common reason people don't leave comments — fear of spam. |
+| `noValidate` on form | Disables browser native validation so the brand-styled inline error messages control UX. |
+| `bg-brand-light` section background | Off-white matches the article page's visual rhythm; distinct from the white body section above. |
+
+---
+
+### 13.9 Blog post page — `app/(site)/blog/[slug]/page.tsx` changes
+
+Added `commentsQuery` to the `Promise.all` with `stega: false` (comment text must not contain stega invisible characters):
+
+```ts
+const [postResult, relatedResult, commentsResult] = await Promise.all([
+  sanityFetch({ query: postBySlugQuery, params: { slug } }),
+  sanityFetch({ query: relatedPostsQuery, params: { currentSlug: slug } }),
+  sanityFetch({ query: commentsQuery, params: { slug }, stega: false }),
+])
+```
+
+**Updated section order:**
+
+```
+1. ArticleHero
+2. ArticleBody
+3. ArticleAuthorCard
+4. ReactionButtons    (NEW — centered wrapper, bg-white, border-t)
+5. CommentSection     (NEW — bg-brand-light section)
+6. ArticleRelatedPosts
+7. BlogNewsletterCTA
+```
+
+`ReactionButtons` receives `post._id`, `post.likes ?? 0`, `post.dislikes ?? 0`.  
+`CommentSection` receives `slug` (as `postSlug`) and `comments`.
+
+---
+
 *Documentation maintained by Claude Code | ProNurtureSphere Limited*

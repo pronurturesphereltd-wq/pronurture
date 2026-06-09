@@ -2,6 +2,7 @@ import { type SchemaTypeDefinition } from 'sanity'
 
 import post from './post'
 import author from './author'
+import comment from './comment'
 import testimonial from './testimonial'
 import service from './service'
 import faq from './faq'
@@ -16,6 +17,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     post,
     author,
+    comment,
     testimonial,
     service,
     faq,

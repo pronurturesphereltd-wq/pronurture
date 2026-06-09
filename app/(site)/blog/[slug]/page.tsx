@@ -1,8 +1,8 @@
 /**
  * app/(site)/blog/[slug]/page.tsx — Individual blog post page (route: /blog/[slug])
  *
- * Server Component that fetches the specific post and 3 related posts from
- * Sanity using the slug from the dynamic route segment.
+ * Server Component that fetches the specific post, 3 related posts, and approved
+ * reader comments from Sanity using the slug from the dynamic route segment.
  *
  * generateStaticParams: fetches all post slugs from Sanity at build time so
  * Next.js can pre-render each post as a static page for maximum performance.
@@ -25,12 +25,15 @@ import {
   postBySlugQuery,
   allPostSlugsQuery,
   relatedPostsQuery,
+  commentsQuery,
 } from '@/sanity/lib/queries'
-import type { SanityPostFull, SanityPost } from '@/sanity/lib/types'
+import type { SanityPostFull, SanityPost, BlogComment } from '@/sanity/lib/types'
 
 import ArticleHero from '@/components/blog/ArticleHero'
 import ArticleBody from '@/components/blog/ArticleBody'
 import ArticleAuthorCard from '@/components/blog/ArticleAuthorCard'
+import ReactionButtons from '@/components/blog/ReactionButtons'
+import CommentSection from '@/components/blog/CommentSection'
 import ArticleRelatedPosts from '@/components/blog/ArticleRelatedPosts'
 import BlogNewsletterCTA from '@/components/blog/BlogNewsletterCTA'
 
@@ -65,14 +68,17 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params
 
-  // Fetch post and related posts concurrently via sanityFetch for Visual Editing support.
-  // Cast from unknown — sanityFetch type param is the GROQ string, not the result type.
-  const [postResult, relatedResult] = await Promise.all([
+  // Fetch post, related posts, and approved comments concurrently.
+  // commentsQuery uses stega: false — comment text must not contain stega characters.
+  const [postResult, relatedResult, commentsResult] = await Promise.all([
     sanityFetch({ query: postBySlugQuery, params: { slug } }),
     sanityFetch({ query: relatedPostsQuery, params: { currentSlug: slug } }),
+    sanityFetch({ query: commentsQuery, params: { slug }, stega: false }),
   ])
+  // Cast from unknown — sanityFetch type param is the GROQ string, not the result type
   const post = postResult.data as SanityPostFull | null
   const related = relatedResult.data as SanityPost[]
+  const comments = commentsResult.data as BlogComment[]
 
   // Show 404 if no post matches the slug
   if (!post) notFound()
@@ -88,10 +94,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {/* 3. Author bio — credibility signal immediately after article */}
       <ArticleAuthorCard author={post.author} />
 
-      {/* 4. Related posts — 3 most recent posts excluding this one */}
+      {/* 4. Reaction buttons — thumbs up/down engagement; sits in a centered wrapper
+           matching the article column width so it aligns with the body text */}
+      <div className="bg-white py-6 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ReactionButtons
+            postId={post._id}
+            initialLikes={post.likes ?? 0}
+            initialDislikes={post.dislikes ?? 0}
+          />
+        </div>
+      </div>
+
+      {/* 5. Comments — approved reader comments + submission form */}
+      <CommentSection postSlug={slug} initialComments={comments} />
+
+      {/* 6. Related posts — 3 most recent posts excluding this one */}
       <ArticleRelatedPosts posts={related} />
 
-      {/* 5. Newsletter CTA — retains readers not yet ready to join waitlist */}
+      {/* 7. Newsletter CTA — retains readers not yet ready to join waitlist */}
       <BlogNewsletterCTA />
     </>
   )

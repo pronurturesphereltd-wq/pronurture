@@ -2,7 +2,7 @@
 
 > This file is the single source of truth for all AI agents (Claude Code, etc.) working on this project.
 > It must be updated after every major feature or page is completed.
-> Last updated: 2026-06-07 | Status: Active Development
+> Last updated: 2026-06-08 | Status: Active Development
 
 ---
 
@@ -153,7 +153,8 @@ Nigeria's health workforce faces staffing gaps, manual HR processes (WhatsApp, s
 | `professionalsPage` | Singleton | For Professionals page |
 | `aboutPage` | Singleton | About page content — `mission` (body: blocks, vision: text), `values[]` (_key, title, description — no icon field, SVGs stored in component), `team[]` (_key, name, role, bio, linkedin, image), `story` (headline, body: blocks, image) |
 | `siteSettings` | Singleton | Global config (logo, nav, footer) |
-| `post` | Collection | Blog articles — fields: title, slug, author (ref), mainImage (image+hotspot+alt), publishedAt, excerpt, category (string, 4 options), body (blocks+images) |
+| `post` | Collection | Blog articles — fields: title, slug, author (ref), mainImage (image+hotspot+alt), publishedAt, excerpt, category (string, 4 options), body (blocks+images), likes (number, default 0), dislikes (number, default 0) |
+| `comment` | Collection | Reader comments — fields: name (string, required), email (string, required, not public), body (text, required), post (reference to post, required), approved (boolean, default false) |
 | `author` | Collection | Team/founders |
 | `service` | Collection | Platform features |
 | `testimonial` | Collection | User quotes |
@@ -500,3 +501,13 @@ Social proof is one of the highest-leverage elements on any homepage. Include:
 | 2026-06-07 | Seeded Sanity content: aboutPage singleton (mission 3 PortableText blocks + vision string, 7 values val-1..val-7, founder team member Iziegbe Asemota, story 3 blocks); added seed:about script | Sanity content seeding |
 | 2026-06-07 | Wired About page to Sanity CMS — AboutMission (PortableText body + plain-text vision), AboutStory (PortableText body + optional urlFor() image), AboutValues (ICON_BY_VALUE_KEY maps _key val-1..val-7 → inline SVG, 7 values from Sanity), AboutTeam (team[0] as founder card, LinkedIn link rendered when present, urlFor() for photo); page.tsx async + revalidate=60 + serverClient | `/about` |
 | 2026-06-07 | Updated aboutPage schema — removed orphaned mission.headline, added mission.vision (text, rows: 3), removed values[].icon (image type — SVGs stored in ICON_BY_VALUE_KEY keyed by _key); all 4 wired About components accept optional props with FALLBACK_* constants; fixed React.ReactNode TypeScript bugs in AboutValues, AboutTeam, AboutWhoWeServe, AboutPSLArms | Sanity schema, About components |
+| 2026-06-07 | Added MP4 background video support to hero section — heroVideo field (file, accept: video/mp4) in homePage Sanity schema; homePageQuery includes heroVideo.asset->url; HomepageHero type updated; HeroSection renders autoPlay/muted/loop/playsInline <video> when URL present, falls back to image/placeholder | HeroSection.tsx |
+| 2026-06-08 | Added `comment` Sanity schema — name, email (private), body, post (reference), approved (boolean, default false); registered in schema index | Sanity CMS |
+| 2026-06-08 | Added `likes` and `dislikes` number fields (default 0) to `post` schema | Sanity CMS |
+| 2026-06-08 | Added `commentsQuery` to `sanity/lib/queries.ts` — fetches approved comments for a post slug (email excluded); added `likes`/`dislikes` to `postBySlugQuery` | Sanity queries |
+| 2026-06-08 | Added `BlogComment` type to `sanity/lib/types.ts`; added `likes`/`dislikes` fields to `SanityPostFull` | TypeScript types |
+| 2026-06-08 | Created `app/api/comments/route.ts` — POST handler: validates name/email/body/postSlug, resolves post _id by slug, writes comment with approved:false via SANITY_API_WRITE_TOKEN; email never returned in response | `/api/comments` |
+| 2026-06-08 | Created `app/api/reactions/route.ts` — POST handler: accepts postId + type (like/dislike), uses patch().setIfMissing().inc() to increment counter, returns updated likes + dislikes counts | `/api/reactions` |
+| 2026-06-08 | Created `components/blog/ReactionButtons.tsx` — 'use client'; thumbs up/down buttons; localStorage key `pronurture_reaction_{postId}` prevents double voting; active like = brand-dark, active dislike = muted red, unvoted = outline | Blog components |
+| 2026-06-08 | Created `components/blog/CommentSection.tsx` — 'use client'; shows approved comments with avatar + date; form with name/email/body; success/error/loading states; POSTs to /api/comments; awaiting moderation message on success | Blog components |
+| 2026-06-08 | Updated `app/(site)/blog/[slug]/page.tsx` — added commentsQuery to Promise.all (stega: false); added ReactionButtons (below author card) and CommentSection (below reactions) before ArticleRelatedPosts | `/blog/[slug]` |

@@ -31,8 +31,21 @@ export const postBySlugQuery = groq`
     excerpt,
     category,
     body,
+    likes,
+    dislikes,
     "author": author->{ name, role },
     mainImage { asset->{ _id, url }, alt }
+  }
+`
+
+/** Approved reader comments for a post — ordered oldest first */
+export const commentsQuery = groq`
+  *[_type == "comment" && post->slug.current == $slug && approved == true]
+  | order(_createdAt asc) {
+    _id,
+    name,
+    body,
+    _createdAt
   }
 `
 

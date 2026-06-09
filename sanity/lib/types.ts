@@ -52,9 +52,19 @@ export interface SanityPost {
   mainImage?: SanityImage | null
 }
 
-/** Full post — includes Portable Text body, used on the [slug] page */
+/** Full post — includes Portable Text body, likes/dislikes, used on the [slug] page */
 export interface SanityPostFull extends SanityPost {
   body?: unknown[]
+  likes?: number
+  dislikes?: number
+}
+
+/** Approved reader comment — returned by commentsQuery */
+export interface BlogComment {
+  _id: string
+  name: string
+  body: string
+  _createdAt: string
 }
 
 /** Hero section fields from the homePage singleton */

@@ -77,6 +77,20 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'likes',
+      title: 'Likes',
+      type: 'number',
+      initialValue: 0,
+      description: 'Incremented via /api/reactions — do not edit manually',
+    }),
+    defineField({
+      name: 'dislikes',
+      title: 'Dislikes',
+      type: 'number',
+      initialValue: 0,
+      description: 'Incremented via /api/reactions — do not edit manually',
+    }),
   ],
   preview: {
     select: { title: 'title', author: 'author.name', media: 'mainImage' },
