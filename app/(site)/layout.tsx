@@ -15,6 +15,8 @@
  * receives the remaining editorial fields.
  */
 
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SanityLive } from "@/sanity/lib/live";
@@ -42,11 +44,16 @@ export default async function SiteLayout({
       {/* Site-wide footer — editorial fields sourced from Sanity */}
       <Footer settings={settings ?? undefined} />
 
-      {/* Live Content API — powers instant content updates and Presentation overlays */}
+      {/* Live Content API — always active; powers instant updates in both normal and draft mode */}
       <SanityLive />
 
-      {/* Draft mode banner — shown only when an editor has enabled live preview */}
-      <DisableDraftMode />
+      {/* Visual Editing overlays + draft mode banner — only active when Draft Mode is enabled */}
+      {(await draftMode()).isEnabled && (
+        <>
+          <VisualEditing />
+          <DisableDraftMode />
+        </>
+      )}
     </>
   );
 }
