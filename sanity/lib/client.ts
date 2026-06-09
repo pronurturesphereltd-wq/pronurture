@@ -7,6 +7,11 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: true,
+  // Stega encodes Studio URL metadata into string values so the Presentation
+  // tool can draw edit overlays directly on the live preview.
+  stega: {
+    studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || '/studio',
+  },
 })
 
 // Non-CDN client for SSR page fetches — bypasses the CDN cache so Vercel

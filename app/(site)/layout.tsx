@@ -17,6 +17,8 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SanityLive } from "@/sanity/lib/live";
+import DisableDraftMode from "@/components/DisableDraftMode";
 import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import type { SiteSettings } from "@/sanity/lib/types";
@@ -39,6 +41,12 @@ export default async function SiteLayout({
 
       {/* Site-wide footer — editorial fields sourced from Sanity */}
       <Footer settings={settings ?? undefined} />
+
+      {/* Live Content API — powers instant content updates and Presentation overlays */}
+      <SanityLive />
+
+      {/* Draft mode banner — shown only when an editor has enabled live preview */}
+      <DisableDraftMode />
     </>
   );
 }

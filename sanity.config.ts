@@ -7,6 +7,7 @@
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
+import {presentationTool} from 'sanity/presentation'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import {apiVersion, dataset, projectId} from './sanity/env'
@@ -20,6 +21,17 @@ export default defineConfig({
   schema,
   plugins: [
     structureTool({structure}),
+    // Presentation tool — opens a live preview panel inside Studio.
+    // previewUrl points to the Next.js site so editors can see changes
+    // instantly on the real page before publishing.
+    presentationTool({
+      previewUrl: {
+        previewMode: {
+          enable: '/api/draft-mode/enable',
+          disable: '/api/draft-mode/disable',
+        },
+      },
+    }),
     visionTool({defaultApiVersion: apiVersion}),
   ],
   document: {
