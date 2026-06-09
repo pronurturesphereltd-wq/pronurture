@@ -64,7 +64,8 @@ export const homePageQuery = groq`
       subheadline,
       ctaText,
       ctaLink,
-      image { asset->{ _id, url }, alt }
+      image { asset->{ _id, url }, alt },
+      heroVideo { asset->{ url } }
     },
     "stats": stats[] { _key, value, label },
     "testimonials": testimonials[]-> { _id, quote, name, role, organisation },

@@ -23,6 +23,15 @@ export default defineType({
             defineField({ name: 'alt', title: 'Alt Text', type: 'string' }),
           ],
         }),
+        defineField({
+          name: 'heroVideo',
+          title: 'Hero Video (MP4)',
+          type: 'file',
+          options: {
+            accept: 'video/mp4',
+          },
+          description: 'Optional MP4 video. When set, plays as background video instead of the hero image.',
+        }),
       ],
     }),
     defineField({

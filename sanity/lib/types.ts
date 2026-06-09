@@ -64,6 +64,11 @@ export interface HomepageHero {
   ctaText?:     string
   ctaLink?:     string
   image?:       SanityImage | null
+  heroVideo?: {
+    asset?: {
+      url: string
+    }
+  } | null
 }
 
 /** One stat entry from homePage.stats[] */

@@ -169,13 +169,26 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
                 aria-hidden="true"
               />
 
-              {/* Platform screenshot — real Sanity image or placehold.co fallback */}
-              <div className="relative rounded-xl overflow-hidden shadow-xl mb-3">
-                <img
-                  src={desktopImageSrc}
-                  alt={imageAlt}
-                  className="w-full h-auto block"
-                />
+              {/* Platform visual — MP4 video background if uploaded to Sanity, else image/placeholder */}
+              <div className={`relative rounded-xl overflow-hidden shadow-xl mb-3${hero?.heroVideo?.asset?.url ? ' aspect-video' : ''}`}>
+                {hero?.heroVideo?.asset?.url ? (
+                  // Video: autoplay, muted (required for autoplay), looped, inline for mobile
+                  <video
+                    src={hero.heroVideo.asset.url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                    aria-label="ProNurtureSphere platform preview"
+                  />
+                ) : (
+                  <img
+                    src={desktopImageSrc}
+                    alt={imageAlt}
+                    className="w-full h-auto block"
+                  />
+                )}
               </div>
 
               {/* Floating notification card */}
@@ -197,7 +210,7 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
             </div>
           </div>
 
-          {/* Mobile-only image */}
+          {/* Mobile-only image / video */}
           <div className="lg:hidden flex justify-center">
             <div className="relative w-full max-w-sm bg-brand-dark rounded-2xl p-4 shadow-xl overflow-hidden">
               <div
@@ -208,12 +221,24 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
                 }}
                 aria-hidden="true"
               />
-              <div className="relative rounded-lg overflow-hidden">
-                <img
-                  src={mobileImageSrc}
-                  alt={imageAlt}
-                  className="w-full h-auto block rounded-lg"
-                />
+              <div className={`relative rounded-lg overflow-hidden${hero?.heroVideo?.asset?.url ? ' aspect-video' : ''}`}>
+                {hero?.heroVideo?.asset?.url ? (
+                  <video
+                    src={hero.heroVideo.asset.url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                    aria-label="ProNurtureSphere platform preview"
+                  />
+                ) : (
+                  <img
+                    src={mobileImageSrc}
+                    alt={imageAlt}
+                    className="w-full h-auto block rounded-lg"
+                  />
+                )}
               </div>
             </div>
           </div>
