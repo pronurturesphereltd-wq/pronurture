@@ -54,7 +54,8 @@ export const allPostSlugsQuery = groq`
   *[_type == "post"]{ "slug": slug.current }
 `
 
-/** Site-wide settings singleton — fetched in (site)/layout.tsx for Navbar + Footer */
+/** Site-wide settings singleton — fetched in (site)/layout.tsx for Navbar + Footer,
+ *  and in homepage page.tsx for waitlistCount */
 export const siteSettingsQuery = groq`
   *[_type == "siteSettings"][0] {
     siteName,
@@ -64,6 +65,7 @@ export const siteSettingsQuery = groq`
     socialLinks,
     copyrightText,
     footerTagline,
+    waitlistCount,
     logo { asset->{ _id, url }, alt },
     logoMono { asset->{ _id, url }, alt }
   }
@@ -81,7 +83,6 @@ export const homePageQuery = groq`
       heroVideo { asset->{ url } }
     },
     "stats": stats[] { _key, value, label },
-    "testimonials": testimonials[]-> { _id, quote, name, role, organisation },
     "featuredServices": featuredServices[]-> { _id, title, slug, shortDescription }
   }
 `

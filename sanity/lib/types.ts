@@ -23,6 +23,7 @@ export interface SiteSettings {
   }
   copyrightText?: string
   footerTagline?: string
+  waitlistCount?: number
   logo?: SanityImage | null
   logoMono?: SanityImage | null
 }
@@ -109,7 +110,6 @@ export interface SanityService {
 export interface HomePageData {
   hero?:             HomepageHero   | null
   stats?:            HomepageStat[] | null
-  testimonials?:     SanityTestimonial[] | null
   featuredServices?: SanityService[] | null
 }
 

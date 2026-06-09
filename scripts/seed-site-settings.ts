@@ -56,6 +56,7 @@ async function run() {
     },
     copyrightText: '© 2026 ProNurtureSphere Limited. All rights reserved.',
     footerTagline: 'Empowering Nigerian Healthcare Workforce',
+    waitlistCount: 0,
   }
 
   const result = await client.createOrReplace(doc)

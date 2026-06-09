@@ -1,7 +1,7 @@
 # DOCS.md — ProNurtureSphere Component & Configuration Documentation
 
-> **Last updated:** 2026-06-07  
-> **Status:** All pages complete — Homepage, Employers, Professionals, About, Blog all wired to Sanity CMS; Navbar and Footer wired to siteSettings  
+> **Last updated:** 2026-06-08  
+> **Status:** All pages complete — Homepage, Employers, Professionals, About, Blog all wired to Sanity CMS; Navbar and Footer wired to siteSettings; blog comments + reactions live; WaitlistSocialProof replaces TestimonialsSection on homepage  
 > This is the living technical reference for the ProNurtureSphere codebase.  
 > Update this file after every new component, page, or config change.
 
@@ -23,7 +23,7 @@
    - [ProblemSection](#35-componentsproblmsectiontsx)
    - [FeaturesSection](#36-componentsfeaturessectiontsx)
    - [AudienceSection](#37-componentsaudiencesectiontsx)
-   - [TestimonialsSection](#38-componentstestimonialsectiontsx)
+   - [WaitlistSocialProof](#38-componentswaitlistsocialprooftsx) *(replaces TestimonialsSection)*
    - [StatsSection](#39-componentsstatssectiontsx)
    - [BlogPreviewSection](#310-componentsblogpreviewsectiontsx)
    - [WaitlistSection](#311-componentswaitlistsectiontsx)
@@ -604,70 +604,57 @@ interface AudienceColumn {
 
 ---
 
-### 3.8 `components/TestimonialsSection.tsx`
+### 3.8 `components/WaitlistSocialProof.tsx`
 
 **Type:** Server Component  
-**File:** `components/TestimonialsSection.tsx`
+**File:** `components/WaitlistSocialProof.tsx`
+
+> Replaced `TestimonialsSection` on 2026-06-08. `TestimonialsSection.tsx` is retained in the codebase and is still used conceptually on the Employers and Professionals pages via their own component stacks.
 
 #### Purpose
-Social proof from real users. Per CLAUDE.md: "People buy from businesses that other people trust." Placed after the Audience split to reinforce each persona's decision with peer validation.
+Two-part section providing honest social proof without fabricated testimonials:
+- **Part 1** — Waitlist counter: shows how many people have already signed up (from `siteSettings.waitlistCount`), driving FOMO and trust
+- **Part 2** — Problem statistics: three sourced facts about Nigeria's healthcare workforce crisis, establishing urgency and framing ProNurtureSphere as the solution
 
 #### Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `testimonials` | `SanityTestimonial[] \| null \| undefined` | Dereferenced testimonial documents from Sanity `homePage.testimonials[]->`. Optional — falls back to `FALLBACK_TESTIMONIALS` when null. |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `waitlistCount` | `number` | `0` | From `siteSettings.waitlistCount` — update in Sanity Studio. Displayed as `{n}+`. |
 
-#### Data Structure
+#### Sanity data source
 
-```ts
-interface SanityTestimonial {
-  _id: string;
-  quote: string;
-  name: string;
-  role?: string;
-  organisation?: string;
-}
+`waitlistCount` lives in the `siteSettings` singleton. Fetched in `app/(site)/page.tsx` via `siteSettingsQuery` in the `Promise.all`. The number displays as `{waitlistCount}+` with no special formatting (editor enters the clean number in Studio).
 
-interface TestimonialDisplay extends SanityTestimonial {
-  initials: string;    // Derived via getInitials() — strips "Dr./Nurse/Prof." prefix
-  avatarBg: string;    // Cycled by index: bg-brand-dark → bg-brand-green → bg-brand-gold
-}
-```
+To update the count: **Sanity Studio → ⚙️ Settings → Site Settings → Waitlist Count**.
 
-`toDisplay(t, index)` maps `SanityTestimonial` → `TestimonialDisplay`. `getInitials("Dr. Amaka Okonkwo")` → `"AO"`.
+#### Part 1 — Counter Banner
 
-**Seeded testimonials:** 3 documents in Sanity — Dr. Amaka Okonkwo (Medical Director, Lagos), Blessing Adeyemi (Nurse, Abuja), Dr. Emeka Nwosu (GP, Port Harcourt).
+| Property | Value |
+|----------|-------|
+| Background | `bg-brand-dark` (`#103613`) |
+| Counter font size | `text-7xl sm:text-8xl lg:text-9xl` |
+| Counter colour | `text-brand-gold` |
+| CTA button | Gold background → brand-dark hover; links to `/waitlist` |
 
-#### Three Testimonials (Placeholder — Replace Post-Launch)
+#### Part 2 — Problem Stats Grid
 
-| Name | Role | Organisation | Persona | Avatar BG |
-|------|------|--------------|---------|-----------|
-| Dr. Chidinma Eze | Medical Director | Sterling Health Hospital, Lagos | Employer | `bg-brand-dark` |
-| Dr. Emeka Okonkwo | General Practitioner | Locum Professional, Abuja | Professional | `bg-brand-green` |
-| Nurse Funmilayo Adeyemi | Head of Nursing Services | Meridian Maternity Centre, Port Harcourt | Professional (nursing) | `bg-brand-gold` |
+| Stat | Value | Source |
+|------|-------|--------|
+| Lapsed nursing licences | `72,000+` annually | MDCN annual reports |
+| Doctor-to-patient ratio | `1 : 8,000` | WHO health workforce data |
+| Monthly locum agency fees | `₦3M+` | Field research |
 
-Three testimonials cover three distinct user archetypes — hospital administrator, doctor, and nurse — maximising relatability across the target audience.
-
-#### Card Anatomy (top to bottom)
-1. Five gold star rating
-2. Large decorative quotation mark SVG (20% opacity green)
-3. Quote text in `blockquote` element
-4. Separator line
-5. Initials avatar + name, role, organisation
+Three cards in a `grid-cols-1 md:grid-cols-3` layout. Cards: `bg-white rounded-2xl shadow-sm`. Large `text-5xl sm:text-6xl text-brand-dark` stat + muted description.
 
 #### Key Design Decisions
 
 | Decision | Why |
 |----------|-----|
-| Initials avatars not photos | No verified headshots yet. Initials look intentional and professional rather than "missing image." Each uses a different brand colour to add visual variety. |
-| `line-clamp-3` NOT used on quotes | Unlike blog excerpts, testimonials should be read in full — they're short enough. Truncating them would reduce their persuasive impact. |
-| `<blockquote>` semantic element | Correct HTML for quoted speech — improves accessibility and SEO (Google can recognise quote markup). |
-| `&ldquo;` and `&rdquo;` | Proper typographic curly quotes, not straight ASCII quotes. Contributes to the premium feel. |
-| `flex flex-col` + `flex-1` on quote | Makes all three cards the same height even if quote lengths differ. The quote stretches to fill available space, keeping the attribution row pinned to the bottom of each card. |
-| Hover: `border-brand-green/20 shadow-lg` | Subtle interactive feedback — cards lift slightly to acknowledge user hover without being distracting. |
-
-> ⚠️ **IMPORTANT:** Replace placeholder testimonials with real, verified quotes from actual ProNurtureSphere users after the beta launch. Fake testimonials damage credibility if discovered. The Sanity `testimonial` collection schema is ready for real content.
+| Replaced fake testimonials with real data | Pre-launch testimonials are unverifiable. Real statistics about Nigeria's healthcare crisis are more persuasive and credible — they confirm the problem ProNurtureSphere solves. |
+| `waitlistCount` editable in Sanity Studio | The number should grow over time. Editors can update it without a code deploy by changing one field in Studio. |
+| `{waitlistCount}+` suffix | The "+" communicates "at least this many" — honest and also implies the number keeps growing. |
+| Attribution footnote | "Sources: MDCN annual reports, WHO..." — adds credibility to the statistics without overwhelming the visual. |
 
 ---
 
@@ -677,7 +664,7 @@ Three testimonials cover three distinct user archetypes — hospital administrat
 **File:** `components/StatsSection.tsx`
 
 #### Purpose
-Reinforces the social proof from TestimonialsSection with hard numbers. Large, bold figures on a deep green background create a dramatic, high-confidence visual moment.
+Reinforces the social proof from WaitlistSocialProof with hard numbers. Large, bold figures on a deep green background create a dramatic, high-confidence visual moment.
 
 #### Props
 
@@ -1331,7 +1318,7 @@ Uses `serverClient` (`useCdn: false`) to bypass Sanity CDN cache and always serv
 | `HeroSection` | `hero` | `homePage?.hero` |
 | `SocialProofBar` | `stats` | `homePage?.stats` |
 | `FeaturesSection` | `featuredServices` | `homePage?.featuredServices` |
-| `TestimonialsSection` | `testimonials` | `homePage?.testimonials` |
+| `WaitlistSocialProof` | `waitlistCount` | `siteSettings?.waitlistCount ?? 0` |
 | `StatsSection` | `stats` | `homePage?.stats` |
 | `BlogPreviewSection` | `posts` | `recentPosts` |
 | `ProblemSection` | — | Hardcoded (no Sanity data) |
@@ -1346,7 +1333,7 @@ Uses `serverClient` (`useCdn: false`) to bypass Sanity CDN cache and always serv
 3. ProblemSection      → Empathy + urgency (agitate the pain)
 4. FeaturesSection     → Solution reveal (answer to the pain)
 5. AudienceSection     → Self-segmentation (which persona are you?)
-6. TestimonialsSection → Peer social proof
+6. WaitlistSocialProof → Waitlist counter + problem statistics
 7. StatsSection        → Scale and reliability with numbers
 8. BlogPreviewSection  → Thought leadership (educate the hesitant)
 9. WaitlistSection     → Final conversion CTA
@@ -2081,7 +2068,7 @@ All `NEXT_PUBLIC_*` variables are safe to expose to the browser. `SANITY_API_WRI
 ### Completed ✅
 - [x] All 10 pages built and deployed
 - [x] All pages moved into `app/(site)/` route group with shared Navbar + Footer layout
-- [x] Homepage (`/`) fully wired to Sanity CMS — HeroSection, SocialProofBar, FeaturesSection, TestimonialsSection, StatsSection, BlogPreviewSection all read from Sanity with hardcoded fallbacks; `revalidate=60`
+- [x] Homepage (`/`) fully wired to Sanity CMS — HeroSection, SocialProofBar, FeaturesSection, WaitlistSocialProof (waitlistCount from siteSettings), StatsSection, BlogPreviewSection all read from Sanity with hardcoded fallbacks; `revalidate=60`
 - [x] Employers page (`/employers`) fully wired to Sanity CMS — EmployersHero, EmployersFeatures, EmployersTestimonials, EmployersCTA; `revalidate=60`; EmployersCTA POSTs to `/api/waitlist` with `source:'employers'`
 - [x] Professionals page (`/professionals`) fully wired to Sanity CMS — same pattern; ProfessionalsCTA POSTs with `source:'professionals'`
 - [x] About page (`/about`) fully wired to Sanity CMS — AboutMission (PortableText), AboutStory (PortableText), AboutValues (ICON_BY_VALUE_KEY), AboutTeam (founder from Sanity, LinkedIn link); `revalidate=60`

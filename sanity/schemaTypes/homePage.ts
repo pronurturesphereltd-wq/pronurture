@@ -41,12 +41,6 @@ export default defineType({
       of: [{ type: 'reference', to: [{ type: 'service' }] }],
     }),
     defineField({
-      name: 'testimonials',
-      title: 'Testimonials',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'testimonial' }] }],
-    }),
-    defineField({
       name: 'stats',
       title: 'Stats',
       type: 'array',

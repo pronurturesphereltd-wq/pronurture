@@ -75,6 +75,13 @@ export default defineType({
         defineField({ name: 'alt', title: 'Alt Text', type: 'string' }),
       ],
     }),
+    defineField({
+      name: 'waitlistCount',
+      title: 'Waitlist Count',
+      type: 'number',
+      description: 'Number of healthcare professionals on the waitlist. Update this manually in Studio.',
+      initialValue: 0,
+    }),
   ],
   preview: {
     select: { title: 'siteName', media: 'logo' },
