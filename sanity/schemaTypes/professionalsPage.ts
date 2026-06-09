@@ -49,12 +49,6 @@ export default defineType({
       of: [featureItem],
     }),
     defineField({
-      name: 'testimonials',
-      title: 'Testimonials',
-      type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'testimonial' }] }],
-    }),
-    defineField({
       name: 'cta',
       title: 'Call to Action Section',
       type: 'object',

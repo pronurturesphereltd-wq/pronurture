@@ -131,10 +131,9 @@ export interface EmployerCTA {
 
 /** employersPage singleton shape — returned by employersPageQuery */
 export interface EmployersPageData {
-  hero?:         HomepageHero        | null
-  features?:     EmployerFeature[]   | null
-  testimonials?: SanityTestimonial[] | null
-  cta?:          EmployerCTA         | null
+  hero?:     HomepageHero      | null
+  features?: EmployerFeature[] | null
+  cta?:      EmployerCTA       | null
 }
 
 /** Feature item from professionalsPage.features[] — inline object with _key */
@@ -155,10 +154,9 @@ export interface ProfessionalCTA {
 
 /** professionalsPage singleton shape — returned by professionalsPageQuery */
 export interface ProfessionalsPageData {
-  hero?:         HomepageHero           | null
-  features?:     ProfessionalFeature[]  | null
-  testimonials?: SanityTestimonial[]    | null
-  cta?:          ProfessionalCTA        | null
+  hero?:     HomepageHero          | null
+  features?: ProfessionalFeature[] | null
+  cta?:      ProfessionalCTA       | null
 }
 
 /** One value item from aboutPage.values[] */

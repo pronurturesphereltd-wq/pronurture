@@ -126,7 +126,6 @@ export const employersPageQuery = groq`
       image { asset->{ _id, url }, alt }
     },
     "features": features[] { _key, title, subtitle, description },
-    "testimonials": testimonials[]-> { _id, quote, name, role, organisation },
     cta { headline, body, buttonText, buttonLink }
   }
 `
@@ -142,7 +141,6 @@ export const professionalsPageQuery = groq`
       image { asset->{ _id, url }, alt }
     },
     "features": features[] { _key, title, subtitle, description },
-    "testimonials": testimonials[]-> { _id, quote, name, role, organisation },
     cta { headline, body, buttonText, buttonLink }
   }
 `

@@ -16,11 +16,10 @@
  * 3. EmployersTransformation — Before/After showing life with ProNurtureSphere
  * 4. EmployersFeatures       — The 6 platform capabilities, benefit-led
  * 5. EmployersHowItWorks     — 3 steps; removes implementation fear
- * 6. EmployersTestimonials   — Peer social proof from other administrators
  *
  * ACTION
- * 7. EmployersFAQ  — Handles final objections (interactive accordion — client component)
- * 8. EmployersCTA  — Final email capture with trust badges (client component)
+ * 6. EmployersFAQ  — Handles final objections (interactive accordion — client component)
+ * 7. EmployersCTA  — Final email capture with trust badges (client component)
  *
  * Sanity data is fetched via serverClient (bypasses CDN for freshness) and passed
  * as props to wired sections with hardcoded fallbacks. Sections without CMS content
@@ -46,7 +45,6 @@ import EmployersPainPoints from "@/components/employers/EmployersPainPoints";
 import EmployersTransformation from "@/components/employers/EmployersTransformation";
 import EmployersFeatures from "@/components/employers/EmployersFeatures";
 import EmployersHowItWorks from "@/components/employers/EmployersHowItWorks";
-import EmployersTestimonials from "@/components/employers/EmployersTestimonials";
 import EmployersFAQ from "@/components/employers/EmployersFAQ";
 import EmployersCTA from "@/components/employers/EmployersCTA";
 
@@ -71,10 +69,7 @@ export default async function EmployersPage() {
       {/* 5. How it works — 3 steps to counter implementation fear (static) */}
       <EmployersHowItWorks />
 
-      {/* 6. Testimonials — social proof from hospital administrators from Sanity */}
-      <EmployersTestimonials testimonials={data?.testimonials} />
-
-      {/* 7. FAQ — resolves final objections (interactive, client component, static) */}
+      {/* 6. FAQ — resolves final objections (interactive, client component, static) */}
       <EmployersFAQ />
 
       {/* 8. CTA — final email capture with trust badges, content from Sanity */}

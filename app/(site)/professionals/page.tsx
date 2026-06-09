@@ -16,11 +16,10 @@
  * 3. ProfessionalsTransformation — Before/After narrative pivot (deep green bg)
  * 4. ProfessionalsFeatures       — 6 benefit-led platform capability cards
  * 5. ProfessionalsHowItWorks     — 3 steps; shows simplicity, counters trust barrier
- * 6. ProfessionalsTestimonials   — Social proof from fellow Nigerian clinicians
  *
  * ACTION
- * 7. ProfessionalsFAQ  — Resolves final hesitations (interactive accordion — client)
- * 8. ProfessionalsCTA  — Final email capture with trust badges (client component)
+ * 6. ProfessionalsFAQ  — Resolves final hesitations (interactive accordion — client)
+ * 7. ProfessionalsCTA  — Final email capture with trust badges (client component)
  *
  * Sanity data is fetched via serverClient (bypasses CDN for freshness) and passed
  * as props to wired sections with hardcoded fallbacks. Sections without CMS content
@@ -46,7 +45,6 @@ import ProfessionalsPainPoints from "@/components/professionals/ProfessionalsPai
 import ProfessionalsTransformation from "@/components/professionals/ProfessionalsTransformation";
 import ProfessionalsFeatures from "@/components/professionals/ProfessionalsFeatures";
 import ProfessionalsHowItWorks from "@/components/professionals/ProfessionalsHowItWorks";
-import ProfessionalsTestimonials from "@/components/professionals/ProfessionalsTestimonials";
 import ProfessionalsFAQ from "@/components/professionals/ProfessionalsFAQ";
 import ProfessionalsCTA from "@/components/professionals/ProfessionalsCTA";
 
@@ -71,10 +69,7 @@ export default async function ProfessionalsPage() {
       {/* 5. How it works — 3 steps to remove complexity and trust barriers (static) */}
       <ProfessionalsHowItWorks />
 
-      {/* 6. Testimonials — peer social proof from Nigerian doctors and nurses from Sanity */}
-      <ProfessionalsTestimonials testimonials={data?.testimonials} />
-
-      {/* 7. FAQ — resolves final hesitations (interactive accordion, client component, static) */}
+      {/* 6. FAQ — resolves final hesitations (interactive accordion, client component, static) */}
       <ProfessionalsFAQ />
 
       {/* 8. CTA — final email capture with trust badges, content from Sanity */}
