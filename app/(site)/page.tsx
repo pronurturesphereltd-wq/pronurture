@@ -29,7 +29,7 @@ export const metadata = {
     "ProNurtureSphere helps Nigerian hospitals and clinics post shifts, verify credentials, manage rosters, and handle payroll — from one platform.",
 }
 
-import { serverClient } from "@/sanity/lib/client"
+import { sanityFetch } from "@/sanity/lib/live"
 import { homePageQuery, recentPostsQuery } from "@/sanity/lib/queries"
 import type { HomePageData, SanityPost } from "@/sanity/lib/types"
 import HeroSection from "@/components/HeroSection"
@@ -43,11 +43,14 @@ import BlogPreviewSection from "@/components/BlogPreviewSection"
 import WaitlistSection from "@/components/WaitlistSection"
 
 export default async function Page() {
-  // Fetch homepage singleton and 3 most recent blog posts in parallel
-  const [homePage, recentPosts] = await Promise.all([
-    serverClient.fetch<HomePageData | null>(homePageQuery),
-    serverClient.fetch<SanityPost[]>(recentPostsQuery),
+  // Fetch homepage singleton and 3 most recent blog posts in parallel.
+  // sanityFetch returns { data: unknown } — cast to known types after fetching.
+  const [homeResult, postsResult] = await Promise.all([
+    sanityFetch({ query: homePageQuery }),
+    sanityFetch({ query: recentPostsQuery }),
   ])
+  const homePage = homeResult.data as HomePageData | null
+  const recentPosts = postsResult.data as SanityPost[]
 
   return (
     <>

@@ -38,7 +38,7 @@ export const metadata = {
     "Ditch spreadsheets and WhatsApp rosters. ProNurtureSphere gives Nigerian facilities shift posting, credential checks, rostering, and payroll in one place.",
 };
 
-import { serverClient } from "@/sanity/lib/client";
+import { sanityFetch } from "@/sanity/lib/live";
 import { employersPageQuery } from "@/sanity/lib/queries";
 import type { EmployersPageData } from "@/sanity/lib/types";
 import EmployersHero from "@/components/employers/EmployersHero";
@@ -51,7 +51,8 @@ import EmployersFAQ from "@/components/employers/EmployersFAQ";
 import EmployersCTA from "@/components/employers/EmployersCTA";
 
 export default async function EmployersPage() {
-  const data = await serverClient.fetch<EmployersPageData | null>(employersPageQuery);
+  // sanityFetch returns { data: unknown } — cast to known type after fetching
+  const data = (await sanityFetch({ query: employersPageQuery })).data as EmployersPageData | null;
 
   return (
     <>

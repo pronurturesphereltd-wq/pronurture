@@ -19,7 +19,8 @@
  */
 
 import { notFound } from 'next/navigation'
-import { client } from '@/sanity/lib/client'
+import { serverClient } from '@/sanity/lib/client'
+import { sanityFetch } from '@/sanity/lib/live'
 import {
   postBySlugQuery,
   allPostSlugsQuery,
@@ -39,18 +40,21 @@ interface BlogPostPageProps {
   params: Promise<{ slug: string }>
 }
 
-/** Pre-render a static page for every slug in Sanity at build time */
+/** Pre-render a static page for every slug in Sanity at build time.
+ *  Uses serverClient directly — stega encoding must be off so slug strings
+ *  are clean URL segments, not stega-encoded values. */
 export async function generateStaticParams() {
-  const slugs: { slug: string }[] = await client.fetch(allPostSlugsQuery)
+  const slugs: { slug: string }[] = await serverClient.fetch(allPostSlugsQuery)
   return slugs.map(({ slug }) => ({ slug }))
 }
 
-/** Per-article SEO metadata from real Sanity data */
+/** Per-article SEO metadata from real Sanity data.
+ *  stega: false prevents invisible stega characters from appearing in
+ *  <title> and <meta description> tags. */
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const { slug } = await params
-  const post: SanityPostFull | null = await client.fetch(postBySlugQuery, {
-    slug,
-  })
+  // Cast from unknown — sanityFetch type param is the GROQ string, not the result type
+  const post = (await sanityFetch({ query: postBySlugQuery, params: { slug }, stega: false })).data as SanityPostFull | null
   if (!post) return {}
   return {
     title: post.title,
@@ -61,12 +65,14 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params
 
-  // Fetch post and related posts concurrently
-  const [post, related]: [SanityPostFull | null, SanityPost[]] =
-    await Promise.all([
-      client.fetch(postBySlugQuery, { slug }),
-      client.fetch(relatedPostsQuery, { currentSlug: slug }),
-    ])
+  // Fetch post and related posts concurrently via sanityFetch for Visual Editing support.
+  // Cast from unknown — sanityFetch type param is the GROQ string, not the result type.
+  const [postResult, relatedResult] = await Promise.all([
+    sanityFetch({ query: postBySlugQuery, params: { slug } }),
+    sanityFetch({ query: relatedPostsQuery, params: { currentSlug: slug } }),
+  ])
+  const post = postResult.data as SanityPostFull | null
+  const related = relatedResult.data as SanityPost[]
 
   // Show 404 if no post matches the slug
   if (!post) notFound()

@@ -49,7 +49,7 @@ export const metadata = {
     "Learn how ProNurtureSphere is transforming healthcare workforce management in Nigeria — our mission, values, team, and the platform we're building.",
 };
 
-import { serverClient } from "@/sanity/lib/client";
+import { sanityFetch } from "@/sanity/lib/live";
 import { aboutPageQuery } from "@/sanity/lib/queries";
 import type { AboutPageData } from "@/sanity/lib/types";
 import AboutHero from "@/components/about/AboutHero";
@@ -64,7 +64,8 @@ import AboutPSLArms from "@/components/about/AboutPSLArms";
 import AboutCTA from "@/components/about/AboutCTA";
 
 export default async function AboutPage() {
-  const data = await serverClient.fetch<AboutPageData | null>(aboutPageQuery);
+  // sanityFetch returns { data: unknown } — cast to known type after fetching
+  const data = (await sanityFetch({ query: aboutPageQuery })).data as AboutPageData | null;
 
   return (
     <>

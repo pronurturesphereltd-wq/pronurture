@@ -38,7 +38,7 @@ export const metadata = {
     "Find verified locum shifts, complete accredited CPD, and grow your healthcare career — built for Nigerian doctors, nurses, and allied health professionals.",
 };
 
-import { serverClient } from "@/sanity/lib/client";
+import { sanityFetch } from "@/sanity/lib/live";
 import { professionalsPageQuery } from "@/sanity/lib/queries";
 import type { ProfessionalsPageData } from "@/sanity/lib/types";
 import ProfessionalsHero from "@/components/professionals/ProfessionalsHero";
@@ -51,7 +51,8 @@ import ProfessionalsFAQ from "@/components/professionals/ProfessionalsFAQ";
 import ProfessionalsCTA from "@/components/professionals/ProfessionalsCTA";
 
 export default async function ProfessionalsPage() {
-  const data = await serverClient.fetch<ProfessionalsPageData | null>(professionalsPageQuery);
+  // sanityFetch returns { data: unknown } — cast to known type after fetching
+  const data = (await sanityFetch({ query: professionalsPageQuery })).data as ProfessionalsPageData | null;
 
   return (
     <>

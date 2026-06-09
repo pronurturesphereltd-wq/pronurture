@@ -20,7 +20,7 @@ import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedPost from '@/components/blog/BlogFeaturedPost'
 import BlogFilteredContent from '@/components/blog/BlogFilteredContent'
 import BlogNewsletterCTA from '@/components/blog/BlogNewsletterCTA'
-import { serverClient } from '@/sanity/lib/client'
+import { sanityFetch } from '@/sanity/lib/live'
 import { postsQuery } from '@/sanity/lib/queries'
 import type { SanityPost } from '@/sanity/lib/types'
 
@@ -33,7 +33,8 @@ export const metadata = {
 }
 
 export default async function BlogPage() {
-  const posts: SanityPost[] = await serverClient.fetch(postsQuery)
+  // sanityFetch returns { data: unknown } — cast to known type after fetching
+  const posts = (await sanityFetch({ query: postsQuery })).data as SanityPost[]
 
   return (
     <>
