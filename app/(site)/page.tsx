@@ -72,6 +72,9 @@ export default async function Page() {
       {/* 5. Audience split — self-segmentation for employers and professionals */}
       <AudienceSection />
 
+      {/* Thin brand-light divider — prevents visual bleed between brand-green and brand-dark */}
+      <div className="h-2 bg-brand-light" />
+
       {/* 6. Waitlist counter + problem statistics — honest social proof */}
       <WaitlistSocialProof waitlistCount={siteSettings?.waitlistCount ?? 0} />
 

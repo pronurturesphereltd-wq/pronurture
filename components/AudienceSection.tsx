@@ -83,7 +83,7 @@ const columns: AudienceColumn[] = [
 const AudienceSection = () => {
   return (
     <section
-      className="w-full"
+      className="w-full overflow-hidden"
       aria-label="Who ProNurtureSphere is for"
     >
       {/* Full-width two-column grid — no container constraints intentionally */}
