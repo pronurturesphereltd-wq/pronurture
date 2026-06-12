@@ -79,3 +79,17 @@ html {
     transform: translateY(0);
   }
 }
+
+/* ── Partners marquee scroll animation ───────────────────────────────────────
+ * The marquee renders the partners list twice side-by-side (100% + 100% wide).
+ * Translating -50% returns the strip to the exact start position, creating a
+ * seamless infinite loop with no visible jump.
+ */
+@utility animate-marquee {
+  animation: marquee 35s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}

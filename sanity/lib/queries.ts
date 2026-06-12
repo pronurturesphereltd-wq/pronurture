@@ -145,6 +145,15 @@ export const professionalsPageQuery = groq`
   }
 `
 
+/** All partner documents ordered alphabetically — homepage PartnersMarquee */
+export const partnersQuery = groq`
+  *[_type == "partner"] | order(name asc) {
+    _id,
+    name,
+    logo { asset->{ url } }
+  }
+`
+
 /** About page singleton — fetched in app/(site)/about/page.tsx */
 export const aboutPageQuery = groq`
   *[_id == "aboutPage"][0] {

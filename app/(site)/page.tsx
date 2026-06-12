@@ -4,7 +4,7 @@
  * Section order (conversion-optimised):
  *
  * 1. HeroSection           — Dual-audience value prop, two CTAs
- * 2. SocialProofBar        — Quick trust signals after the hero
+ * 2. PartnersMarquee       — Scrolling strip of trusted partner organisations
  * 3. ProblemSection        — Names the system failure for each persona
  * 4. AudienceSection       — Speaks directly to each persona, self-segmentation UX
  * 5. HowItWorks            — Two parallel 3-step onboarding flows
@@ -25,10 +25,10 @@ export const metadata = {
 }
 
 import { sanityFetch } from "@/sanity/lib/live"
-import { homePageQuery, recentPostsQuery, siteSettingsQuery } from "@/sanity/lib/queries"
-import type { HomePageData, SanityPost, SiteSettings } from "@/sanity/lib/types"
+import { homePageQuery, partnersQuery, recentPostsQuery, siteSettingsQuery } from "@/sanity/lib/queries"
+import type { HomePageData, SanityPartner, SanityPost, SiteSettings } from "@/sanity/lib/types"
 import HeroSection from "@/components/HeroSection"
-import SocialProofBar from "@/components/SocialProofBar"
+import PartnersMarquee from "@/components/PartnersMarquee"
 import ProblemSection from "@/components/ProblemSection"
 import AudienceSection from "@/components/AudienceSection"
 import HowItWorks from "@/components/HowItWorks"
@@ -37,22 +37,24 @@ import BlogPreviewSection from "@/components/BlogPreviewSection"
 import WaitlistSection from "@/components/WaitlistSection"
 
 export default async function Page() {
-  const [homeResult, postsResult, settingsResult] = await Promise.all([
+  const [homeResult, postsResult, settingsResult, partnersResult] = await Promise.all([
     sanityFetch({ query: homePageQuery }),
     sanityFetch({ query: recentPostsQuery }),
     sanityFetch({ query: siteSettingsQuery }),
+    sanityFetch({ query: partnersQuery }),
   ])
   const homePage = homeResult.data as HomePageData | null
   const recentPosts = postsResult.data as SanityPost[]
   const siteSettings = settingsResult.data as SiteSettings | null
+  const partners = partnersResult.data as SanityPartner[]
 
   return (
     <>
       {/* 1. Hero — above the fold, dual-audience value prop */}
       <HeroSection hero={homePage?.hero} />
 
-      {/* 2. Social proof bar — quick trust signals after the hero */}
-      <SocialProofBar stats={homePage?.stats} />
+      {/* 2. Partners marquee — scrolling strip of trusted healthcare bodies */}
+      <PartnersMarquee partners={partners} />
 
       {/* 3. Problem — names the system failure for each persona */}
       <ProblemSection />

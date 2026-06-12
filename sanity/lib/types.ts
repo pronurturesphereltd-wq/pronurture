@@ -8,6 +8,17 @@
  * exact PortableText value type at the usage site (see ArticleBody.tsx).
  */
 
+/** Partner document — returned by partnersQuery */
+export interface SanityPartner {
+  _id: string
+  name: string
+  logo?: {
+    asset: {
+      url: string
+    }
+  } | null
+}
+
 /** siteSettings singleton — returned by siteSettingsQuery */
 export interface SiteSettings {
   siteName: string

@@ -15,7 +15,9 @@
     "seed:employers": "npx tsx scripts/seed-employers-page.ts",
     "seed:professionals": "npx tsx scripts/seed-professionals-page.ts",
     "seed:about": "npx tsx scripts/seed-about-page.ts",
-    "update:categories": "npx tsx scripts/update-post-categories.ts"
+    "update:categories": "npx tsx scripts/update-post-categories.ts",
+    "cleanup:testimonial-refs": "npx tsx scripts/cleanup-testimonial-refs.ts",
+    "seed:partners": "npx tsx scripts/seed-partners.ts"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",
