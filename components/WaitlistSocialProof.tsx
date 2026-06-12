@@ -1,38 +1,79 @@
 /**
  * WaitlistSocialProof.tsx
  *
- * Two-part section that replaces TestimonialsSection on the homepage.
+ * Three-part section on the homepage:
  *
  * PART 1 — Waitlist counter banner (bg-brand-dark)
- *   Shows the live waitlist number from siteSettings.waitlistCount, formatted
- *   with a "+" suffix (e.g. "247+"). Editors update the number in Sanity Studio.
- *   Includes a direct CTA to /waitlist.
+ *   Live count from siteSettings.waitlistCount. Updated by editors in Sanity Studio.
  *
- * PART 2 — Problem statistics grid (bg-brand-light)
- *   Three hard-hitting statistics about Nigeria's healthcare workforce crisis.
- *   These are factual, sourced figures — they create urgency without fabricated
- *   social proof.
+ * PART 2 — 2×3 stat grid (bg-brand-light)
+ *   Six sourced statistics about Nigeria's healthcare workforce crisis.
+ *   Mix of published data (MDCN, WHO) and PSL's own May 2026 field survey
+ *   (40 professionals, 13 states).
+ *
+ * PART 3 — Survey quotes block (bg-brand-light, continuation)
+ *   Three verbatim quotes from the PSL Clinical Workforce Survey.
+ *   Attributed by role and state only — no names used.
  *
  * @param waitlistCount - Number from siteSettings; falls back to 0
  */
 
 import Link from 'next/link'
 
-const PROBLEM_STATS = [
+const STATS = [
   {
-    id:    'nurses',
-    value: '72,000+',
-    label: 'Nigerian nurses with lapsed licences annually',
+    id:     'nurses',
+    value:  '72,000+',
+    label:  'Nigerian nurses with lapsed licences annually',
+    source: 'Source: MDCN Annual Report',
   },
   {
-    id:    'ratio',
-    value: '1 : 8,000',
-    label: "Doctor-to-patient ratio vs WHO's 1:600 recommendation",
+    id:     'ratio',
+    value:  '1 : 8,000',
+    label:  "Doctor-to-patient ratio vs WHO's 1:600 target",
+    source: 'Source: WHO Health Workforce Data',
   },
   {
-    id:    'fees',
-    value: '₦3M+',
-    label: 'Average monthly locum agency fees per mid-size hospital',
+    id:     'mobile-cpd',
+    value:  '87%',
+    label:  'of clinical professionals would complete CPD entirely on mobile if quality is right',
+    source: 'Source: PSL Field Survey, May 2026 — 40 professionals across 13 states',
+  },
+  {
+    id:     'misleading-jobs',
+    value:  '52.5%',
+    label:  'have taken a job that turned out significantly different from the listing',
+    source: 'Source: PSL Field Survey, May 2026',
+  },
+  {
+    id:     'cpd-tracking',
+    value:  '62.5%',
+    label:  'are behind, uncertain of, or not tracking CPD requirements',
+    source: 'Source: PSL Field Survey, May 2026',
+  },
+  {
+    id:     'open-to-jobs',
+    value:  '97.5%',
+    label:  'are open to new job opportunities',
+    source: 'Source: PSL Field Survey, May 2026',
+  },
+]
+
+const QUOTES = [
+  {
+    id:          'quote-1',
+    text:        'The single biggest thing missing is somewhere I can find jobs with the salary shown before I waste time applying.',
+    attribution: 'Registered nurse, 4 years experience, Edo State',
+  },
+  {
+    id:          'quote-2',
+    text:        'Poor knowledge on how to go about professional development in the best, cheapest possible way — despite the will to do it.',
+    attribution: 'Nurse-midwife, 7 years experience, Lagos',
+  },
+  {
+    id:          'quote-3',
+    text:        'Filling a vacancy takes months. By the time we find someone through WhatsApp and references, the person we wanted has already taken another role.',
+    attribution: 'Medical Director, private hospital, Edo State',
   },
 ]
 
@@ -51,12 +92,10 @@ const WaitlistSocialProof = ({ waitlistCount = 0 }: WaitlistSocialProofProps) =>
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
-          {/* Eyebrow */}
           <p className="text-brand-gold/70 text-sm font-semibold uppercase tracking-widest mb-6">
             Join the Movement
           </p>
 
-          {/* Large counter — brand-gold for maximum visual pop on dark green */}
           <p
             className="text-7xl sm:text-8xl lg:text-9xl font-bold text-brand-gold leading-none mb-4"
             aria-label={`${waitlistCount} plus`}
@@ -64,17 +103,14 @@ const WaitlistSocialProof = ({ waitlistCount = 0 }: WaitlistSocialProofProps) =>
             {waitlistCount}+
           </p>
 
-          {/* Descriptor */}
           <p className="text-white/80 text-xl sm:text-2xl font-medium mb-3">
             healthcare professionals already on the waitlist
           </p>
 
-          {/* Supporting line */}
           <p className="text-white/50 text-base mb-10">
             Join them — early access is free
           </p>
 
-          {/* CTA */}
           <Link
             href="/waitlist"
             className="
@@ -95,53 +131,93 @@ const WaitlistSocialProof = ({ waitlistCount = 0 }: WaitlistSocialProofProps) =>
         </div>
       </section>
 
-      {/* ── PART 2: Problem statistics grid ─────────────────────────────── */}
+      {/* ── PART 2 + 3: Stats grid and survey quotes ─────────────────────── */}
       <section
         className="bg-brand-light py-20 lg:py-28"
-        aria-label="Nigeria healthcare workforce statistics"
+        aria-label="Nigeria healthcare workforce statistics and survey findings"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Section eyebrow */}
+          {/* ── Stats section header ─────────────────────────────────────── */}
           <div className="text-center mb-14">
             <p className="text-brand-green text-sm font-semibold uppercase tracking-widest mb-4">
-              The Problem We&apos;re Solving
+              The Data
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-brand-dark leading-tight max-w-2xl mx-auto">
-              Nigeria&apos;s healthcare workforce crisis is{' '}
-              <span className="text-brand-green">measurable</span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-brand-dark leading-tight max-w-3xl mx-auto">
+              Nigeria&apos;s healthcare workforce crisis is real — and measurable.{' '}
+              <span className="text-brand-green block mt-1 text-2xl sm:text-3xl font-medium">
+                These are not projections. They are current conditions.
+              </span>
             </h2>
           </div>
 
-          {/* Stat cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {PROBLEM_STATS.map((stat) => (
+          {/* ── 2×3 stat grid ─────────────────────────────────────────────── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+            {STATS.map((stat) => (
               <div
                 key={stat.id}
                 className="
-                  bg-white rounded-2xl p-10
+                  bg-white rounded-2xl p-8
                   border border-brand-dark/5
                   shadow-sm
                   text-center
                 "
               >
-                {/* Large stat number */}
-                <p className="text-5xl sm:text-6xl font-bold text-brand-dark leading-none mb-4">
+                {/* Large stat value */}
+                <p className="text-5xl sm:text-6xl font-bold text-brand-dark leading-none mb-3">
                   {stat.value}
                 </p>
 
-                {/* Descriptor */}
-                <p className="text-brand-dark/60 text-base leading-relaxed">
+                {/* Label */}
+                <p className="text-brand-dark/70 text-base leading-relaxed mb-3">
                   {stat.label}
+                </p>
+
+                {/* Source attribution — small and muted */}
+                <p className="text-brand-dark/35 text-xs leading-snug">
+                  {stat.source}
                 </p>
               </div>
             ))}
           </div>
 
-          {/* Attribution footnote */}
-          <p className="text-center text-brand-dark/35 text-xs mt-10">
-            Sources: MDCN annual reports, WHO health workforce data, field research
-          </p>
+          {/* ── PART 3: Survey quotes block ───────────────────────────────── */}
+          <div className="max-w-5xl mx-auto">
+
+            <div className="text-center mb-10">
+              <h3 className="text-2xl sm:text-3xl font-bold text-brand-dark mb-3">
+                What Nigerian healthcare professionals told us.
+              </h3>
+              <p className="text-brand-dark/50 text-sm">
+                Verbatim quotes from PSL Clinical Workforce Survey, May 2026.
+                Attributed by role and state only — no names used.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {QUOTES.map((quote) => (
+                <div
+                  key={quote.id}
+                  className="
+                    bg-brand-light rounded-xl p-6
+                    border border-brand-dark/5
+                    border-l-4 border-l-brand-gold
+                  "
+                >
+                  {/* Italic quote text */}
+                  <p className="text-brand-dark/80 text-base italic leading-relaxed mb-4">
+                    &ldquo;{quote.text}&rdquo;
+                  </p>
+
+                  {/* Attribution — muted, role + state only */}
+                  <p className="text-brand-dark/45 text-sm">
+                    — {quote.attribution}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+          </div>
         </div>
       </section>
     </>

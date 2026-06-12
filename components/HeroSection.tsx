@@ -92,7 +92,7 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
             {/* ── CTA Buttons ─────────────────────────────────────────────── */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
 
-              {/* Primary CTA */}
+              {/* Primary CTA — healthcare professional */}
               <Link
                 href={ctaLink}
                 className="
@@ -119,9 +119,9 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
                 </svg>
               </Link>
 
-              {/* Secondary CTA */}
+              {/* Secondary CTA — healthcare facility manager */}
               <Link
-                href="#features"
+                href="/waitlist?role=employer"
                 className="
                   inline-flex items-center justify-center
                   px-6 py-3 rounded-full
@@ -132,9 +132,14 @@ const HeroSection = ({ hero }: HeroSectionProps) => {
                   focus:outline-none focus:ring-2 focus:ring-brand-dark focus:ring-offset-2 focus:ring-offset-brand-light
                 "
               >
-                See How It Works
+                I manage a clinical team →
               </Link>
             </div>
+
+            {/* Below-CTA reassurance note */}
+            <p className="mt-3 text-gray-400 text-xs text-center lg:text-left">
+              Free to join. No credit card required.
+            </p>
 
           </div>
 
