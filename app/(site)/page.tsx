@@ -24,7 +24,7 @@ export const metadata = {
     "Find verified clinical jobs with salary shown, earn MDCN/NMCN-aligned CPD, or post vacancies and manage your clinical team. Nigeria's healthcare workforce platform.",
 }
 
-import { sanityFetch } from "@/sanity/lib/live"
+import { serverClient } from "@/sanity/lib/client"
 import { homePageQuery, partnersQuery, recentPostsQuery, siteSettingsQuery } from "@/sanity/lib/queries"
 import type { HomePageData, SanityPartner, SanityPost, SiteSettings } from "@/sanity/lib/types"
 import HeroSection from "@/components/HeroSection"
@@ -37,16 +37,12 @@ import BlogPreviewSection from "@/components/BlogPreviewSection"
 import WaitlistSection from "@/components/WaitlistSection"
 
 export default async function Page() {
-  const [homeResult, postsResult, settingsResult, partnersResult] = await Promise.all([
-    sanityFetch({ query: homePageQuery }),
-    sanityFetch({ query: recentPostsQuery }),
-    sanityFetch({ query: siteSettingsQuery }),
-    sanityFetch({ query: partnersQuery }),
+  const [homePage, recentPosts, siteSettings, partners] = await Promise.all([
+    serverClient.fetch<HomePageData | null>(homePageQuery),
+    serverClient.fetch<SanityPost[]>(recentPostsQuery),
+    serverClient.fetch<SiteSettings | null>(siteSettingsQuery),
+    serverClient.fetch<SanityPartner[]>(partnersQuery),
   ])
-  const homePage = homeResult.data as HomePageData | null
-  const recentPosts = postsResult.data as SanityPost[]
-  const siteSettings = settingsResult.data as SiteSettings | null
-  const partners = partnersResult.data as SanityPartner[]
 
   return (
     <>
