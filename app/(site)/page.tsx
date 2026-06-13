@@ -1,41 +1,54 @@
 /**
  * app/(site)/page.tsx — Homepage (route: /)
  *
- * Phase 1 — Design Foundation.
- * All Sanity fetches kept intact. Homepage sections will be rebuilt in Phase 2.
+ * Phase 2 — Full homepage rebuild using the Phase 1 design system.
+ * All Sanity fetches preserved. The pt-16 lg:pt-[72px] offset compensates
+ * for the fixed Navbar height so content begins below it.
  *
- * The pt-16 lg:pt-[72px] offset compensates for the fixed Navbar height
- * so content is not hidden underneath it.
+ * siteSettings is no longer fetched here — it is fetched once in
+ * app/(site)/layout.tsx and passed directly to Navbar and Footer.
  */
 
 export const revalidate = 60
 
 export const metadata = {
-  title: "ProNurtureSphere — Jobs, CPD & Workforce Management for Nigerian Healthcare",
+  title: "ProNurtureSphere — Nigeria's Healthcare Workforce Platform",
   description:
-    "Find verified clinical jobs with salary shown, earn MDCN/NMCN-aligned CPD, or post vacancies and manage your clinical team. Nigeria's healthcare workforce platform.",
+    "PSL connects Nigerian clinical professionals with verified jobs, accredited CPD, and locum shifts — and gives healthcare facilities the verified candidates and compliance tools they need. Join free.",
 }
 
 import { serverClient } from "@/sanity/lib/client"
-import { homePageQuery, partnersQuery, recentPostsQuery, siteSettingsQuery } from "@/sanity/lib/queries"
-import type { HomePageData, SanityPartner, SanityPost, SiteSettings } from "@/sanity/lib/types"
+import { homePageQuery, partnersQuery, recentPostsQuery } from "@/sanity/lib/queries"
+import type { HomePageData, SanityPartner, SanityPost } from "@/sanity/lib/types"
+
+import HomeHero          from "@/components/home/HomeHero"
+import HomePartnersTicker from "@/components/home/HomePartnersTicker"
+import HomeProblem       from "@/components/home/HomeProblem"
+import HomeValueProp     from "@/components/home/HomeValueProp"
+import HomeTrustData     from "@/components/home/HomeTrustData"
+import HomeSurveyVoices  from "@/components/home/HomeSurveyVoices"
+import HomeHowItWorks    from "@/components/home/HomeHowItWorks"
+import HomeBlogPreview   from "@/components/home/HomeBlogPreview"
+import HomeFinalCTA      from "@/components/home/HomeFinalCTA"
 
 export default async function Page() {
-  // All Sanity fetches preserved — data will be threaded into Phase 2 components
-  const [homePage, recentPosts, siteSettings, partners] = await Promise.all([
+  const [homePage, recentPosts, partners] = await Promise.all([
     serverClient.fetch<HomePageData | null>(homePageQuery),
     serverClient.fetch<SanityPost[]>(recentPostsQuery),
-    serverClient.fetch<SiteSettings | null>(siteSettingsQuery),
     serverClient.fetch<SanityPartner[]>(partnersQuery),
   ])
 
   return (
     <div className="pt-16 lg:pt-[72px]">
-      <div className="container-site py-24 text-center">
-        <p className="text-brand-gray" style={{ fontSize: 'var(--text-body)' }}>
-          Homepage rebuilding — Phase 2 incoming.
-        </p>
-      </div>
+      <HomeHero           hero={homePage?.hero} />
+      <HomePartnersTicker partners={partners ?? []} />
+      <HomeProblem />
+      <HomeValueProp />
+      <HomeTrustData />
+      <HomeSurveyVoices />
+      <HomeHowItWorks />
+      <HomeBlogPreview    posts={recentPosts ?? []} />
+      <HomeFinalCTA />
     </div>
   )
 }
