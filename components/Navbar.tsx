@@ -1,200 +1,148 @@
-"use client";
+'use client'
 
 /**
  * Navbar.tsx — Site-wide sticky navigation bar
  *
- * Behaviour:
- * - Fixed at the top of the viewport on all pages
- * - ALWAYS white background with Full Color logo
- * - Mobile: shows a hamburger icon that toggles a full-width dropdown menu
- * - "Get Early Access" CTA button uses brand-gold for high contrast
+ * Design: Stratex-style clean nav — icon box logo + text stack,
+ * text nav links, sliding-arrow primary CTA button.
+ *
+ * Logo treatment: dark green rounded box (PSL lettermark) + two-line text:
+ *   line 1 — "ProNurture" DM Sans Bold
+ *   line 2 — "SPHERE LIMITED" DM Sans 500 uppercase tracking-widest
+ *
+ * Entrance: spring animation from opacity 0, y -20px on mount.
+ * Mobile: Menu/X icons from lucide-react toggle vertical nav with
+ *   Framer Motion height + opacity animation.
  *
  * Why 'use client'?
- * This component needs React state (mobileOpen) and a resize event listener
- * to auto-close the mobile menu — server components can't do this.
+ * Needs useState (mobileOpen) and a resize listener to auto-close the
+ * mobile menu. Also uses Framer Motion for entrance and mobile animations.
  */
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
-import type { SanityImage } from "@/sanity/lib/types";
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { Menu, X } from 'lucide-react'
+import { motion } from 'framer-motion'
+import Button from '@/components/ui/Button'
 
-/** Navigation links shared between desktop and mobile menus */
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "For Employers", href: "/employers" },
-  { label: "For Professionals", href: "/professionals" },
-  { label: "About", href: "/about" },
-  { label: "Blog", href: "/blog" },
-];
+const NAV_LINKS = [
+  { label: 'For Professionals', href: '/professionals' },
+  { label: 'For Employers',     href: '/employers' },
+  { label: 'About',             href: '/about' },
+  { label: 'Blog',              href: '/blog' },
+]
 
-interface NavbarProps {
-  /** Site name from Sanity siteSettings — falls back to hardcoded value if not yet seeded */
-  siteName?: string
-  /** Full-colour logo from Sanity — falls back to local SVG if not uploaded */
-  logo?: SanityImage | null
-}
+const Navbar = () => {
+  const [mobileOpen, setMobileOpen] = useState(false)
 
-const Navbar = ({ siteName = 'ProNurtureSphere', logo }: NavbarProps) => {
-  /**
-   * mobileOpen: controls the hamburger/mobile menu visibility.
-   * Toggled by the hamburger button on small screens.
-   */
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Close mobile menu when the viewport resizes to desktop (avoids stuck state)
+  // Auto-close mobile menu on desktop resize
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) setMobileOpen(false);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const onResize = () => { if (window.innerWidth >= 1024) setMobileOpen(false) }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
 
   return (
-    <nav
+    <motion.nav
       aria-label="Main navigation"
-      className="
-        fixed top-0 left-0 right-0 z-50
-        bg-white shadow-sm border-b border-gray-100
-      "
+      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black/5"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 58 }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+      <div className="container-site">
+        <div className="flex items-center justify-between h-16 lg:h-[72px]">
 
           {/* ── Logo ─────────────────────────────────────────────────────── */}
-          <Link href="/" className="flex-shrink-0 flex items-center gap-3" aria-label="ProNurtureSphere home">
-            {/* Full-colour logo — uses Sanity asset when uploaded, local SVG otherwise */}
-            <div className="relative h-8 w-10">
-              <Image
-                src={logo ? urlFor(logo).width(120).auto('format').url() : "/brand-assets/Full Color Logo.svg"}
-                alt={logo?.alt ?? "ProNurtureSphere Limited"}
-                fill
-                className="object-contain object-left"
-                priority
-              />
+          <Link
+            href="/"
+            className="flex items-center gap-3 flex-shrink-0"
+            aria-label="ProNurtureSphere home"
+          >
+            {/* Icon box — dark green square with white PSL lettermark */}
+            <div className="w-10 h-10 rounded-xl bg-brand-dark flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-xs tracking-tight select-none">PSL</span>
             </div>
-            <span className="text-brand-dark font-bold text-lg">{siteName}</span>
+            {/* Two-line text stack */}
+            <div className="flex flex-col leading-none gap-[3px]">
+              <span className="font-bold text-brand-dark" style={{ fontSize: '15px' }}>
+                ProNurture
+              </span>
+              <span
+                className="font-medium text-brand-dark/50 uppercase"
+                style={{ fontSize: '9px', letterSpacing: 'var(--ls-caps)' }}
+              >
+                SPHERE LIMITED
+              </span>
+            </div>
           </Link>
 
-          {/* ── Desktop Navigation Links ──────────────────────────────────── */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
+          {/* ── Desktop nav links ─────────────────────────────────────────── */}
+          <div className="hidden lg:flex items-center gap-7">
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="
-                  text-sm font-medium text-brand-dark
-                  transition-colors duration-200
-                  hover:text-brand-green
-                "
+                className="font-medium text-brand-dark/60 hover:text-brand-dark transition-opacity duration-150"
+                style={{ fontSize: 'var(--text-sm)' }}
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* ── Desktop CTA Button ────────────────────────────────────────── */}
+          {/* ── Desktop CTA ───────────────────────────────────────────────── */}
           <div className="hidden lg:block">
-            <Link
-              href="/waitlist"
-              className="
-                inline-flex items-center justify-center
-                px-5 py-2.5 rounded-full
-                bg-brand-gold text-brand-dark
-                text-sm font-bold
-                cursor-pointer transition-all duration-200
-                hover:bg-brand-dark hover:text-white hover:scale-105
-                focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2
-              "
-            >
-              Get Early Access
-            </Link>
+            <Button label="Get Early Access" href="/waitlist" variant="primary" />
           </div>
 
-          {/* ── Mobile Hamburger Button ───────────────────────────────────── */}
+          {/* ── Mobile hamburger ─────────────────────────────────────────── */}
           <button
-            className="lg:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-gold"
+            className="lg:hidden p-2 text-brand-dark rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-dark/20"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            <span className="sr-only">{mobileOpen ? "Close menu" : "Open menu"}</span>
-            {/* Hamburger → X icon transition — always dark on white navbar */}
-            <div className="w-6 h-5 flex flex-col justify-between">
-              <span
-                className={`block h-0.5 bg-brand-dark rounded-full transition-all duration-300 ${
-                  mobileOpen ? "rotate-45 translate-y-2.5" : ""
-                }`}
-              />
-              <span
-                className={`block h-0.5 bg-brand-dark rounded-full transition-all duration-300 ${
-                  mobileOpen ? "opacity-0 scale-x-0" : ""
-                }`}
-              />
-              <span
-                className={`block h-0.5 bg-brand-dark rounded-full transition-all duration-300 ${
-                  mobileOpen ? "-rotate-45 -translate-y-2" : ""
-                }`}
-              />
-            </div>
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
+
         </div>
       </div>
 
-      {/* ── Mobile Menu Dropdown ────────────────────────────────────────────── */}
-      {/*
-       * Slides down from the Navbar when mobileOpen is true.
-       * White background keeps links readable on any page.
-       */}
-      <div
+      {/* ── Mobile menu ───────────────────────────────────────────────────── */}
+      <motion.div
         id="mobile-menu"
-        className={`
-          lg:hidden bg-white shadow-lg border-t border-gray-100
-          overflow-hidden transition-all duration-300 ease-in-out
-          ${mobileOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}
-        `}
+        className="lg:hidden bg-white border-t border-black/5 overflow-hidden"
+        initial={false}
+        animate={mobileOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 58 }}
         aria-hidden={!mobileOpen}
       >
-        <div className="px-4 pb-6 pt-2 flex flex-col gap-1">
-          {navLinks.map((link) => (
+        <div className="container-site pb-6 pt-3 flex flex-col gap-1">
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => setMobileOpen(false)} // Close menu on navigation
-              className="
-                block px-3 py-3 rounded-lg
-                text-brand-dark text-base font-medium
-                hover:bg-brand-light hover:text-brand-green
-                transition-colors duration-150
-              "
+              onClick={() => setMobileOpen(false)}
+              className="py-3 px-2 rounded-lg font-medium text-brand-dark/70 hover:text-brand-dark transition-opacity duration-150"
+              style={{ fontSize: 'var(--text-body)' }}
             >
               {link.label}
             </Link>
           ))}
-
-          {/* Mobile CTA — full width for easy tap target */}
-          <Link
-            href="/waitlist"
-            onClick={() => setMobileOpen(false)}
-            className="
-              mt-3 flex items-center justify-center
-              px-5 py-3 rounded-full
-              bg-brand-gold text-brand-dark
-              text-base font-bold text-center
-              cursor-pointer transition-all duration-200
-              hover:bg-brand-dark hover:text-white hover:scale-105
-              focus:outline-none focus:ring-2 focus:ring-brand-gold
-            "
-          >
-            Get Early Access
-          </Link>
+          {/* CTA visible in mobile nav */}
+          <div className="mt-3">
+            <Button
+              label="Get Early Access"
+              href="/waitlist"
+              variant="primary"
+            />
+          </div>
         </div>
-      </div>
-    </nav>
-  );
-};
+      </motion.div>
+    </motion.nav>
+  )
+}
 
-export default Navbar;
+export default Navbar

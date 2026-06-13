@@ -1,19 +1,11 @@
 /**
  * app/(site)/page.tsx — Homepage (route: /)
  *
- * Section order (conversion-optimised):
+ * Phase 1 — Design Foundation.
+ * All Sanity fetches kept intact. Homepage sections will be rebuilt in Phase 2.
  *
- * 1. HeroSection           — Dual-audience value prop, two CTAs
- * 2. PartnersMarquee       — Scrolling strip of trusted partner organisations
- * 3. ProblemSection        — Names the system failure for each persona
- * 4. AudienceSection       — Speaks directly to each persona, self-segmentation UX
- * 5. HowItWorks            — Two parallel 3-step onboarding flows
- * 6. WaitlistSocialProof   — Waitlist counter + 6-stat grid + survey quotes
- * 7. BlogPreviewSection    — Thought leadership, SEO value, educates hesitant visitors
- * 8. WaitlistSection       — Final conversion opportunity — dual CTA, no form
- *
- * Data is fetched from Sanity in parallel and threaded down as props.
- * Every component falls back to hardcoded content if Sanity returns null.
+ * The pt-16 lg:pt-[72px] offset compensates for the fixed Navbar height
+ * so content is not hidden underneath it.
  */
 
 export const revalidate = 60
@@ -27,16 +19,9 @@ export const metadata = {
 import { serverClient } from "@/sanity/lib/client"
 import { homePageQuery, partnersQuery, recentPostsQuery, siteSettingsQuery } from "@/sanity/lib/queries"
 import type { HomePageData, SanityPartner, SanityPost, SiteSettings } from "@/sanity/lib/types"
-import HeroSection from "@/components/HeroSection"
-import PartnersMarquee from "@/components/PartnersMarquee"
-import ProblemSection from "@/components/ProblemSection"
-import AudienceSection from "@/components/AudienceSection"
-import HowItWorks from "@/components/HowItWorks"
-import WaitlistSocialProof from "@/components/WaitlistSocialProof"
-import BlogPreviewSection from "@/components/BlogPreviewSection"
-import WaitlistSection from "@/components/WaitlistSection"
 
 export default async function Page() {
+  // All Sanity fetches preserved — data will be threaded into Phase 2 components
   const [homePage, recentPosts, siteSettings, partners] = await Promise.all([
     serverClient.fetch<HomePageData | null>(homePageQuery),
     serverClient.fetch<SanityPost[]>(recentPostsQuery),
@@ -45,33 +30,12 @@ export default async function Page() {
   ])
 
   return (
-    <>
-      {/* 1. Hero — above the fold, dual-audience value prop */}
-      <HeroSection hero={homePage?.hero} />
-
-      {/* 2. Partners marquee — scrolling strip of trusted healthcare bodies */}
-      <PartnersMarquee partners={partners} />
-
-      {/* 3. Problem — names the system failure for each persona */}
-      <ProblemSection />
-
-      {/* 4. Audience split — self-segmentation for professionals and employers */}
-      <AudienceSection />
-
-      {/* 5. How It Works — two parallel 3-step flows, one per persona */}
-      <HowItWorks />
-
-      {/* Thin divider — prevents visual bleed between HowItWorks and WaitlistSocialProof */}
-      <div className="h-2 bg-brand-light" />
-
-      {/* 6. Waitlist counter + sourced stats + verbatim survey quotes */}
-      <WaitlistSocialProof waitlistCount={siteSettings?.waitlistCount ?? 0} />
-
-      {/* 7. Blog preview — thought leadership, educates hesitant visitors */}
-      <BlogPreviewSection posts={recentPosts} />
-
-      {/* 8. Waitlist — final, high-visibility conversion CTA */}
-      <WaitlistSection />
-    </>
+    <div className="pt-16 lg:pt-[72px]">
+      <div className="container-site py-24 text-center">
+        <p className="text-brand-gray" style={{ fontSize: 'var(--text-body)' }}>
+          Homepage rebuilding — Phase 2 incoming.
+        </p>
+      </div>
+    </div>
   )
 }

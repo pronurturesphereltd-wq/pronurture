@@ -4,87 +4,204 @@
  * globals.css — ProNurture global styles
  *
  * Tailwind v4 uses @theme to define design tokens.
- * All brand colors are defined here and generate utility classes automatically.
- * e.g. --color-brand-dark  → bg-brand-dark,  text-brand-dark,  border-brand-dark
- *      --color-brand-light → bg-brand-light, text-brand-light, border-brand-light
+ * All brand colors, radius, and font tokens defined here generate
+ * utility classes automatically:
+ *   --color-brand-dark  → bg-brand-dark, text-brand-dark, border-brand-dark
+ *   --radius-pill       → rounded-pill
+ *   etc.
  *
  * IMPORTANT — color-scheme fix:
  * Tailwind v4's preflight sets `color-scheme: dark light` on :root, which causes
- * browsers running in dark mode to render any section with a transparent or
- * unresolved background as solid black (the browser's dark-mode canvas default).
- * We override this with `color-scheme: light` because ProNurture is a
- * light-mode-only marketing site — there is no dark theme.
+ * browsers in dark mode to render transparent backgrounds as solid black.
+ * We override with `color-scheme: light` — ProNurture is light-mode only.
  *
- * DM Sans font is loaded via next/font/google in layout.tsx and exposed
- * as --font-dm-sans CSS variable, which we reference here in --font-sans.
+ * DM Sans is loaded via next/font/google in layout.tsx, exposed as
+ * --font-dm-sans CSS variable, referenced here in --font-sans.
  */
 
 @theme {
   /* ── Brand Colors ──────────────────────────────────────────────────────── */
-  /* Deep Green: primary brand, authority, trust */
-  --color-brand-dark:  #103613;
-  /* Yellow Green: energy, growth, approachability */
-  --color-brand-green: #7a853e;
-  /* Gold/Warm: CTA buttons, warmth — NOT clinical */
-  --color-brand-gold:  #c09e5a;
-  /* White: clean backgrounds */
-  --color-brand-white: #ffffff;
-  /* Off-white: soft section alternating backgrounds */
-  --color-brand-light: #f5f5f0;
+  --color-brand-dark:       #103613;   /* Deep Green — primary, authority, trust */
+  --color-brand-green:      #7a853e;   /* Yellow Green — energy, approachability */
+  --color-brand-gold:       #c09e5a;   /* Gold — warmth, CTA accent */
+  --color-brand-white:      #ffffff;
+  --color-brand-offwhite:   #f5f5f0;   /* Off-white — section alternate bg */
+  --color-brand-light:      #f5f5f0;   /* Alias — kept for backward compat with existing components */
+  --color-brand-near-black: #0d0d0d;   /* Primary body text */
+  --color-brand-gray:       #5a5a5a;   /* Subtext, descriptions */
+
+  /* ── Border Radius ─────────────────────────────────────────────────────── */
+  --radius-hero-card:    28px;
+  --radius-service-card: 24px;
+  --radius-pricing-card: 28px;
+  --radius-team-card:    20px;
+  --radius-feature-icon: 16px;
+  --radius-pill:         1000px;
+  --radius-tag:          100px;
 
   /* ── Typography ────────────────────────────────────────────────────────── */
-  /* DM Sans is set as the primary font — see layout.tsx */
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ── Force light mode ────────────────────────────────────────────────────── */
 /*
- * This overrides Tailwind v4's default `color-scheme: dark light` preflight rule.
- * Without this, devices in dark mode render transparent section backgrounds black,
- * making the entire page appear black instead of its intended brand colors.
+ * Overrides Tailwind v4's default `color-scheme: dark light` preflight rule.
+ * Without this, devices in dark mode render transparent section backgrounds as
+ * solid black, making the entire page appear broken.
  */
 :root {
   color-scheme: light;
+
+  /* ── Fluid type scale (clamp for responsive sizes) ───────────────────── */
+  --text-hero:    clamp(40px, 5.5vw, 56px);
+  --text-h2:      clamp(36px, 4vw, 48px);
+  --text-h3:      clamp(28px, 3vw, 36px);
+  --text-h4:      clamp(20px, 2vw, 26px);
+  --text-body-lg: 20px;
+  --text-body:    17px;
+  --text-sm:      15px;
+  --text-xs:      13px;
+
+  /* ── Letter spacing ────────────────────────────────────────────────────── */
+  --ls-heading: -0.02em;
+  --ls-caps:     0.08em;   /* "SPHERE LIMITED" sub-brand, section eyebrows */
+
+  /* ── Line heights ──────────────────────────────────────────────────────── */
+  --lh-body: 1.6em;
+
+  /* ── Layout ────────────────────────────────────────────────────────────── */
+  --section-padding-y: 72px;
+  --container-max:     1150px;
+  --container-pad:     25px;
+
+  /* ── Gradients ─────────────────────────────────────────────────────────── */
+  --gradient-hero-dark-bg: linear-gradient(135deg, #103613 0%, #1a4d1e 100%);
+  --gradient-fade-left:    linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0) 100%);
+  --gradient-fade-right:   linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,0) 100%);
+  --gradient-hero-card: linear-gradient(
+    244deg,
+    rgba(122, 133, 62, 0.12) 0%,
+    #ffffff 73%,
+    rgba(192, 158, 90, 0.04) 100%
+  );
+  --gradient-service-card-mask: linear-gradient(
+    180deg,
+    rgba(0,0,0,0)    0%,
+    rgba(0,0,0,0)   50%,
+    rgba(0,0,0,0.6) 66%,
+    rgba(0,0,0,1)  100%
+  );
+  --gradient-team-card-overlay: linear-gradient(
+    180deg,
+    rgba(255,255,255,0)   0%,
+    rgba(16, 54, 19, 0.7) 100%
+  );
+  --gradient-section-tint: linear-gradient(
+    180deg,
+    rgba(122, 133, 62, 0.08) 0%,
+    rgba(255,255,255,0)      70%,
+    rgba(255,255,255,0)      100%
+  );
 }
 
-/* ── Base body styles — marketing site is light-mode only ────────────────── */
+/* ── CSS reset additions ─────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, p, figure {
+  margin: 0;
+}
+
+/* ── Base body styles ─────────────────────────────────────────────────────── */
 body {
   background-color: #f5f5f0;
-  color: #103613;
+  color: #0d0d0d;
   font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling for anchor links (e.g. "See How It Works" → #features) */
 html {
   scroll-behavior: smooth;
 }
 
-/* ── Blog grid filter fade-in animation ─────────────────────────────────────
- * Triggered via key={activeCategory} on the grid wrapper — React remounts
- * the element on key change, re-running the animation on every filter swap.
+/* ── Container utility ────────────────────────────────────────────────────── */
+/*
+ * Used instead of Tailwind's built-in container — gives us a fixed 1150px
+ * max-width with consistent 25px side padding across all sections.
  */
+@utility container-site {
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+}
+
+/* ── Sliding arrow button (signature Stratex-style interaction) ────────────
+ *
+ * Two ArrowRight icons sit inside an overflow:hidden pill circle.
+ * arrow-a starts 20px to the left, off-screen.
+ * arrow-b starts centered.
+ *
+ * On hover (.btn-sliding:hover):
+ *   arrow-a slides right to center (enters from left)
+ *   arrow-b slides right off-screen (exits to right)
+ *
+ * Result: the arrow appears to "slide through" the button on hover.
+ */
+.btn-icon-circle {
+  width: 33px;
+  height: 33px;
+  border-radius: 1000px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.arrow-a {
+  position: absolute;
+  left: -20px;
+  transition: left 0.2s ease;
+}
+
+.arrow-b {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.2s ease;
+}
+
+.btn-sliding:hover .arrow-a {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.btn-sliding:hover .arrow-b {
+  left: calc(100% + 20px);
+  transform: translateX(0);
+}
+
+/* ── Blog grid filter fade-in ────────────────────────────────────────────── */
+/* Triggered via key={activeCategory} on the grid wrapper — React remounts
+ * the element on key change, re-running the animation on every filter swap. */
 @utility animate-fade-in {
   animation: fade-in 0.22s ease-out both;
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Partners marquee scroll animation ───────────────────────────────────────
- * The marquee renders the partners list twice side-by-side (100% + 100% wide).
- * Translating -50% returns the strip to the exact start position, creating a
- * seamless infinite loop with no visible jump.
- */
+/* ── Partners marquee ────────────────────────────────────────────────────── */
+/* The marquee renders the partners list twice side-by-side (100% + 100%).
+ * Translating -50% returns to the exact start, creating a seamless loop. */
 @utility animate-marquee {
   animation: marquee 35s linear infinite;
 }
