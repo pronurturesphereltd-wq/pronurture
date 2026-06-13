@@ -66,7 +66,7 @@ const PARTNERS = [
 
 async function main() {
   for (const partner of PARTNERS) {
-    const doc: Record<string, unknown> = {
+    const doc: { _id: string; _type: string; name: string; website?: string } = {
       _id:   partner._id,
       _type: 'partner',
       name:  partner.name,
