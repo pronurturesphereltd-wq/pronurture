@@ -25,6 +25,7 @@ export const aboutPage = defineType({
       name: 'values',
       title: 'Values',
       type: 'array',
+      validation: (R) => R.max(4),
       of: [{
         type: 'object',
         fields: [
@@ -33,6 +34,12 @@ export const aboutPage = defineType({
         ],
         preview: { select: { title: 'headline' } },
       }],
+      initialValue: [
+        { _type: 'object', _key: 'v1', headline: 'Salary should always be shown.', body: 'No clinical professional should waste time applying for a role without knowing the pay.' },
+        { _type: 'object', _key: 'v2', headline: 'Clinical professionals deserve career tools built for them.', body: 'Not tools designed for office workers, adapted for healthcare. Tools built from scratch for this sector.' },
+        { _type: 'object', _key: 'v3', headline: 'Trust is earned with specifics, not promises.', body: 'We show our research. We cite our sources. We give every employer a named contact they can call.' },
+        { _type: 'object', _key: 'v4', headline: 'PSL is a launchpad, not a listing site.', body: "We are building something that helps Nigerian healthcare professionals grow, not just move between jobs." },
+      ],
     }),
     defineField({
       name: 'team',
