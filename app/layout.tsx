@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <Navbar ctaLabel={settings?.navCta || 'Join the Waitlist'} />
         <main style={{ paddingTop: 68 }}>{children}</main>
-        <Footer tagline={settings?.footerTagline} email={settings?.footerEmail} copyright={settings?.footerCopyright} />
+        <Footer tagline={settings?.footerTagline} email={settings?.footerEmail} copyright={settings?.footerCopyright} socialLinks={settings?.socialLinks} />
       </body>
     </html>
   )

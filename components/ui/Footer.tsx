@@ -22,12 +22,20 @@ interface FooterProps {
   tagline?: string
   email?: string
   copyright?: string
+  socialLinks?: {
+    linkedin?: string
+    twitter?: string
+    facebook?: string
+    instagram?: string
+    whatsapp?: string
+  }
 }
 
 export default function Footer({
   tagline = 'The career platform Nigerian healthcare has been waiting for.',
   email = 'hello@pronurturespherehq.com',
   copyright = 'ProNurtureSphere Limited. All rights reserved.',
+  socialLinks,
 }: FooterProps) {
   return (
     <footer style={{ background: 'var(--brand-offwhite)', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: 64, paddingBottom: 40 }}>
@@ -67,7 +75,14 @@ export default function Footer({
 
         <div style={{ borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <p style={{ fontSize: 13, color: 'var(--brand-gray)' }}>© {new Date().getFullYear()} {copyright}</p>
-          <a href={`mailto:${email}`} style={{ fontSize: 13, color: 'var(--brand-gray)', textDecoration: 'none' }}>{email}</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            {socialLinks?.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', textDecoration: 'none', fontSize: 13, transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}>LinkedIn</a>}
+            {socialLinks?.twitter && <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', textDecoration: 'none', fontSize: 13, transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}>Twitter / X</a>}
+            {socialLinks?.facebook && <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', textDecoration: 'none', fontSize: 13, transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}>Facebook</a>}
+            {socialLinks?.instagram && <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', textDecoration: 'none', fontSize: 13, transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}>Instagram</a>}
+            {socialLinks?.whatsapp && <a href={socialLinks.whatsapp} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', textDecoration: 'none', fontSize: 13, transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}>WhatsApp</a>}
+            <a href={`mailto:${email}`} style={{ fontSize: 13, color: 'var(--brand-gray)', textDecoration: 'none' }}>{email}</a>
+          </div>
         </div>
       </div>
 
