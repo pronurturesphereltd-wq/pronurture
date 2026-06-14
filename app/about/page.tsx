@@ -49,7 +49,7 @@ export default async function AboutPage() {
             <div>
               <SectionTag label="The founding story" />
               <div style={{ marginTop: 24, fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.75 }}>
-                {(data?.story || "Nurses applying through WhatsApp groups and hearing nothing back. Doctors taking jobs where the salary was never shown. Midwives falling behind on CPD because tracking it was too complicated. Medical Directors spending months filling one vacancy through walk-ins.\n\nThese aren't rare situations. They're the daily reality for Nigerian healthcare professionals and the facilities that employ them.\n\nWe built PSL to fix it. Not to add another app — but to build the platform Nigerian healthcare has always needed.").split('\n\n').map((para: string, i: number) => (
+                {(typeof data?.story === 'string' ? data.story : "Nurses applying through WhatsApp groups and hearing nothing back. Doctors taking jobs where the salary was never shown. Midwives falling behind on CPD because tracking it was too complicated. Medical Directors spending months filling one vacancy through walk-ins.\n\nThese are not rare situations. They are the daily reality for Nigerian healthcare professionals and the facilities that employ them.\n\nWe built PSL to fix it. Not to add another app — but to build the platform Nigerian healthcare has always needed.").split('\n\n').map((para: string, i: number) => (
                   <p key={i} style={{ marginBottom: 20 }}>{para}</p>
                 ))}
               </div>
