@@ -1,53 +1,44 @@
-'use client'
+import { defineConfig } from 'sanity'
+import { structureTool } from 'sanity/structure'
+import { schemaTypes } from './sanity/schemas'
 
-/**
- * This configuration is used to for the Sanity Studio that’s mounted on the `\app\studio\[[...tool]]\page.tsx` route
- */
-
-import {visionTool} from '@sanity/vision'
-import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
-import {presentationTool} from 'sanity/presentation'
-
-// Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
-import {apiVersion, dataset, projectId} from './sanity/env'
-import {schema} from './sanity/schemaTypes'
-import {structure, singletonTypes} from './sanity/structure'
+const singletonTypes = ['siteSettings', 'homepage', 'professionalsPage', 'employersPage', 'aboutPage', 'contactPage']
 
 export default defineConfig({
+  name: 'psl-studio',
+  title: 'PSL Website Studio',
+  projectId: 'cfu3qevi',
+  dataset: 'production',
   basePath: '/studio',
-  projectId,
-  dataset,
-  schema,
   plugins: [
-    structureTool({structure}),
-    // Presentation tool — opens a live preview panel inside Studio.
-    // previewUrl points to the Next.js site so editors can see changes
-    // instantly on the real page before publishing.
-    presentationTool({
-      previewUrl: {
-        previewMode: {
-          enable: '/api/draft-mode/enable',
-          disable: '/api/draft-mode/disable',
-        },
-      },
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Content')
+          .items([
+            S.listItem().title('Site Settings').id('siteSettings').child(
+              S.document().schemaType('siteSettings').documentId('siteSettings')
+            ),
+            S.divider(),
+            S.listItem().title('Homepage').id('homepage').child(
+              S.document().schemaType('homepage').documentId('homepage')
+            ),
+            S.listItem().title('For Professionals').id('professionalsPage').child(
+              S.document().schemaType('professionalsPage').documentId('professionalsPage')
+            ),
+            S.listItem().title('For Employers').id('employersPage').child(
+              S.document().schemaType('employersPage').documentId('employersPage')
+            ),
+            S.listItem().title('About').id('aboutPage').child(
+              S.document().schemaType('aboutPage').documentId('aboutPage')
+            ),
+            S.listItem().title('Contact').id('contactPage').child(
+              S.document().schemaType('contactPage').documentId('contactPage')
+            ),
+            S.divider(),
+            S.documentTypeListItem('blogPost').title('Blog Posts'),
+          ]),
     }),
-    visionTool({defaultApiVersion: apiVersion}),
   ],
-  document: {
-    // Hide singleton types from the global "New document" menu
-    newDocumentOptions: (prev, { creationContext }) => {
-      if (creationContext.type === 'global') {
-        return prev.filter((item) => !singletonTypes.has(item.templateId))
-      }
-      return prev
-    },
-    // Prevent duplicate singleton documents via the action menu
-    actions: (prev, { schemaType }) => {
-      if (singletonTypes.has(schemaType)) {
-        return prev.filter(({ action }) => action !== 'duplicate')
-      }
-      return prev
-    },
-  },
+  schema: { types: schemaTypes },
 })

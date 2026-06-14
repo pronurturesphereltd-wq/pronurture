@@ -1,212 +1,139 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap');
 
-/**
- * globals.css — ProNurture global styles
- *
- * Tailwind v4 uses @theme to define design tokens.
- * All brand colors, radius, and font tokens defined here generate
- * utility classes automatically:
- *   --color-brand-dark  → bg-brand-dark, text-brand-dark, border-brand-dark
- *   --radius-pill       → rounded-pill
- *   etc.
- *
- * IMPORTANT — color-scheme fix:
- * Tailwind v4's preflight sets `color-scheme: dark light` on :root, which causes
- * browsers in dark mode to render transparent backgrounds as solid black.
- * We override with `color-scheme: light` — ProNurture is light-mode only.
- *
- * DM Sans is loaded via next/font/google in layout.tsx, exposed as
- * --font-dm-sans CSS variable, referenced here in --font-sans.
- */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  /* ── Brand Colors ──────────────────────────────────────────────────────── */
-  --color-brand-dark:       #103613;   /* Deep Green — primary, authority, trust */
-  --color-brand-green:      #7a853e;   /* Yellow Green — energy, approachability */
-  --color-brand-gold:       #c09e5a;   /* Gold — warmth, CTA accent */
-  --color-brand-white:      #ffffff;
-  --color-brand-offwhite:   #f5f5f0;   /* Off-white — section alternate bg */
-  --color-brand-light:      #f5f5f0;   /* Alias — kept for backward compat with existing components */
-  --color-brand-near-black: #0d0d0d;   /* Primary body text */
-  --color-brand-gray:       #5a5a5a;   /* Subtext, descriptions */
-
-  /* ── Border Radius ─────────────────────────────────────────────────────── */
-  --radius-hero-card:    28px;
-  --radius-service-card: 24px;
-  --radius-pricing-card: 28px;
-  --radius-team-card:    20px;
-  --radius-feature-icon: 16px;
-  --radius-pill:         1000px;
-  --radius-tag:          100px;
-
-  /* ── Typography ────────────────────────────────────────────────────────── */
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-}
-
-/* ── Force light mode ────────────────────────────────────────────────────── */
-/*
- * Overrides Tailwind v4's default `color-scheme: dark light` preflight rule.
- * Without this, devices in dark mode render transparent section backgrounds as
- * solid black, making the entire page appear broken.
- */
 :root {
-  color-scheme: light;
-
-  /* ── Fluid type scale (clamp for responsive sizes) ───────────────────── */
-  --text-hero:    clamp(40px, 5.5vw, 56px);
-  --text-h2:      clamp(36px, 4vw, 48px);
-  --text-h3:      clamp(28px, 3vw, 36px);
-  --text-h4:      clamp(20px, 2vw, 26px);
-  --text-body-lg: 20px;
-  --text-body:    17px;
-  --text-sm:      15px;
-  --text-xs:      13px;
-
-  /* ── Letter spacing ────────────────────────────────────────────────────── */
-  --ls-heading: -0.02em;
-  --ls-caps:     0.08em;   /* "SPHERE LIMITED" sub-brand, section eyebrows */
-
-  /* ── Line heights ──────────────────────────────────────────────────────── */
-  --lh-body: 1.6em;
-
-  /* ── Layout ────────────────────────────────────────────────────────────── */
-  --section-padding-y: 72px;
-  --container-max:     1150px;
-  --container-pad:     25px;
-
-  /* ── Gradients ─────────────────────────────────────────────────────────── */
-  --gradient-hero-dark-bg: linear-gradient(135deg, #103613 0%, #1a4d1e 100%);
-  --gradient-fade-left:    linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0) 100%);
-  --gradient-fade-right:   linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,0) 100%);
-  --gradient-hero-card: linear-gradient(
-    244deg,
-    rgba(122, 133, 62, 0.12) 0%,
-    #ffffff 73%,
-    rgba(192, 158, 90, 0.04) 100%
-  );
-  --gradient-service-card-mask: linear-gradient(
-    180deg,
-    rgba(0,0,0,0)    0%,
-    rgba(0,0,0,0)   50%,
-    rgba(0,0,0,0.6) 66%,
-    rgba(0,0,0,1)  100%
-  );
-  --gradient-team-card-overlay: linear-gradient(
-    180deg,
-    rgba(255,255,255,0)   0%,
-    rgba(16, 54, 19, 0.7) 100%
-  );
-  --gradient-section-tint: linear-gradient(
-    180deg,
-    rgba(122, 133, 62, 0.08) 0%,
-    rgba(255,255,255,0)      70%,
-    rgba(255,255,255,0)      100%
-  );
+  --brand-dark: #103613;
+  --brand-green: #7a853e;
+  --brand-gold: #c09e5a;
+  --brand-white: #ffffff;
+  --brand-offwhite: #f5f5f0;
+  --brand-near-black: #0d0d0d;
+  --brand-gray: #5a5a5a;
+  --radius-pill: 1000px;
+  --section-padding-y: 80px;
+  --container-max: 1150px;
+  --container-pad: 25px;
+  --font-primary: "DM Sans", sans-serif;
 }
 
-/* ── CSS reset additions ─────────────────────────────────────────────────── */
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+h1,h2,h3,h4,h5,h6,p,figure { margin: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-primary); background: #ffffff; color: var(--brand-near-black); font-size: 17px; line-height: 1.6; letter-spacing: -0.01em; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: var(--brand-dark); border-radius: 3px; }
+
+.section-tag { display: flex; align-items: center; gap: 8px; width: fit-content; }
+.section-tag__dot { width: 8px; height: 8px; border-radius: 1000px; flex-shrink: 0; }
+.section-tag--green .section-tag__dot { background: var(--brand-dark); }
+.section-tag--green span { color: var(--brand-dark); font-weight: 500; font-size: 15px; }
+.section-tag--white .section-tag__dot { background: #ffffff; }
+.section-tag--white span { color: #ffffff; font-weight: 500; font-size: 15px; }
+.section-tag--gold .section-tag__dot { background: var(--brand-gold); }
+.section-tag--gold span { color: var(--brand-gold); font-weight: 500; font-size: 15px; }
+
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-dark); color: #ffffff; border-radius: var(--radius-pill); padding: 3px 3px 3px 20px; font-size: 15px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: opacity 0.15s ease, transform 0.15s ease; white-space: nowrap; font-family: var(--font-primary); }
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary--white { background: #ffffff; color: var(--brand-near-black); }
+.btn-primary__icon { width: 33px; height: 33px; border-radius: 1000px; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; flex-shrink: 0; color: var(--brand-dark); }
+.btn-primary--white .btn-primary__icon { background: var(--brand-dark); color: #ffffff; }
+.btn-primary .arrow-a, .btn-primary .arrow-b { position: absolute; transition: transform 0.2s ease; }
+.btn-primary .arrow-a { transform: translateX(-140%); }
+.btn-primary .arrow-b { transform: translateX(0); }
+.btn-primary:hover .arrow-a { transform: translateX(0); }
+.btn-primary:hover .arrow-b { transform: translateX(140%); }
+
+.btn-text { display: inline-flex; align-items: center; gap: 6px; color: #ffffff; font-size: 15px; font-weight: 500; text-decoration: none; cursor: pointer; background: none; border: none; transition: opacity 0.15s ease; font-family: var(--font-primary); }
+.btn-text:hover { opacity: 0.7; }
+.btn-text--dark { color: var(--brand-near-black); }
+
+.container { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-pad); }
+
+/* Ticker */
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.ticker-track { animation: ticker 30s linear infinite; will-change: transform; }
+
+/* Card hover interactions */
+.card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+
+/* Fade in animation */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in-up { animation: fadeInUp 0.5s ease forwards; }
+
+/* Prose */
+.prose h2 { font-size: clamp(24px,3vw,32px); font-weight: 700; margin: 2rem 0 1rem; letter-spacing: -0.02em; }
+.prose h3 { font-size: clamp(20px,2.5vw,26px); font-weight: 700; margin: 1.5rem 0 0.75rem; }
+.prose p { margin-bottom: 1.25rem; line-height: 1.75; }
+.prose ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.prose li { margin-bottom: 0.5rem; }
+.prose strong { font-weight: 700; }
+.prose a { color: var(--brand-dark); text-decoration: underline; }
+.prose blockquote { border-left: 3px solid var(--brand-gold); padding-left: 1.25rem; font-style: italic; color: var(--brand-gray); margin: 1.5rem 0; }
+
+/* ── RESPONSIVE ── */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  :root { --container-pad: 20px; }
 }
 
-h1, h2, h3, h4, h5, h6, p, figure {
-  margin: 0;
+@media (min-width: 810px) and (max-width: 1024px) {
+  .hero-card { padding: 40px 40px 0 !important; }
+  .hero-image-card { height: 300px !important; }
 }
 
-/* ── Base body styles ─────────────────────────────────────────────────────── */
-body {
-  background-color: #f5f5f0;
-  color: #0d0d0d;
-  font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@media (max-width: 809px) {
+  .hero-image-card { display: none !important; }
 }
 
-html {
-  scroll-behavior: smooth;
+/* Mobile */
+@media (max-width: 809px) {
+  :root { --section-padding-y: 56px; --container-pad: 16px; }
+
+  /* Global grid collapse */
+  section .container > div { grid-template-columns: 1fr !important; }
+  footer .container > div:first-child { grid-template-columns: 1fr 1fr !important; }
+  footer .container > div:first-child > div:first-child { grid-column: 1 / -1; }
+
+  /* Hero */
+  .hero-card { padding: 32px 24px 0 !important; border-radius: 20px !important; }
+  .hero-card > div { grid-template-columns: 1fr !important; }
+  .hero-image-card { display: none !important; }
+
+  /* Typography scale down */
+  h1 { font-size: clamp(28px, 8vw, 40px) !important; }
+  h2 { font-size: clamp(24px, 6vw, 32px) !important; }
+
+  /* Buttons full width on mobile */
+  .btn-mobile-full { width: 100% !important; justify-content: center !important; }
+
+  /* Stats grid */
+  .stats-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* Features grid */
+  .features-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* Ticker speed up on mobile */
+  .ticker-track { animation-duration: 20s; }
+
+  /* Card padding reduce */
+  .card-mobile { padding: 24px !important; }
+
+  /* Waitlist form grid */
+  .form-name-grid { grid-template-columns: 1fr !important; }
 }
 
-/* ── Container utility ────────────────────────────────────────────────────── */
-/*
- * Used instead of Tailwind's built-in container — gives us a fixed 1150px
- * max-width with consistent 25px side padding across all sections.
- */
-@utility container-site {
-  max-width: var(--container-max);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--container-pad);
-  padding-right: var(--container-pad);
-}
-
-/* ── Sliding arrow button (signature Stratex-style interaction) ────────────
- *
- * Two ArrowRight icons sit inside an overflow:hidden pill circle.
- * arrow-a starts 20px to the left, off-screen.
- * arrow-b starts centered.
- *
- * On hover (.btn-sliding:hover):
- *   arrow-a slides right to center (enters from left)
- *   arrow-b slides right off-screen (exits to right)
- *
- * Result: the arrow appears to "slide through" the button on hover.
- */
-.btn-icon-circle {
-  width: 33px;
-  height: 33px;
-  border-radius: 1000px;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.arrow-a {
-  position: absolute;
-  left: -20px;
-  transition: left 0.2s ease;
-}
-
-.arrow-b {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: all 0.2s ease;
-}
-
-.btn-sliding:hover .arrow-a {
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.btn-sliding:hover .arrow-b {
-  left: calc(100% + 20px);
-  transform: translateX(0);
-}
-
-/* ── Blog grid filter fade-in ────────────────────────────────────────────── */
-/* Triggered via key={activeCategory} on the grid wrapper — React remounts
- * the element on key change, re-running the animation on every filter swap. */
-@utility animate-fade-in {
-  animation: fade-in 0.22s ease-out both;
-}
-
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Partners marquee ────────────────────────────────────────────────────── */
-/* The marquee renders the partners list twice side-by-side (100% + 100%).
- * Translating -50% returns to the exact start, creating a seamless loop. */
-@utility animate-marquee {
-  animation: marquee 35s linear infinite;
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* Small mobile */
+@media (max-width: 480px) {
+  :root { --container-pad: 14px; }
+  .stats-grid { grid-template-columns: 1fr !important; }
+  .features-grid { grid-template-columns: 1fr !important; }
+  footer .container > div:first-child { grid-template-columns: 1fr !important; }
 }
