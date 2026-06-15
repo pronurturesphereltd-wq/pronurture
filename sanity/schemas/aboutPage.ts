@@ -57,6 +57,10 @@ export const aboutPage = defineType({
       }],
     }),
     defineField({ name: 'teamPlaceholder', title: 'Team Placeholder Text', type: 'text', initialValue: 'We spent time inside Nigerian healthcare — as clinicians, administrators, and patients — before writing a single line of code. PSL is the platform we wished had existed.' }),
+    defineField({ name: 'mission', title: 'Mission (legacy)', type: 'object', hidden: true, fields: [
+      { name: 'vision', title: 'Vision', type: 'string' },
+      { name: 'body', title: 'Body', type: 'array', of: [{ type: 'block' }] },
+    ]}),
   ],
   preview: { prepare: () => ({ title: 'About Page' }) },
 })
