@@ -1,15 +1,11 @@
-import { Metadata } from 'next'
+'use client'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
-import { getProfessionalsPage } from '@/lib/sanity'
+import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 
-export const metadata: Metadata = {
-  title: 'For Healthcare Professionals | PSL',
-  description: 'Jobs with salary shown. CPD on your phone. Locum shifts when you need them.',
-}
 
 const defaultPainPoints = [
   { headline: 'Jobs with no salary shown.', body: "You shouldn't have to apply blind. On PSL, every listing shows the pay — before you spend a minute on the application." },
@@ -39,9 +35,8 @@ const defaultFAQs = [
 
 const iconMap: Record<string, any> = { DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet }
 
-export default async function ProfessionalsPage() {
-  let data: any = {}
-  try { data = await getProfessionalsPage() } catch {}
+export default function ProfessionalsPage() {
+  const data: any = {}
 
   const painPoints = data?.painPoints?.length ? data.painPoints : defaultPainPoints
   const features = data?.features?.length ? data.features : defaultFeatures
@@ -71,13 +66,18 @@ export default async function ProfessionalsPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             {painPoints.map((p: any, i: number) => (
-              <div key={i} style={{ padding: 32, borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: '#fff' }}>
+              <AnimateOnScroll key={i} delay={i * 100}>
+              <div style={{ padding: 32, borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+              >
                 <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(16,54,19,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
                   <CheckCircle2 size={18} color="var(--brand-dark)" />
                 </div>
                 <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10, letterSpacing: '-0.01em' }}>{p.headline}</h3>
                 <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{p.body}</p>
               </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
@@ -93,13 +93,18 @@ export default async function ProfessionalsPage() {
             {features.map((f: any, i: number) => {
               const Icon = iconMap[f.icon] || CheckCircle2
               return (
-                <div key={i} style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.07)', background: '#fff', textAlign: 'center' }}>
+                <AnimateOnScroll key={i} delay={i * 80}>
+                <div style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.07)', background: '#fff', textAlign: 'center', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+                >
                   <div style={{ width: 50, height: 50, borderRadius: 14, background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 1px 20px rgba(0,0,0,0.12)' }}>
                     <Icon size={22} color="#fff" />
                   </div>
                   <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
                   <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.description}</p>
                 </div>
+                </AnimateOnScroll>
               )
             })}
           </div>
