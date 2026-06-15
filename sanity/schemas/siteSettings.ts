@@ -27,6 +27,8 @@ export const siteSettings = defineType({
     defineField({ name: 'email', title: 'Email (legacy)', type: 'string', hidden: true }),
     defineField({ name: 'tagline', title: 'Tagline (legacy)', type: 'string', hidden: true }),
     defineField({ name: 'waitlistCount', title: 'Waitlist Count (legacy)', type: 'number', hidden: true }),
+    defineField({ name: 'title', title: 'Title (legacy)', type: 'string', hidden: true }),
+    defineField({ name: 'description', title: 'Description (legacy)', type: 'text', hidden: true }),
   ],
   preview: { select: { title: 'siteName' } },
 })

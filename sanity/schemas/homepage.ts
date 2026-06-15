@@ -42,6 +42,8 @@ export const homepage = defineType({
     }),
     defineField({ name: 'closingHeadline', title: 'Closing CTA Headline', type: 'string', initialValue: 'Join free today.' }),
     defineField({ name: 'closingSubtext', title: 'Closing CTA Subtext', type: 'string', initialValue: 'No credit card. No commitment. Early access is open now.' }),
+    defineField({ name: 'title', title: 'Title (legacy)', type: 'string', hidden: true }),
+    defineField({ name: 'description', title: 'Description (legacy)', type: 'text', hidden: true }),
   ],
   preview: { prepare: () => ({ title: 'Homepage' }) },
 })

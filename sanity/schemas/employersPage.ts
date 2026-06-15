@@ -78,6 +78,8 @@ export const employersPage = defineType({
       { name: 'buttonText', title: 'Button Text', type: 'string' },
       { name: 'buttonLink', title: 'Button Link', type: 'string' },
     ]}),
+    defineField({ name: 'title', title: 'Title (legacy)', type: 'string', hidden: true }),
+    defineField({ name: 'description', title: 'Description (legacy)', type: 'text', hidden: true }),
   ],
   preview: { prepare: () => ({ title: 'For Employers Page' }) },
 })
