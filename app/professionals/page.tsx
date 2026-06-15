@@ -5,6 +5,7 @@ import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
+import { useEffect, useRef } from 'react'
 
 
 const defaultPainPoints = [
@@ -46,7 +47,7 @@ export default function ProfessionalsPage() {
   return (
     <>
       <section style={{ padding: '56px 0 72px', background: 'var(--brand-offwhite)' }}>
-        <div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
+        <AnimateOnScroll><div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
           <SectionTag label="For Healthcare Professionals" />
           <h1 style={{ fontSize: 'clamp(34px,5vw,56px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, marginTop: 20, marginBottom: 20 }}>
             {data?.heroHeadline || 'Your career. Finally, a platform built for it.'}
@@ -55,15 +56,15 @@ export default function ProfessionalsPage() {
             {data?.heroSubheadline || 'Jobs with salary shown. CPD on your phone. Locum shifts when you need them. For every registered clinical professional in Nigeria.'}
           </p>
           <PrimaryButton href="/waitlist?role=professional">{data?.heroCta || 'Join free — no card required'}</PrimaryButton>
-        </div>
+        </div></AnimateOnScroll>
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="The problems we fix" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>The system has been failing you. PSL fixes it.</h2>
-          </div>
+          </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             {painPoints.map((p: any, i: number) => (
               <AnimateOnScroll key={i} delay={i * 100}>
@@ -85,10 +86,10 @@ export default function ProfessionalsPage() {
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="What you get" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything your career needs. Nothing it does not.</h2>
-          </div>
+          </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
               const Icon = iconMap[f.icon] || CheckCircle2
@@ -114,33 +115,33 @@ export default function ProfessionalsPage() {
       <section style={{ padding: 'var(--section-padding-y) 0' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
-            <div>
+            <AnimateOnScroll><div>
               <SectionTag label="Who PSL is for" />
               <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, marginBottom: 20, letterSpacing: '-0.02em' }}>If you are registered, PSL is for you.</h2>
               <p style={{ fontSize: 16, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 24 }}>Registered with MDCN, NMCN, PCN, or any recognised Nigerian professional body? PSL was built for you.</p>
               <PrimaryButton href="/waitlist?role=professional">Create your free profile</PrimaryButton>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            </div></AnimateOnScroll>
+            <AnimateOnScroll delay={150}><div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
               {disciplines.map((d: string) => (
                 <span key={d} style={{ padding: '10px 18px', borderRadius: 100, background: 'rgba(16,54,19,0.07)', fontSize: 14, fontWeight: 500, color: 'var(--brand-dark)', border: '1px solid rgba(16,54,19,0.12)' }}>{d}</span>
               ))}
-            </div>
+            </div></AnimateOnScroll>
           </div>
         </div>
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 48 }}>
             <SectionTag label="FAQ" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Questions answered.</h2>
-          </div>
-          <FAQAccordion items={faqs} />
+          </div></AnimateOnScroll>
+          <AnimateOnScroll delay={100}><FAQAccordion items={faqs} /></AnimateOnScroll>
         </div>
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-dark)' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
+        <AnimateOnScroll><div className="container" style={{ textAlign: 'center' }}>
           <SectionTag label="Early access" variant="white" />
           <h2 style={{ fontSize: 'clamp(28px,4vw,46px)', fontWeight: 700, color: '#fff', marginTop: 16, marginBottom: 16, letterSpacing: '-0.02em' }}>{data?.closingHeadline || 'Ready? Join free.'}</h2>
           <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', marginBottom: 36, maxWidth: 400, margin: '0 auto 36px' }}>{data?.closingSubtext || 'No card. No commitment. Your career — finally, a platform built for it.'}</p>
@@ -148,7 +149,7 @@ export default function ProfessionalsPage() {
             Create your free profile
             <span className="btn-primary__icon"><ArrowRight size={15} className="arrow-a" /><ArrowRight size={15} className="arrow-b" /></span>
           </Link>
-        </div>
+        </div></AnimateOnScroll>
       </section>
 
     </>
