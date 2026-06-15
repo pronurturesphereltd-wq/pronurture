@@ -66,6 +66,18 @@ export const employersPage = defineType({
     }),
     defineField({ name: 'closingHeadline', title: 'Closing CTA Headline', type: 'string', initialValue: "We're real people. Here's how to reach us." }),
     defineField({ name: 'closingSubtext', title: 'Closing CTA Subtext', type: 'text', initialValue: 'Every PSL employer account comes with a named contact reachable on WhatsApp.' }),
+    defineField({ name: 'hero', title: 'Hero (legacy)', type: 'object', hidden: true, fields: [
+      { name: 'headline', title: 'Headline', type: 'string' },
+      { name: 'subheadline', title: 'Subheadline', type: 'text' },
+      { name: 'ctaText', title: 'CTA Text', type: 'string' },
+      { name: 'ctaLink', title: 'CTA Link', type: 'string' },
+    ]}),
+    defineField({ name: 'cta', title: 'CTA (legacy)', type: 'object', hidden: true, fields: [
+      { name: 'headline', title: 'Headline', type: 'string' },
+      { name: 'body', title: 'Body', type: 'text' },
+      { name: 'buttonText', title: 'Button Text', type: 'string' },
+      { name: 'buttonLink', title: 'Button Link', type: 'string' },
+    ]}),
   ],
   preview: { prepare: () => ({ title: 'For Employers Page' }) },
 })
