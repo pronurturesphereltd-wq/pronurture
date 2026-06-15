@@ -1,5 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
+import { presentationTool } from 'sanity/presentation'
 import { schemaTypes } from './sanity/schemas'
 
 const singletonTypes = ['siteSettings', 'homepage', 'professionalsPage', 'employersPage', 'aboutPage', 'contactPage']
@@ -11,6 +12,13 @@ export default defineConfig({
   dataset: 'production',
   basePath: '/studio',
   plugins: [
+    presentationTool({
+      previewUrl: {
+        previewMode: {
+          enable: '/api/draft-mode/enable',
+        },
+      },
+    }),
     structureTool({
       structure: (S) =>
         S.list()
