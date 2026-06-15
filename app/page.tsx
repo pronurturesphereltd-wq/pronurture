@@ -1,15 +1,12 @@
-import { Metadata } from 'next'
+'use client'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, Users, Briefcase, Smartphone } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import CountUp from '@/components/ui/CountUp'
-import { getHomepage, urlFor } from '@/lib/sanity'
+import { urlFor } from '@/lib/sanity'
 
-export const metadata: Metadata = {
-  title: 'The career app Nigerian healthcare has been waiting for | PSL',
-}
 
 const defaultStats = [
   { value: '72,000+', label: 'Nigerian nurses with lapsed licences every year', source: 'MDCN Annual Report' },
@@ -26,9 +23,8 @@ const defaultQuotes = [
   { quote: 'By the time we find someone through WhatsApp, the person we wanted has taken another role.', attribution: 'Medical Director, Private Hospital, Edo State' },
 ]
 
-export default async function HomePage() {
-  let data: any = {}
-  try { data = await getHomepage() } catch {}
+export default function HomePage() {
+  const data: any = {}
   const stats = data?.stats?.length ? data.stats : defaultStats
   const quotes = data?.quotes?.length ? data.quotes : defaultQuotes
 
