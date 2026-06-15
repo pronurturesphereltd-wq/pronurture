@@ -89,7 +89,7 @@ export default async function ProfessionalsPage() {
             <SectionTag label="What you get" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything your career needs. Nothing it does not.</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
               const Icon = iconMap[f.icon] || CheckCircle2
               return (
