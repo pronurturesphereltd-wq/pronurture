@@ -6,7 +6,11 @@ export const aboutPage = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'heroHeadline', title: 'Hero Headline', type: 'string', initialValue: 'We built PSL because the system was failing the people running it.' }),
-    defineField({ name: 'story', title: 'Founding Story', type: 'text', rows: 6, initialValue: "Nurses applying through WhatsApp groups and hearing nothing back. Doctors taking jobs where the salary was never shown. Midwives falling behind on CPD because tracking it was too complicated. Medical Directors spending months filling one vacancy through walk-ins.\n\nThese aren't rare situations. They're the daily reality for Nigerian healthcare professionals and the facilities that employ them.\n\nWe built PSL to fix it. Not to add another app — but to build the platform Nigerian healthcare has always needed." }),
+    defineField({ name: 'heroHeadlineLegacy', title: 'Hero Headline (legacy object)', type: 'object', hidden: true, fields: [
+      { name: 'text', title: 'Text', type: 'string' },
+    ]}),
+    defineField({ name: 'story', title: 'Founding Story', type: 'text', rows: 6, initialValue: "Nurses applying through WhatsApp groups and hearing nothing back. Doctors taking jobs where the salary was never shown. Midwives falling behind on CPD because tracking it was too complicated. Medical Directors spending months filling one vacancy through walk-ins.\n\nThese are not rare situations. They are the daily reality for Nigerian healthcare professionals and the facilities that employ them.\n\nWe built PSL to fix it. Not to add another app — but to build the platform Nigerian healthcare has always needed." }),
+    defineField({ name: 'storyLegacy', title: 'Story (legacy block)', type: 'array', hidden: true, of: [{ type: 'block' }] }),
     defineField({
       name: 'surveyStats',
       title: 'Survey Stats',

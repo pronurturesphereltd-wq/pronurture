@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-06-15T01:52:35.667Z",
+  "createdAt": "2026-06-15T02:03:42.990Z",
   "studioVersion": "6.0.0",
   "version": 3,
   "workspaces": [
@@ -13,7 +13,7 @@
       },
       "name": "psl-studio",
       "projectId": "cfu3qevi",
-      "schema": "c97ccf2b.create-schema.json",
+      "schema": "18fa83d6.create-schema.json",
       "title": "PSL Website Studio",
       "tools": "a1fd46b5.create-tools.json"
     }
