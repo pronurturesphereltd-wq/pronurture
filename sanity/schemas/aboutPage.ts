@@ -61,6 +61,8 @@ export const aboutPage = defineType({
       { name: 'vision', title: 'Vision', type: 'string' },
       { name: 'body', title: 'Body', type: 'array', of: [{ type: 'block' }] },
     ]}),
+    defineField({ name: 'title', title: 'Title (legacy)', type: 'string', hidden: true }),
+    defineField({ name: 'description', title: 'Description (legacy)', type: 'text', hidden: true }),
   ],
   preview: { prepare: () => ({ title: 'About Page' }) },
 })
