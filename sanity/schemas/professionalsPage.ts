@@ -57,6 +57,18 @@ export const professionalsPage = defineType({
     }),
     defineField({ name: 'closingHeadline', title: 'Closing CTA Headline', type: 'string', initialValue: 'Ready? Join free.' }),
     defineField({ name: 'closingSubtext', title: 'Closing CTA Subtext', type: 'string', initialValue: 'No card. No commitment. Your career — finally, a platform built for it.' }),
+    defineField({ name: 'hero', title: 'Hero (legacy)', type: 'object', hidden: true, fields: [
+      { name: 'headline', title: 'Headline', type: 'string' },
+      { name: 'subheadline', title: 'Subheadline', type: 'text' },
+      { name: 'ctaText', title: 'CTA Text', type: 'string' },
+      { name: 'ctaLink', title: 'CTA Link', type: 'string' },
+    ]}),
+    defineField({ name: 'cta', title: 'CTA (legacy)', type: 'object', hidden: true, fields: [
+      { name: 'headline', title: 'Headline', type: 'string' },
+      { name: 'body', title: 'Body', type: 'text' },
+      { name: 'buttonText', title: 'Button Text', type: 'string' },
+      { name: 'buttonLink', title: 'Button Link', type: 'string' },
+    ]}),
   ],
   preview: { prepare: () => ({ title: 'For Professionals Page' }) },
 })
