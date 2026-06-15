@@ -1,15 +1,10 @@
-import { Metadata } from 'next'
+'use client'
 import Link from 'next/link'
 import { ArrowRight, ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
-import { getEmployersPage, getContactPage } from '@/lib/sanity'
-
-export const metadata: Metadata = {
-  title: 'For Healthcare Facilities | PSL',
-  description: 'Stop hiring blind. Every candidate verified before they reach you.',
-}
+import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 
 const defaultPainPoints = [
   { headline: "You're filling vacancies through WhatsApp and walk-ins.", body: "Months of messages. Candidates who don't show. By the time you've verified someone, the nurse you wanted has already taken another offer. PSL fixes the pipeline.", source: '' },
@@ -43,11 +38,9 @@ const defaultFAQs = [
 
 const iconMap: Record<string, any> = { ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle }
 
-export default async function EmployersPage() {
-  let data: any = {}
-  let contactData: any = {}
-  try { data = await getEmployersPage() } catch {}
-  try { contactData = await getContactPage() } catch {}
+export default function EmployersPage() {
+  const data: any = {}
+  const contactData: any = {}
 
   const painPoints = data?.painPoints?.length ? data.painPoints : defaultPainPoints
   const features = data?.features?.length ? data.features : defaultFeatures
@@ -58,7 +51,7 @@ export default async function EmployersPage() {
   return (
     <>
       <section style={{ padding: '56px 0 72px', background: 'var(--brand-dark)' }}>
-        <div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
+        <AnimateOnScroll><div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
           <SectionTag label="For Healthcare Facilities" variant="white" />
           <h1 style={{ fontSize: 'clamp(34px,5vw,56px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.15, marginTop: 20, marginBottom: 20 }}>
             {data?.heroHeadline || 'Stop hiring blind.'}
@@ -77,18 +70,22 @@ export default async function EmployersPage() {
               </a>
             )}
           </div>
-        </div>
+        </div></AnimateOnScroll>
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="Sound familiar?" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>The hiring process is broken. We know because we asked.</h2>
-          </div>
+          </div></AnimateOnScroll>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 820, margin: '0 auto' }}>
             {painPoints.map((p: any, i: number) => (
-              <div key={i} style={{ padding: '32px 36px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: '#fff', display: 'flex', gap: 24, alignItems: 'flex-start' }}>
+              <AnimateOnScroll key={i} delay={i * 100}>
+              <div style={{ padding: '32px 36px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: '#fff', display: 'flex', gap: 24, alignItems: 'flex-start', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+              >
                 <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(16,54,19,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
                   <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--brand-dark)' }}>0{i+1}</span>
                 </div>
@@ -98,6 +95,7 @@ export default async function EmployersPage() {
                   {p.source && <p style={{ fontSize: 12, color: 'var(--brand-gray)', marginTop: 8, opacity: 0.7 }}>Source: {p.source}</p>}
                 </div>
               </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
@@ -105,21 +103,26 @@ export default async function EmployersPage() {
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="What you get" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything you need to run your clinical workforce.</h2>
-          </div>
+          </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
               const Icon = iconMap[f.icon] || ShieldCheck
               return (
-                <div key={i} style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.07)', background: '#fff' }}>
+                <AnimateOnScroll key={i} delay={i * 80}>
+                <div style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.07)', background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+                >
                   <div style={{ width: 48, height: 48, borderRadius: 13, background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18, boxShadow: '0 1px 20px rgba(0,0,0,0.12)' }}>
                     <Icon size={22} color="#fff" />
                   </div>
                   <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
                   <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.description}</p>
                 </div>
+                </AnimateOnScroll>
               )
             })}
           </div>
@@ -128,17 +131,22 @@ export default async function EmployersPage() {
 
       <section style={{ padding: 'var(--section-padding-y) 0' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 48 }}>
             <SectionTag label="By the numbers" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>What employers told us before we built a single feature.</h2>
-          </div>
+          </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
             {stats.map((s: any, i: number) => (
-              <div key={i} style={{ padding: '24px', borderRadius: 18, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)', textAlign: 'center' }}>
+              <AnimateOnScroll key={i} delay={i * 100}>
+              <div style={{ padding: '24px', borderRadius: 18, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)', textAlign: 'center', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+              >
                 <p style={{ fontSize: 'clamp(28px,3vw,40px)', fontWeight: 700, color: 'var(--brand-dark)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 8 }}>{s.value}</p>
                 <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.55, marginBottom: 8 }}>{s.label}</p>
                 <p style={{ fontSize: 12, color: 'var(--brand-gray)', opacity: 0.6 }}>{s.source}</p>
               </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
@@ -146,16 +154,16 @@ export default async function EmployersPage() {
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 48 }}>
             <SectionTag label="FAQ" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Questions answered.</h2>
-          </div>
-          <FAQAccordion items={faqs} />
+          </div></AnimateOnScroll>
+          <AnimateOnScroll delay={100}><FAQAccordion items={faqs} /></AnimateOnScroll>
         </div>
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-dark)' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
+        <AnimateOnScroll><div className="container" style={{ textAlign: 'center' }}>
           <SectionTag label="Get started" variant="white" />
           <h2 style={{ fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 700, color: '#fff', marginTop: 16, marginBottom: 16, letterSpacing: '-0.02em' }}>{data?.closingHeadline || "We're real people. Here's how to reach us."}</h2>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginBottom: 36, maxWidth: 500, margin: '0 auto 36px', lineHeight: 1.65 }}>{data?.closingSubtext || 'Every PSL employer account comes with a named contact reachable on WhatsApp. Not a helpdesk. Not a ticket number. A person who knows your facility.'}</p>
@@ -170,7 +178,7 @@ export default async function EmployersPage() {
               </a>
             )}
           </div>
-        </div>
+        </div></AnimateOnScroll>
       </section>
 
     </>
