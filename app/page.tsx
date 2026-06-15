@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { ArrowRight, CheckCircle2, Users, Briefcase, Smartphone } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
+import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
+import CountUp from '@/components/ui/CountUp'
 import { getHomepage, urlFor } from '@/lib/sanity'
 
 export const metadata: Metadata = {
@@ -114,7 +116,11 @@ export default async function HomePage() {
       <section style={{ paddingTop: 48, paddingBottom: 'var(--section-padding-y)', borderTop: '1px solid rgba(0,0,0,0.06)', marginTop: 32 }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: '#fff' }}>
+            <AnimateOnScroll delay={0}>
+            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+            >
               <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16,54,19,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
                 <Users size={22} color="var(--brand-dark)" />
               </div>
@@ -128,7 +134,12 @@ export default async function HomePage() {
               ))}
               <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 24 }}>Join free</PrimaryButton>
             </div>
-            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: 'var(--brand-offwhite)' }}>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={150}>
+            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: 'var(--brand-offwhite)', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+            >
               <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16,54,19,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
                 <Briefcase size={22} color="var(--brand-dark)" />
               </div>
@@ -142,6 +153,7 @@ export default async function HomePage() {
               ))}
               <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 24 }}>Post a vacancy free</PrimaryButton>
             </div>
+            </AnimateOnScroll>
           </div>
         </div>
       </section>
@@ -155,11 +167,13 @@ export default async function HomePage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {stats.map((s: any, i: number) => (
-              <div key={i} style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}>
-                <p style={{ fontSize: 'clamp(28px,3vw,44px)', fontWeight: 700, color: '#c09e5a', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 10 }}>{s.value}</p>
+              <AnimateOnScroll key={i} delay={i * 100}>
+              <div style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', height: '100%' }}>
+                <p style={{ fontSize: 'clamp(28px,3vw,44px)', fontWeight: 700, color: '#c09e5a', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 10 }}><CountUp value={s.value} /></p>
                 <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.75)', lineHeight: 1.55, marginBottom: 10 }}>{s.label}</p>
                 <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>Source: {s.source}</p>
               </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
@@ -175,7 +189,11 @@ export default async function HomePage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
             {quotes.map((q: any, i: number) => (
-              <div key={i} style={{ background: '#fff', borderRadius: 20, padding: 28, border: '1px solid rgba(0,0,0,0.06)' }}>
+              <AnimateOnScroll key={i} delay={i * 120}>
+              <div style={{ background: '#fff', borderRadius: 20, padding: 28, border: '1px solid rgba(0,0,0,0.06)', height: '100%', cursor: 'default', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+              >
                 <p style={{ fontSize: 16, color: 'var(--brand-near-black)', fontStyle: 'italic', lineHeight: 1.65, marginBottom: 20 }}>"{q.quote}"</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -184,6 +202,7 @@ export default async function HomePage() {
                   <p style={{ fontSize: 13, color: 'var(--brand-gray)' }}>{q.attribution}</p>
                 </div>
               </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
