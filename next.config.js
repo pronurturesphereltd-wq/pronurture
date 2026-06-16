@@ -14,12 +14,8 @@ const nextConfig = {
         source: '/(.*)',
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'ALLOW-FROM https://sanity.io',
-          },
-          {
             key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self' https://sanity.io https://*.sanity.studio",
+            value: "frame-ancestors 'self' https://sanity.io https://*.sanity.studio https://pronurture.sanity.studio",
           },
         ],
       },
