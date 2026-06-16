@@ -14,9 +14,8 @@ export default defineConfig({
   plugins: [
     presentationTool({
       previewUrl: {
-        origin: 'https://pronurture.vercel.app',
-        previewMode: {
-          enable: '/api/draft-mode/enable',
+        draftMode: {
+          enable: 'https://pronurture.vercel.app/api/draft-mode/enable',
         },
       },
     }),
