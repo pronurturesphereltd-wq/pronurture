@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/ui/Navbar'
-import VisualEditing from './components/VisualEditing'
 import Footer from '@/components/ui/Footer'
 import { getSiteSettings } from '@/lib/sanity'
 
@@ -19,7 +18,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body>
         <Navbar ctaLabel={settings?.navCta || 'Join the Waitlist'} />
-        <VisualEditing />
         <main style={{ paddingTop: 68 }}>{children}</main>
         <Footer tagline={settings?.footerTagline} email={settings?.footerEmail} copyright={settings?.footerCopyright} socialLinks={settings?.socialLinks} />
       </body>
