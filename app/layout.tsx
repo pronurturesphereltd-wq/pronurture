@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/ui/Navbar'
+import VisualEditing from './components/VisualEditing'
 import Footer from '@/components/ui/Footer'
 import { getSiteSettings } from '@/lib/sanity'
-import { VisualEditing } from 'next-sanity'
 
 export const metadata: Metadata = {
   title: { default: 'ProNurtureSphere — The career app Nigerian healthcare has been waiting for', template: '%s | PSL' },
