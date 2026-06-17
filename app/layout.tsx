@@ -3,6 +3,7 @@ import './globals.css'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
 import { getSiteSettings } from '@/lib/sanity'
+import VisualEditing from './components/VisualEditing'
 
 export const metadata: Metadata = {
   title: { default: 'ProNurtureSphere — The career app Nigerian healthcare has been waiting for', template: '%s | PSL' },
@@ -18,6 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body>
         <Navbar ctaLabel={settings?.navCta || 'Join the Waitlist'} />
+        <VisualEditing />
         <main style={{ paddingTop: 68 }}>{children}</main>
         <Footer tagline={settings?.footerTagline} email={settings?.footerEmail} copyright={settings?.footerCopyright} socialLinks={settings?.socialLinks} />
       </body>
