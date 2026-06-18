@@ -64,7 +64,7 @@ interface FooterProps {
 
 export default function Footer({
   tagline = 'The career platform Nigerian healthcare has been waiting for.',
-  email = 'hello@pronurturespherehq.com',
+  email = 'uwa@pronurture.com.ng',
   copyright = 'ProNurtureSphere Limited. All rights reserved.',
   socialLinks,
 }: FooterProps) {

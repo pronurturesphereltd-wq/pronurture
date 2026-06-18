@@ -8,7 +8,7 @@ export const siteSettings = defineType({
     defineField({ name: 'siteName', title: 'Site Name', type: 'string', initialValue: 'ProNurtureSphere' }),
     defineField({ name: 'navCta', title: 'Navbar CTA Label', type: 'string', initialValue: 'Join the Waitlist' }),
     defineField({ name: 'footerTagline', title: 'Footer Tagline', type: 'string', initialValue: 'The career platform Nigerian healthcare has been waiting for.' }),
-    defineField({ name: 'footerEmail', title: 'Footer Email', type: 'string', initialValue: 'hello@pronurturespherehq.com' }),
+    defineField({ name: 'footerEmail', title: 'Footer Email', type: 'string', initialValue: 'uwa@pronurture.com.ng' }),
     defineField({ name: 'whatsappNumber', title: 'WhatsApp Number (with country code e.g. +2348012345678)', type: 'string' }),
     defineField({ name: 'footerCopyright', title: 'Footer Copyright Text', type: 'string', initialValue: 'ProNurtureSphere Limited. All rights reserved.' }),
     defineField({

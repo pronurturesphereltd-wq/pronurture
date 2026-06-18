@@ -60,7 +60,7 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
       })
       setSubmitted(true)
     } catch {
-      setError('Something went wrong. Please try again or email us at hello@pronurturespherehq.com')
+      setError('Something went wrong. Please try again or email us at uwa@pronurture.com.ng')
     } finally {
       setSubmitting(false)
     }

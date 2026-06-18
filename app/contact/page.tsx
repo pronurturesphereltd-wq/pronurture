@@ -14,7 +14,7 @@ export default async function ContactPage() {
   let data: any = {}
   try { data = await getContactPage() } catch {}
   const whatsapp = data?.whatsappNumber || ''
-  const email = data?.email || 'hello@pronurturespherehq.com'
+  const email = data?.email || 'uwa@pronurture.com.ng'
 
   return (
     <>
