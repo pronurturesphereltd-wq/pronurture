@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "copywriting": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/copywriting/SKILL.md",
+      "computedHash": "cb9761b92e140cd68c1de6397c51dd9952da198382abfdbf26589ef26f6572b4"
+    },
+    "email-marketing": {
+      "source": "claude-office-skills/skills",
+      "sourceType": "github",
+      "skillPath": "email-marketing/SKILL.md",
+      "computedHash": "5f8a6096f8fda91978d9019d10a3dc19fc5bbaa4083407dd85ff8e6f5bb99353"
+    }
+  }
+}

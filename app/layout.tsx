@@ -5,8 +5,9 @@ import Footer from '@/components/ui/Footer'
 import { getSiteSettings } from '@/lib/sanity'
 
 export const metadata: Metadata = {
-  title: { default: 'ProNurtureSphere — The career app Nigerian healthcare has been waiting for', template: '%s | PSL' },
-  description: 'Find clinical jobs with salary shown, track your CPD, and pick up locum shifts — or post vacancies and manage your clinical team. All in one place.',
+  metadataBase: new URL('https://pronurture.vercel.app'),
+  title: { default: 'ProNurture Sphere Limited | PSL — Nigeria\'s Healthcare Career Platform', template: '%s | PSL' },
+  description: 'PSL connects Nigerian clinical professionals with verified hospitals and clinics. Find jobs with salary shown upfront, track your CPD, and pick up locum shifts — all in one platform.',
   keywords: ['Nigerian healthcare jobs', 'nurse jobs Nigeria', 'CPD Nigeria', 'locum Nigeria'],
   openGraph: { siteName: 'ProNurtureSphere Limited', type: 'website', locale: 'en_NG' },
 }
