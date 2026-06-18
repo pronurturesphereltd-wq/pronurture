@@ -76,7 +76,7 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
           You're on the list.
         </h3>
         <p style={{ fontSize: 17, color: 'var(--brand-gray)', maxWidth: 400, margin: '0 auto', lineHeight: 1.65 }}>
-          We'll be in touch before PSL goes live. If you have questions in the meantime, WhatsApp us directly.
+          We just sent your confirmation email — go check your inbox now. Don't see it? Check your spam folder and mark it "not spam" so you don't miss updates from us. We'll be in touch before PSL goes live, and if you have questions in the meantime, WhatsApp us directly.
         </p>
       </div>
     )
