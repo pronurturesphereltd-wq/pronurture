@@ -12,6 +12,7 @@ interface FormData {
   phone: string
   role: Role
   discipline?: string
+  disciplineOther?: string
   facilityName?: string
   state: string
   hearAbout?: string
@@ -42,7 +43,7 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
     defaultValues: { role: defaultRole || 'professional' },
   })
 
-  const role = watch('role')
+  const { role, discipline } = watch()
 
   const onSubmit = async (data: FormData) => {
     setSubmitting(true)
@@ -146,6 +147,16 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
             {DISCIPLINES.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
           {errors.discipline && <p style={errorStyle}>{errors.discipline.message}</p>}
+          {discipline === 'Other' && (
+            <div style={{ marginTop: 12 }}>
+              <input
+                {...register('disciplineOther', { required: discipline === 'Other' ? 'Please specify your discipline' : false })}
+                placeholder="Please specify your discipline"
+                style={inputStyle}
+              />
+              {errors.disciplineOther && <p style={errorStyle}>{errors.disciplineOther.message}</p>}
+            </div>
+          )}
         </div>
       )}
 
