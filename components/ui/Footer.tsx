@@ -32,6 +32,12 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
+const YouTubeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
+  </svg>
+)
+
 const footerLinks = {
   Platform: [
     { label: 'For Professionals', href: '/professionals' },
@@ -59,6 +65,7 @@ interface FooterProps {
     facebook?: string
     instagram?: string
     whatsapp?: string
+    youtube?: string
   }
 }
 
@@ -108,6 +115,7 @@ export default function Footer({
           <p style={{ fontSize: 13, color: 'var(--brand-gray)' }}>© {new Date().getFullYear()} {copyright}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             {socialLinks?.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}><LinkedInIcon /></a>}
+            {socialLinks?.youtube && <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}><YouTubeIcon /></a>}
             {socialLinks?.twitter && <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}><TwitterIcon /></a>}
             {socialLinks?.facebook && <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}><FacebookIcon /></a>}
             {socialLinks?.instagram && <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}><InstagramIcon /></a>}

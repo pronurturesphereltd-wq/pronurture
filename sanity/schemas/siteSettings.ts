@@ -21,6 +21,7 @@ export const siteSettings = defineType({
         { name: 'facebook', title: 'Facebook URL', type: 'url' },
         { name: 'instagram', title: 'Instagram URL', type: 'url' },
         { name: 'whatsapp', title: 'WhatsApp Link (wa.me link)', type: 'url' },
+        { name: 'youtube', title: 'YouTube Channel URL', type: 'url' },
       ],
     }),
     defineField({ name: 'copyrightText', title: 'Copyright Text (legacy)', type: 'string', hidden: true }),
