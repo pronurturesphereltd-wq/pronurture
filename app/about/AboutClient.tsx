@@ -5,6 +5,7 @@ import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import { getAboutPage, urlFor } from '@/lib/sanity'
+import FAQAccordion from '@/components/ui/FAQAccordion'
 
 const defaultValues = [
   { headline: 'Salary should always be shown.', body: 'No clinical professional should waste time applying for a role without knowing the pay. Every job on PSL shows the salary range before you spend a minute on the application.' },
@@ -19,6 +20,37 @@ const defaultSurveyStats = [
   '87% would complete CPD entirely on mobile if quality is right',
   '97.5% are open to new job opportunities',
   '80% of facilities have no system for tracking staff CPD',
+]
+
+const generalFAQs = [
+  {
+    question: 'What is PSL all about?',
+    answer: "PSL (ProNurtureSphere Limited) is Nigeria's career platform for clinical professionals and the facilities that hire them. We help healthcare professionals find jobs with salary shown upfront, track their NMCN/MDCN CPD points, and pick up locum shifts — while helping facilities hire verified staff faster.",
+  },
+  {
+    question: 'How can I be part of this organisation?',
+    answer: "We're not actively hiring for the PSL team right now, but we welcome interest. Send your CV and a short note about what you'd bring to uwa@pronurture.com.ng, and we'll reach out when a relevant role opens.",
+  },
+  {
+    question: 'Can I be part of it remotely?',
+    answer: 'Yes. Most roles at PSL are remote-friendly and can be done from anywhere.',
+  },
+  {
+    question: 'Where is your organisation located?',
+    answer: 'PSL is headquartered in Benin, Nigeria.',
+  },
+  {
+    question: 'Do you offer recognised certification courses?',
+    answer: 'Yes. The CPD courses available through PSL are accredited and recognized by NMCN and MDCN, and completed hours are tracked automatically toward your license renewal.',
+  },
+  {
+    question: 'Can you help me get a job abroad?',
+    answer: 'Not yet. PSL is currently focused on connecting clinical professionals with opportunities within Nigeria. Diaspora and international placements are on our roadmap for the future.',
+  },
+  {
+    question: 'What other benefits do you offer?',
+    answer: "Beyond job listings, PSL gives professionals automatic CPD tracking, access to locum shifts, and salary transparency on every listing. Facilities get verified candidates, faster hiring, and tools to manage their team's compliance — all in one platform.",
+  },
 ]
 
 export default function AboutClient() {
@@ -158,6 +190,14 @@ export default function AboutClient() {
             </AnimateOnScroll>
           )}
         </div>
+      </section>
+
+      <section style={{ padding: '80px 24px', maxWidth: 800, margin: '0 auto' }}>
+        <AnimateOnScroll>
+          <SectionTag label="FAQ" />
+          <h2 style={{ fontSize: 36, fontWeight: 800, marginBottom: 32 }}>Common questions.</h2>
+          <FAQAccordion items={generalFAQs} />
+        </AnimateOnScroll>
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
