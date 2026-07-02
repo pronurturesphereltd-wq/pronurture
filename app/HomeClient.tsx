@@ -31,13 +31,13 @@ export default function HomeClient() {
     <>
       {/* HERO */}
       <section style={{
-        minHeight: '100vh',
+        height: 'calc(100vh - 72px)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        padding: '120px 24px 80px',
+        padding: '40px 24px',
         position: 'relative',
         background: '#ffffff',
         overflow: 'hidden',
@@ -64,33 +64,6 @@ export default function HomeClient() {
           background: 'radial-gradient(ellipse at center, rgba(17,54,20,0.07) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
-
-        {/* Social proof pill */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 10,
-          background: '#fff',
-          border: '1px solid rgba(17,54,20,0.12)',
-          borderRadius: 999,
-          padding: '8px 16px 8px 8px',
-          marginBottom: 36,
-          position: 'relative',
-          boxShadow: '0 1px 8px rgba(0,0,0,0.06)',
-        }}>
-          <div style={{ display: 'flex', marginRight: 4 }}>
-            {['#C09D59','#113614','#7A863E'].map((c, i) => (
-              <div key={i} style={{
-                width: 28, height: 28, borderRadius: '50%',
-                background: c, border: '2px solid #fff',
-                marginLeft: i > 0 ? -8 : 0,
-              }} />
-            ))}
-          </div>
-          <span style={{ fontSize: 14, fontWeight: 600, color: '#113614' }}>
-            Join 5k+ healthcare professionals
-          </span>
-        </div>
 
         {/* Headline */}
         <h1 style={{
