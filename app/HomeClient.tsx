@@ -173,48 +173,89 @@ export default function HomeClient() {
       </section>
 
       {/* ONE PLATFORM */}
-      <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-dark)', position: 'relative', overflow: 'hidden' }}>
-        {/* subtle grid texture */}
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
-        <div className="container" style={{ position: 'relative' }}>
+      <section style={{ padding: '100px 24px', background: '#fff', position: 'relative', overflow: 'hidden' }}>
+        {/* Subtle grid texture */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: `linear-gradient(rgba(17,54,20,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(17,54,20,0.03) 1px, transparent 1px)`,
+          backgroundSize: '48px 48px', pointerEvents: 'none',
+        }} />
+
+        <div style={{ maxWidth: 800, margin: '0 auto', position: 'relative' }}>
           <AnimateOnScroll>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <SectionTag label="The Platform" variant="white" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,42px)', fontWeight: 700, marginTop: 16, marginBottom: 16, letterSpacing: '-0.02em', color: '#fff' }}>One Platform. Every Workforce Need.</h2>
-            <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 560, margin: '0 auto' }}>Healthcare organisations rely on too many disconnected systems. Sound familiar?</p>
-          </div>
+            <SectionTag label="The Platform" />
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: 800, color: '#0d2810', lineHeight: 1.1, margin: '16px 0 24px', letterSpacing: '-0.02em' }}>
+              One Platform.<br />Every Workforce Need.
+            </h2>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: '#4a5e4d', marginBottom: 64 }}>
+              Healthcare organisations rely on too many disconnected systems.
+            </p>
           </AnimateOnScroll>
 
-          {/* Pain point cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, marginBottom: 48 }}>
+          {/* Animated pain points */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginBottom: 64 }}>
             {[
-              { icon: '📋', text: 'Recruitment happens in one place.' },
-              { icon: '🗂️', text: 'Staff records live somewhere else.' },
-              { icon: '📊', text: 'Schedules are managed on spreadsheets.' },
-              { icon: '📝', text: 'Training is tracked manually.' },
-              { icon: '⚠️', text: 'Compliance becomes a last-minute scramble.' },
+              { label: 'Recruitment happens in one place.', icon: '👥' },
+              { label: 'Staff records live somewhere else.', icon: '📁' },
+              { label: 'Schedules are managed on spreadsheets.', icon: '📊' },
+              { label: 'Training is tracked manually.', icon: '📋' },
+              { label: 'Compliance becomes a last-minute scramble.', icon: '⚠️' },
             ].map((item, i) => (
-              <AnimateOnScroll key={item.text} delay={i * 80}>
-              <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, padding: '20px 16px', textAlign: 'center', backdropFilter: 'blur(8px)' }}>
-                <div style={{ fontSize: 28, marginBottom: 12 }}>{item.icon}</div>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.55, margin: 0 }}>{item.text}</p>
-              </div>
+              <AnimateOnScroll key={i} delay={i * 120}>
+                <div
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 20,
+                    padding: '20px 0',
+                    borderBottom: '1px solid rgba(17,54,20,0.08)',
+                    transition: 'padding-left 0.3s ease',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.paddingLeft = '12px'; }}
+                  onMouseLeave={e => { e.currentTarget.style.paddingLeft = '0px'; }}
+                >
+                  <span style={{
+                    fontSize: 24, width: 48, height: 48,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'rgba(17,54,20,0.05)', borderRadius: 12, flexShrink: 0,
+                  }}>{item.icon}</span>
+                  <span style={{
+                    fontSize: 20, fontWeight: 500, color: '#1a3d1e',
+                    textDecoration: 'line-through', textDecorationColor: 'rgba(192,157,89,0.6)',
+                    textDecorationThickness: '2px',
+                  }}>{item.label}</span>
+                  <span style={{
+                    marginLeft: 'auto', fontSize: 13, fontWeight: 700,
+                    color: '#C09D59', letterSpacing: '0.05em', flexShrink: 0,
+                  }}>PSL FIXES THIS</span>
+                </div>
               </AnimateOnScroll>
             ))}
           </div>
 
-          {/* Resolution bar */}
-          <AnimateOnScroll delay={200}>
-          <div style={{ background: '#c09e5a', borderRadius: 20, padding: '32px 40px', display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: 260 }}>
-              <p style={{ fontSize: 'clamp(18px,2.2vw,24px)', fontWeight: 700, color: '#0d2810', lineHeight: 1.4, margin: 0 }}>
-                PSL brings everything together into one connected platform.
-              </p>
+          {/* Closing statement */}
+          <AnimateOnScroll delay={600}>
+            <div style={{
+              background: 'linear-gradient(135deg, #113614 0%, #1a4d1e 100%)',
+              borderRadius: 20, padding: '40px 48px',
+              display: 'flex', alignItems: 'center', gap: 32,
+            }}>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 20, lineHeight: 1.7, color: 'rgba(255,255,255,0.9)', margin: 0 }}>
+                  PSL brings everything together into one connected platform — giving healthcare professionals and employers the tools they need to work smarter, grow faster, and deliver better patient care.
+                </p>
+              </div>
+              <a href="/waitlist" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8, flexShrink: 0,
+                background: '#C09D59', color: '#0d2810',
+                padding: '14px 24px', borderRadius: 999,
+                fontWeight: 700, fontSize: 15, textDecoration: 'none',
+                whiteSpace: 'nowrap',
+                transition: 'transform 0.15s, box-shadow 0.15s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(192,157,89,0.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
+                See the Platform →
+              </a>
             </div>
-            <p style={{ fontSize: 15, color: 'rgba(13,40,16,0.75)', lineHeight: 1.65, maxWidth: 380, margin: 0 }}>
-              Giving healthcare professionals and employers the tools they need to work smarter, grow faster, and deliver better patient care.
-            </p>
-          </div>
           </AnimateOnScroll>
         </div>
       </section>
