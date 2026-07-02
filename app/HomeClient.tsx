@@ -33,7 +33,7 @@ export default function HomeClient() {
       {/* HERO */}
       <section style={{ padding: '32px 0 0' }}>
         <div className="container">
-          <div className="hero-card" style={{ background: 'linear-gradient(135deg,#103613 0%,#1a4d1e 100%)', borderRadius: 28, padding: '48px 48px 0', overflow: 'hidden', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'flex-start', maxHeight: 'calc(100vh - 160px)' }}>
+          <div className="hero-card" style={{ background: 'linear-gradient(135deg,#103613 0%,#1a4d1e 100%)', borderRadius: 28, padding: '48px 48px 0', overflow: 'hidden', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'flex-start' }}>
             <div style={{ paddingBottom: 40, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, background: 'rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', width: 'fit-content' }}>
                 <span style={{ color: '#c09e5a', fontSize: 13 }}>✦</span>
