@@ -320,7 +320,7 @@ export default function HomeClient() {
                   <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 'auto', paddingTop: 24 }}>Create Your Free Professional Profile</PrimaryButton>
+              <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 'auto', paddingTop: 24, alignSelf: 'flex-start' }}>Create Your Free Professional Profile</PrimaryButton>
             </div>
             </AnimateOnScroll>
             <AnimateOnScroll delay={150}>
@@ -347,7 +347,7 @@ export default function HomeClient() {
                   <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 'auto', paddingTop: 24 }}>Start Hiring Smarter</PrimaryButton>
+              <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 'auto', paddingTop: 24, alignSelf: 'flex-start' }}>Start Hiring Smarter</PrimaryButton>
             </div>
             </AnimateOnScroll>
           </div>
