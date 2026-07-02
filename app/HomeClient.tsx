@@ -37,21 +37,24 @@ export default function HomeClient() {
             <div style={{ paddingBottom: 40, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, background: 'rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', width: 'fit-content' }}>
                 <span style={{ color: '#c09e5a', fontSize: 13 }}>✦</span>
-                <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 500 }}>{data?.heroEyebrow || 'For Nigerian Healthcare Professionals & Facilities'}</span>
+                <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 500 }}>{data?.heroEyebrow || 'Trusted by Healthcare Professionals, Hospitals & Clinics Across Nigeria'}</span>
               </div>
               <h1 style={{ fontSize: 'clamp(28px,3.5vw,46px)', fontWeight: 700, color: '#ffffff', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 16 }}>
-                {data?.heroHeadline || 'The career app Nigerian healthcare has been waiting for.'}
+                {data?.heroHeadline || 'The Healthcare Workforce Platform Nigeria Has Been Waiting For.'}
               </h1>
-              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, marginBottom: 20, maxWidth: 460 }}>
-                {data?.heroSubheadline || 'Find jobs with salary shown, track your CPD, pick up locum shifts, and manage your entire workforce — from hiring and onboarding to scheduling, compliance, and retention. All in one place.'}
+              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, marginBottom: 12, maxWidth: 460 }}>
+                {data?.heroSubheadline || "Whether you're advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform."}
+              </p>
+              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, marginBottom: 20, maxWidth: 460, fontWeight: 600 }}>
+                {"Healthcare is complex. Managing your workforce shouldn't be."}
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', marginBottom: 20 }}>
                 <Link href="/waitlist?role=professional" className="btn-primary btn-primary--white">
-                  {data?.heroCta1 || "I'm a healthcare professional"}
+                  {data?.heroCta1 || "Join as a Healthcare Professional"}
                   <span className="btn-primary__icon"><ArrowRight size={15} className="arrow-a" /><ArrowRight size={15} className="arrow-b" /></span>
                 </Link>
                 <Link href="/waitlist?role=employer" className="btn-text">
-                  {data?.heroCta2 || 'I run a healthcare facility'} <ArrowRight size={15} />
+                  {data?.heroCta2 || 'Hire Healthcare Professionals'} <ArrowRight size={15} />
                 </Link>
               </div>
               <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>{data?.heroNote || 'Free to join. No credit card required.'}</p>
@@ -89,8 +92,11 @@ export default function HomeClient() {
 
       {/* PARTNERS TICKER */}
       <section style={{ padding: '32px 0 0', borderBottom: 'none', overflow: 'hidden', position: 'relative', background: '#fff' }}>
-        <p style={{ textAlign: 'center', fontSize: 12, fontWeight: 600, color: 'var(--brand-gray)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 20, opacity: 0.5 }}>
-          Aligned with Nigerian professional bodies
+        <p style={{ textAlign: 'center', fontSize: 18, fontWeight: 700, color: 'var(--brand-near-black)', marginBottom: 12, letterSpacing: '-0.01em' }}>
+          Built for Every Part of Nigeria's Healthcare Workforce
+        </p>
+        <p style={{ textAlign: 'center', fontSize: 15, color: 'var(--brand-gray)', maxWidth: 640, margin: '0 auto 24px' }}>
+          Trusted by healthcare professionals, hospitals, clinics, diagnostic centres, NGOs, training institutions, and healthcare organisations committed to building a stronger healthcare system.
         </p>
         <div style={{ position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 140, background: 'linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
@@ -103,6 +109,66 @@ export default function HomeClient() {
                   <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--brand-near-black)', letterSpacing: '0.04em', opacity: 0.6, whiteSpace: 'nowrap' }}>{name}</span>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ONE PLATFORM */}
+      <section style={{ padding: 'var(--section-padding-y) 0', background: '#fff' }}>
+        <div className="container">
+          <AnimateOnScroll>
+          <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+            <SectionTag label="The Platform" />
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 700, marginTop: 16, marginBottom: 20, letterSpacing: '-0.02em' }}>One Platform. Every Workforce Need.</h2>
+            <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.8, marginBottom: 24 }}>Healthcare organisations rely on too many disconnected systems.</p>
+            <div style={{ textAlign: 'left', margin: '0 auto 28px', display: 'inline-block' }}>
+              {[
+                'Recruitment happens in one place.',
+                'Staff records live somewhere else.',
+                'Schedules are managed on spreadsheets.',
+                'Training is tracked manually.',
+                'Compliance becomes a last-minute scramble.',
+              ].map((point) => (
+                <div key={point} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
+                  <span style={{ color: 'var(--brand-dark)', fontWeight: 700, fontSize: 18, flexShrink: 0 }}>–</span>
+                  <p style={{ fontSize: 18, color: 'var(--brand-near-black)', lineHeight: 1.8, margin: 0 }}>{point}</p>
+                </div>
+              ))}
+            </div>
+            <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.8 }}>PSL brings everything together into one connected platform — giving healthcare professionals and employers the tools they need to work smarter, grow faster, and deliver better patient care.</p>
+          </div>
+          </AnimateOnScroll>
+        </div>
+      </section>
+
+      {/* WHY PSL */}
+      <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <SectionTag label="Why PSL" />
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 700, marginTop: 16, marginBottom: 16, letterSpacing: '-0.02em' }}>Built Around the Entire Healthcare Workforce Lifecycle</h2>
+            <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.8, maxWidth: 640, margin: '0 auto' }}>{"Healthcare workforce management doesn't start with hiring — and it doesn't end after onboarding. PSL supports every stage of the journey."}</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            {[
+              { title: 'Learn', body: 'Professional development and CPD.' },
+              { title: 'Connect', body: 'Verified professionals meet trusted employers.' },
+              { title: 'Hire', body: 'Recruit confidently using verified credentials.' },
+              { title: 'Manage', body: 'Scheduling, attendance, compliance, and workforce records.' },
+              { title: 'Develop', body: 'Career pathways, competency tracking, and continuous learning.' },
+              { title: 'Grow', body: 'Data-driven workforce planning and better healthcare outcomes.' },
+            ].map((card, i) => (
+              <AnimateOnScroll key={card.title} delay={i * 80}>
+              <div
+                style={{ background: '#fff', borderRadius: 12, padding: 24, border: '1px solid rgba(0,0,0,0.08)', transition: 'transform 0.2s ease, box-shadow 0.2s ease', height: '100%' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+              >
+                <p style={{ fontSize: 17, fontWeight: 700, color: 'var(--brand-dark)', marginBottom: 8 }}>{card.title}</p>
+                <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{card.body}</p>
+              </div>
+              </AnimateOnScroll>
             ))}
           </div>
         </div>
@@ -121,14 +187,22 @@ export default function HomeClient() {
                 <Users size={22} color="var(--brand-dark)" />
               </div>
               <SectionTag label="For Healthcare Professionals" />
-              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 16, letterSpacing: '-0.02em' }}>Jobs. CPD. Locum shifts. Your career, fully managed.</h3>
-              {['Jobs with salary shown — every listing, always','Apply in one tap — your profile does the work','MDCN/NMCN CPD on your phone — track, learn, renew','Locum shifts at verified facilities near you','Role-based learning paths and competency tracking','All your credentials stored, verified, and shareable'].map((item) => (
-                <div key={item} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
+              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 12, letterSpacing: '-0.02em' }}>Everything You Need to Build a Successful Healthcare Career</h3>
+              <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 20 }}>Your career deserves more than another job board. PSL helps you discover opportunities, build your professional profile, manage your credentials, complete CPD, access verified locum shifts, and keep your career moving forward from one secure platform.</p>
+              {[
+                { t: 'Find Better Opportunities', b: 'Browse verified healthcare jobs with transparent salaries and apply in just a few clicks.' },
+                { t: 'Build a Verified Professional Profile', b: 'Keep your qualifications, licences, employment history, and credentials securely stored and instantly shareable.' },
+                { t: 'Complete CPD Anytime', b: 'Access accredited CPD courses, monitor your progress, and stay compliant with professional requirements.' },
+                { t: 'Pick Up Verified Locum Shifts', b: 'Choose flexible work opportunities that match your schedule and location.' },
+                { t: 'Follow Your Career Roadmap', b: 'Receive personalised learning recommendations based on your role, specialty, and career goals.' },
+                { t: 'Stay Ready for Every Opportunity', b: 'Never miss licence renewals or important compliance deadlines with automated reminders.' },
+              ].map((item) => (
+                <div key={item.t} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
                   <CheckCircle2 size={17} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item}</span>
+                  <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 24 }}>Join free</PrimaryButton>
+              <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 24 }}>Create Your Free Professional Profile</PrimaryButton>
             </div>
             </AnimateOnScroll>
             <AnimateOnScroll delay={150}>
@@ -140,14 +214,22 @@ export default function HomeClient() {
                 <Briefcase size={22} color="var(--brand-dark)" />
               </div>
               <SectionTag label="For Healthcare Facilities" />
-              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 16, letterSpacing: '-0.02em' }}>Hire. Schedule. Track. Stay compliant. One platform.</h3>
-              {["Staff registry — one verified profile per worker, always up to date","Shift scheduling, attendance, and leave management in one dashboard","Staffing forecasts and vacancy tracking — know your gaps before they hurt","CPD dashboard — see your whole team's training status at a glance","Onboarding checklists and credential verification built in","All workforce data digital, audit-ready, and exportable"].map((item) => (
-                <div key={item} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
+              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 12, letterSpacing: '-0.02em' }}>Everything You Need to Build a Stronger Workforce</h3>
+              <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 20 }}>Healthcare workforce management shouldn't involve spreadsheets, WhatsApp groups, paperwork, and disconnected software. PSL gives healthcare facilities one intelligent platform to recruit, onboard, schedule, develop, and retain exceptional healthcare professionals.</p>
+              {[
+                { t: 'Verified Staff Registry', b: 'Maintain one secure digital profile for every member of your workforce.' },
+                { t: 'Recruitment Made Simple', b: 'Post vacancies, review verified applicants, and hire qualified professionals faster.' },
+                { t: 'Smart Shift Scheduling', b: 'Build staff rosters, manage attendance, approve leave requests, and reduce scheduling conflicts.' },
+                { t: 'Workforce Planning', b: 'Identify staffing shortages before they affect operations using predictive workforce insights.' },
+                { t: 'Compliance & CPD', b: 'Monitor staff licences, certifications, and CPD completion from one dashboard.' },
+                { t: 'Workforce Analytics', b: 'Make informed workforce decisions using real-time reports and operational insights.' },
+              ].map((item) => (
+                <div key={item.t} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
                   <CheckCircle2 size={17} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item}</span>
+                  <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 24 }}>Post a vacancy free</PrimaryButton>
+              <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 24 }}>Start Hiring Smarter</PrimaryButton>
             </div>
             </AnimateOnScroll>
           </div>
@@ -209,18 +291,18 @@ export default function HomeClient() {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="How it works" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Simple. Three steps.</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Get Started in Three Simple Steps</h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64 }}>
             {[
               { label: "If you're a healthcare professional", color: 'var(--brand-dark)', steps: [
-                { n:'01', t:'Create your verified profile', b:'Add your qualifications, registration number, and employment history.' },
-                { n:'02', t:'Browse, track, and learn', b:'Find jobs in your specialty, pick up locum shifts, track your CPD, and follow your role-based learning path.' },
-                { n:'03', t:'Apply in one tap', b:'Study offline. Get booked. Grow.' },
+                { n:'01', t:'Create Your Account', b:"Choose whether you're joining as a healthcare professional or healthcare employer." },
+                { n:'02', t:'Complete Your Profile', b:'Add your professional information or facility details to unlock the platform.' },
+                { n:'03', t:'Start Growing', b:'Apply for jobs, recruit talent, manage your workforce, complete CPD, and access the tools you need to succeed.' },
               ], href: '/waitlist?role=professional', cta: 'Join as a professional' },
               { label: "If you run a healthcare facility", color: 'var(--brand-gold)', steps: [
-                { n:'01', t:'Create your facility profile', b:'Takes under 15 minutes.' },
-                { n:'02', t:'Post vacancies and manage your roster', b:'Receive applications from verified professionals. Schedule shifts, track attendance, and manage leave from one place.' },
+                { n:'01', t:'Create Your Account', b:"Choose whether you're joining as a healthcare professional or healthcare employer." },
+                { n:'02', t:'Complete Your Profile', b:'Add your professional information or facility details to unlock the platform.' },
                 { n:'03', t:'Manage everything in one dashboard', b:'CPD compliance, workforce analytics, staffing forecasts, and staff records — all from one view.' },
               ], href: '/waitlist?role=employer', cta: 'Join as a facility' },
             ].map((col) => (
@@ -247,11 +329,11 @@ export default function HomeClient() {
       {/* CLOSING CTA */}
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: 'clamp(30px,4.5vw,52px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 16 }}>{data?.closingHeadline || 'Join free today.'}</h2>
-          <p style={{ fontSize: 17, color: 'var(--brand-gray)', marginBottom: 36, maxWidth: 460, margin: '0 auto 36px' }}>{data?.closingSubtext || 'No credit card. No commitment. Early access is open now.'}</p>
+          <h2 style={{ fontSize: 'clamp(30px,4.5vw,52px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 16 }}>{data?.closingHeadline || 'Build the Future of Healthcare — Starting Today'}</h2>
+          <p style={{ fontSize: 17, color: 'var(--brand-gray)', marginBottom: 36, maxWidth: 460, margin: '0 auto 36px' }}>{data?.closingSubtext || "The future of healthcare depends on connected professionals, stronger institutions, and smarter workforce management. PSL brings all three together. Join the platform that's helping transform Nigeria's healthcare workforce — one professional, one facility, and one opportunity at a time."}</p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <PrimaryButton href="/waitlist?role=professional">I'm a healthcare professional</PrimaryButton>
-            <PrimaryButton href="/waitlist?role=employer" variant="white">I run a healthcare facility</PrimaryButton>
+            <PrimaryButton href="/waitlist?role=professional">Join as a Healthcare Professional</PrimaryButton>
+            <PrimaryButton href="/waitlist?role=employer" variant="white">Join as a Healthcare Employer</PrimaryButton>
           </div>
         </div>
       </section>
