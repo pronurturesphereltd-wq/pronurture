@@ -2,7 +2,7 @@ import AboutClient from './AboutClient'
 
 export const metadata = {
   title: 'About PSL',
-  description: 'PSL was built by people who lived the gaps in Nigerian healthcare staffing. Learn about our mission and the team behind ProNurtureSphere Limited.',
+  description: 'Learn how ProNurtureSphere is building Nigeria\'s healthcare workforce platform — combining workforce management, CPD training, staffing, and compliance in one connected system.',
 }
 
 export default function Page() {

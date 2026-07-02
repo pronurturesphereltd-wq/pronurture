@@ -43,6 +43,10 @@ const footerLinks = {
     { label: 'For Professionals', href: '/professionals' },
     { label: 'For Employers', href: '/employers' },
     { label: 'Join Waitlist', href: '/waitlist' },
+    { label: 'Staff Registry', href: '/employers#registry' },
+    { label: 'Attendance & Leave', href: '/employers#attendance' },
+    { label: 'Workforce Analytics', href: '/employers#analytics' },
+    { label: 'Staffing Forecasts', href: '/employers#forecasts' },
   ],
   Company: [
     { label: 'About PSL', href: '/about' },

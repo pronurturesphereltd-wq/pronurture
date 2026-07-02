@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet } from 'lucide-react'
+import { ArrowRight, CheckCircle2, DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
@@ -13,6 +13,8 @@ const defaultPainPoints = [
   { headline: "Listings that aren't even for you.", body: 'PSL filters by your discipline, specialty, and state. You only see roles that actually match what you do.' },
   { headline: 'CPD deadlines with no system to track them.', body: 'PSL shows your NMCN or MDCN points balance in real time and sends you a WhatsApp reminder before your renewal is due.' },
   { headline: 'Jobs that look nothing like the listing.', body: 'Every employer on PSL is verified before they can post. What you see is what you get. 52.5% of clinical professionals surveyed have experienced this.' },
+  { headline: 'No single place to manage your professional identity.', body: 'Your qualifications, registration, employment history, and licenses are scattered across emails, folders, and paper files. PSL gives you one verified professional profile — ready to share with any employer or regulator in one tap.' },
+  { headline: 'No visibility into your career growth or competency gaps.', body: 'PSL gives you a role-based learning path tied to your specialty so you always know what to study next and where you stand.' },
 ]
 
 const defaultFeatures = [
@@ -24,6 +26,10 @@ const defaultFeatures = [
   { icon: 'Wallet', title: 'Certificate wallet', description: 'Store all your credentials. Share them with employers or regulators in one tap.' },
   { icon: 'ShieldCheck', title: 'Locum marketplace', description: 'Browse verified shifts near you. Transparent pay. No agencies.' },
   { icon: 'Bell', title: 'WhatsApp CPD alerts', description: 'We remind you before your deadline — directly on WhatsApp.' },
+  { icon: 'UserCheck', title: 'Verified professional profile', description: 'One master profile covering your identity, qualifications, registration, employment history, and license status — always up to date, always shareable.' },
+  { icon: 'BarChart2', title: 'Competency tracking', description: 'Track your skills and progress against the requirements of your role. Know exactly where you stand.' },
+  { icon: 'Compass', title: 'Role-based learning paths', description: 'Curated training tied to your specialty. Know what to study next and why it matters for your career.' },
+  { icon: 'Clock', title: 'License and credential alerts', description: 'Never miss a renewal. PSL tracks your license expiry dates and alerts you well before they lapse.' },
 ]
 
 const defaultFAQs = [
@@ -32,9 +38,11 @@ const defaultFAQs = [
   { question: 'Can I use PSL for locum work alongside my main job?', answer: 'Yes. Locum shifts are separate from full-time listings. Browse and pick up shifts that fit your schedule.' },
   { question: 'How is PSL different from Jobberman or LinkedIn?', answer: "PSL is built only for clinical professionals. It understands your registration, your CPD cycle, and your discipline. Jobberman and LinkedIn weren't designed for you. PSL was." },
   { question: 'What disciplines are on PSL?', answer: "Nurses, midwives, doctors, pharmacists, physiotherapists, lab scientists, radiographers, CHEWs, and all allied health professionals. If you're registered with a Nigerian professional body, you qualify." },
+  { question: 'What is a PSL professional profile?', answer: 'Your PSL profile is a verified record of your professional identity — your qualifications, registration number, employment history, licenses, and credentials. It stays with you across jobs and is shareable with employers or regulators in one tap.' },
+  { question: 'How does competency tracking work?', answer: 'PSL maps your completed training, CPD credits, and role experience against the requirements of your specialty. You can see where you meet the standard, where gaps exist, and what learning to prioritise next.' },
 ]
 
-const iconMap: Record<string, any> = { DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet }
+const iconMap: Record<string, any> = { DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock }
 
 export default function ProfessionalsClient() {
   const data: any = {}
@@ -50,10 +58,10 @@ export default function ProfessionalsClient() {
         <AnimateOnScroll><div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
           <SectionTag label="For Healthcare Professionals" />
           <h1 style={{ fontSize: 'clamp(34px,5vw,56px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, marginTop: 20, marginBottom: 20 }}>
-            {data?.heroHeadline || 'Your career. Finally, a platform built for it.'}
+            {data?.heroHeadline || 'Your career. Your credentials. One platform built for it.'}
           </h1>
           <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 36, maxWidth: 540, margin: '0 auto 36px' }}>
-            {data?.heroSubheadline || 'Jobs with salary shown. CPD on your phone. Locum shifts when you need them. For every registered clinical professional in Nigeria.'}
+            {data?.heroSubheadline || 'Jobs with salary shown. CPD on your phone. Locum shifts when you need them. Your professional profile, credentials, and career growth — all in one place. For every registered clinical professional in Nigeria.'}
           </p>
           <PrimaryButton href="/waitlist?role=professional">{data?.heroCta || 'Join free — no card required'}</PrimaryButton>
         </div></AnimateOnScroll>

@@ -1,8 +1,8 @@
 import ProfessionalsClient from './ProfessionalsClient'
 
 export const metadata = {
-  title: 'For Clinical Professionals',
-  description: 'Find clinical jobs in Nigeria with salary shown upfront, track your NMCN/MDCN CPD points automatically, and pick up verified locum shifts.',
+  title: 'For Healthcare Professionals | PSL',
+  description: 'Find healthcare jobs with salary shown, track your CPD, pick up locum shifts, and manage your professional credentials — all in one platform built for Nigerian healthcare professionals.',
 }
 
 export default function Page() {

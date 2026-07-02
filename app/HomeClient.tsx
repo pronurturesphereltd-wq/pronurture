@@ -43,7 +43,7 @@ export default function HomeClient() {
                 {data?.heroHeadline || 'The career app Nigerian healthcare has been waiting for.'}
               </h1>
               <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, marginBottom: 20, maxWidth: 460 }}>
-                {data?.heroSubheadline || 'Find clinical jobs with salary shown, track your CPD, and pick up locum shifts — or post vacancies and manage your clinical team. All in one place.'}
+                {data?.heroSubheadline || 'Find jobs with salary shown, track your CPD, pick up locum shifts, and manage your entire workforce — from hiring and onboarding to scheduling, compliance, and retention. All in one place.'}
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', marginBottom: 20 }}>
                 <Link href="/waitlist?role=professional" className="btn-primary btn-primary--white">
@@ -121,8 +121,8 @@ export default function HomeClient() {
                 <Users size={22} color="var(--brand-dark)" />
               </div>
               <SectionTag label="For Healthcare Professionals" />
-              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 16, letterSpacing: '-0.02em' }}>Jobs. CPD. Locum shifts. Everything your career needs.</h3>
-              {['Jobs with salary shown — every listing, always','Apply in one tap — your profile does the work','MDCN/NMCN CPD on your phone — track, learn, renew','Locum shifts at verified facilities near you','All your certificates stored and shareable'].map((item) => (
+              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 16, letterSpacing: '-0.02em' }}>Jobs. CPD. Locum shifts. Your career, fully managed.</h3>
+              {['Jobs with salary shown — every listing, always','Apply in one tap — your profile does the work','MDCN/NMCN CPD on your phone — track, learn, renew','Locum shifts at verified facilities near you','Role-based learning paths and competency tracking','All your credentials stored, verified, and shareable'].map((item) => (
                 <div key={item} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
                   <CheckCircle2 size={17} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 2 }} />
                   <span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item}</span>
@@ -140,8 +140,8 @@ export default function HomeClient() {
                 <Briefcase size={22} color="var(--brand-dark)" />
               </div>
               <SectionTag label="For Healthcare Facilities" />
-              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 16, letterSpacing: '-0.02em' }}>Hire faster. Stay compliant. Stop guessing.</h3>
-              {["Candidates verified before they reach your inbox","CPD dashboard — see your whole team's status at a glance","Fill urgent gaps with locum professionals in hours","All staff records digital and inspection-ready","A real support contact on WhatsApp — not a helpdesk ticket"].map((item) => (
+              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 16, letterSpacing: '-0.02em' }}>Hire. Schedule. Track. Stay compliant. One platform.</h3>
+              {["Staff registry — one verified profile per worker, always up to date","Shift scheduling, attendance, and leave management in one dashboard","Staffing forecasts and vacancy tracking — know your gaps before they hurt","CPD dashboard — see your whole team's training status at a glance","Onboarding checklists and credential verification built in","All workforce data digital, audit-ready, and exportable"].map((item) => (
                 <div key={item} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
                   <CheckCircle2 size={17} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 2 }} />
                   <span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item}</span>
@@ -214,14 +214,14 @@ export default function HomeClient() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64 }}>
             {[
               { label: "If you're a healthcare professional", color: 'var(--brand-dark)', steps: [
-                { n:'01', t:'Create your free profile', b:'Add your qualifications and registration number.' },
-                { n:'02', t:'Browse and track', b:'Find jobs in your specialty, track your CPD, and see locum shifts near you.' },
+                { n:'01', t:'Create your verified profile', b:'Add your qualifications, registration number, and employment history.' },
+                { n:'02', t:'Browse, track, and learn', b:'Find jobs in your specialty, pick up locum shifts, track your CPD, and follow your role-based learning path.' },
                 { n:'03', t:'Apply in one tap', b:'Study offline. Get booked. Grow.' },
               ], href: '/waitlist?role=professional', cta: 'Join as a professional' },
               { label: "If you run a healthcare facility", color: 'var(--brand-gold)', steps: [
                 { n:'01', t:'Create your facility profile', b:'Takes under 15 minutes.' },
-                { n:'02', t:'Post vacancies', b:'Receive applications from verified, credentialled professionals.' },
-                { n:'03', t:'Manage everything in one place', b:"Your team's CPD, records, and shifts — all from one dashboard." },
+                { n:'02', t:'Post vacancies and manage your roster', b:'Receive applications from verified professionals. Schedule shifts, track attendance, and manage leave from one place.' },
+                { n:'03', t:'Manage everything in one dashboard', b:'CPD compliance, workforce analytics, staffing forecasts, and staff records — all from one view.' },
               ], href: '/waitlist?role=employer', cta: 'Join as a facility' },
             ].map((col) => (
               <div key={col.label}>

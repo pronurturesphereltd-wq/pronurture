@@ -1,8 +1,8 @@
 import EmployersClient from './EmployersClient'
 
 export const metadata = {
-  title: 'For Healthcare Employers',
-  description: 'Hire verified Nigerian clinical professionals faster. Post vacancies, manage your team\'s CPD compliance, and fill shifts without the 6-month wait.',
+  title: 'For Healthcare Employers | PSL',
+  description: 'Ditch spreadsheets and WhatsApp rosters. PSL gives Nigerian facilities a staff registry, shift scheduling, attendance tracking, credential verification, staffing forecasts, CPD tracking, and workforce analytics — all in one platform.',
 }
 
 export default function Page() {
