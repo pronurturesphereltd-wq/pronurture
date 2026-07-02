@@ -297,7 +297,7 @@ export default function HomeClient() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             <AnimateOnScroll delay={0}>
-            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
             >
@@ -320,11 +320,11 @@ export default function HomeClient() {
                   <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 24 }}>Create Your Free Professional Profile</PrimaryButton>
+              <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 'auto', paddingTop: 24 }}>Create Your Free Professional Profile</PrimaryButton>
             </div>
             </AnimateOnScroll>
             <AnimateOnScroll delay={150}>
-            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: 'var(--brand-offwhite)', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: 'var(--brand-offwhite)', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
             >
@@ -347,7 +347,7 @@ export default function HomeClient() {
                   <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 24 }}>Start Hiring Smarter</PrimaryButton>
+              <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 'auto', paddingTop: 24 }}>Start Hiring Smarter</PrimaryButton>
             </div>
             </AnimateOnScroll>
           </div>
