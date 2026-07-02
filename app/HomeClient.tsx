@@ -67,13 +67,13 @@ export default function HomeClient() {
 
         {/* Headline */}
         <h1 style={{
-          fontSize: 'clamp(40px, 6vw, 80px)',
+          fontSize: 'clamp(32px, 4.5vw, 58px)',
           fontWeight: 800,
-          lineHeight: 1.05,
+          lineHeight: 1.08,
           letterSpacing: '-0.02em',
           color: '#0d2810',
-          maxWidth: 880,
-          margin: '0 auto 24px',
+          maxWidth: 800,
+          margin: '0 auto 16px',
           position: 'relative',
         }}>
           The Healthcare Workforce Platform{' '}
@@ -87,20 +87,20 @@ export default function HomeClient() {
 
         {/* Subheadline */}
         <p style={{
-          fontSize: 'clamp(16px, 1.8vw, 20px)',
-          lineHeight: 1.7,
+          fontSize: 'clamp(14px, 1.4vw, 17px)',
+          lineHeight: 1.6,
           color: '#4a5e4d',
-          maxWidth: 640,
-          margin: '0 auto 16px',
+          maxWidth: 580,
+          margin: '0 auto 12px',
           position: 'relative',
         }}>
           Whether you&apos;re advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform.
         </p>
         <p style={{
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: 600,
           color: '#113614',
-          marginBottom: 40,
+          marginBottom: 28,
           position: 'relative',
         }}>
           Healthcare is complex. Managing your workforce shouldn&apos;t be.
@@ -117,8 +117,8 @@ export default function HomeClient() {
           <a href="/waitlist?role=professional" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             background: '#113614', color: '#fff',
-            padding: '14px 28px', borderRadius: 999,
-            fontWeight: 700, fontSize: 16,
+            padding: '12px 24px', borderRadius: 999,
+            fontWeight: 700, fontSize: 15,
             textDecoration: 'none',
             boxShadow: '0 4px 16px rgba(17,54,20,0.25)',
             transition: 'transform 0.15s, box-shadow 0.15s',
@@ -130,8 +130,8 @@ export default function HomeClient() {
           <a href="/waitlist?role=employer" style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
             background: 'transparent', color: '#113614',
-            padding: '14px 28px', borderRadius: 999,
-            fontWeight: 700, fontSize: 16,
+            padding: '12px 24px', borderRadius: 999,
+            fontWeight: 700, fontSize: 15,
             textDecoration: 'none',
             border: '2px solid #113614',
             transition: 'background 0.15s, color 0.15s',
@@ -143,7 +143,7 @@ export default function HomeClient() {
         </div>
 
         {/* Caption */}
-        <p style={{ fontSize: 13, color: '#7a8c7d', marginTop: 20, position: 'relative' }}>
+        <p style={{ fontSize: 13, color: '#7a8c7d', marginTop: 14, position: 'relative' }}>
           Free to join. No credit card required.
         </p>
       </section>
