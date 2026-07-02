@@ -1,11 +1,10 @@
 'use client'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, Users, Briefcase, Smartphone } from 'lucide-react'
+import { CheckCircle2, Users, Briefcase } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import CountUp from '@/components/ui/CountUp'
-import { urlFor } from '@/lib/sanity'
 
 
 const defaultStats = [
@@ -31,63 +30,149 @@ export default function HomeClient() {
   return (
     <>
       {/* HERO */}
-      <section style={{ padding: '32px 0 0' }}>
-        <div className="container">
-          <div className="hero-card" style={{ background: 'linear-gradient(135deg,#103613 0%,#1a4d1e 100%)', borderRadius: 28, padding: '48px 48px 0', overflow: 'hidden', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'flex-start' }}>
-            <div style={{ paddingBottom: 40, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, background: 'rgba(255,255,255,0.1)', borderRadius: 100, padding: '6px 14px', width: 'fit-content' }}>
-                <span style={{ color: '#c09e5a', fontSize: 13 }}>✦</span>
-                <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 500 }}>{data?.heroEyebrow || 'Trusted by Healthcare Professionals, Hospitals & Clinics Across Nigeria'}</span>
-              </div>
-              <h1 style={{ fontSize: 'clamp(28px,3.5vw,46px)', fontWeight: 700, color: '#ffffff', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 16 }}>
-                {data?.heroHeadline || 'The Healthcare Workforce Platform Nigeria Has Been Waiting For.'}
-              </h1>
-              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, marginBottom: 12, maxWidth: 460 }}>
-                {data?.heroSubheadline || "Whether you're advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform."}
-              </p>
-              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.78)', lineHeight: 1.6, marginBottom: 20, maxWidth: 460, fontWeight: 600 }}>
-                {"Healthcare is complex. Managing your workforce shouldn't be."}
-              </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', marginBottom: 20 }}>
-                <Link href="/waitlist?role=professional" className="btn-primary btn-primary--white">
-                  {data?.heroCta1 || "Join as a Healthcare Professional"}
-                  <span className="btn-primary__icon"><ArrowRight size={15} className="arrow-a" /><ArrowRight size={15} className="arrow-b" /></span>
-                </Link>
-                <Link href="/waitlist?role=employer" className="btn-text">
-                  {data?.heroCta2 || 'Hire Healthcare Professionals'} <ArrowRight size={15} />
-                </Link>
-              </div>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>{data?.heroNote || 'Free to join. No credit card required.'}</p>
-            </div>
-            <div className="hero-image-card" style={{ borderRadius: 20, overflow: 'hidden', height: 380, position: 'relative' }}>
-              {data?.heroImage ? (
-                <img
-                  src={urlFor(data.heroImage).width(800).height(600).url()}
-                  alt="Hero"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : data?.heroVideo ? (
-                <video
-                  src={data.heroVideo}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <div style={{ background: 'rgba(255,255,255,0.06)', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <div style={{ textAlign: 'center', padding: 32 }}>
-                    <div style={{ width: 80, height: 80, borderRadius: 20, background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                      <Smartphone size={36} color="rgba(255,255,255,0.5)" />
-                    </div>
-                    <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 13 }}>Add image or video via Sanity Studio</p>
-                  </div>
-                </div>
-              )}
-            </div>
+      <section style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: '120px 24px 80px',
+        position: 'relative',
+        background: '#ffffff',
+        overflow: 'hidden',
+      }}>
+        {/* Grid texture overlay */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `
+            linear-gradient(rgba(17,54,20,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(17,54,20,0.04) 1px, transparent 1px)
+          `,
+          backgroundSize: '48px 48px',
+          pointerEvents: 'none',
+        }} />
+        {/* Radial glow */}
+        <div style={{
+          position: 'absolute',
+          top: '-10%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '900px',
+          height: '600px',
+          background: 'radial-gradient(ellipse at center, rgba(17,54,20,0.07) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        {/* Social proof pill */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 10,
+          background: '#fff',
+          border: '1px solid rgba(17,54,20,0.12)',
+          borderRadius: 999,
+          padding: '8px 16px 8px 8px',
+          marginBottom: 36,
+          position: 'relative',
+          boxShadow: '0 1px 8px rgba(0,0,0,0.06)',
+        }}>
+          <div style={{ display: 'flex', marginRight: 4 }}>
+            {['#C09D59','#113614','#7A863E'].map((c, i) => (
+              <div key={i} style={{
+                width: 28, height: 28, borderRadius: '50%',
+                background: c, border: '2px solid #fff',
+                marginLeft: i > 0 ? -8 : 0,
+              }} />
+            ))}
           </div>
+          <span style={{ fontSize: 14, fontWeight: 600, color: '#113614' }}>
+            Join 5k+ healthcare professionals
+          </span>
         </div>
+
+        {/* Headline */}
+        <h1 style={{
+          fontSize: 'clamp(40px, 6vw, 80px)',
+          fontWeight: 800,
+          lineHeight: 1.05,
+          letterSpacing: '-0.02em',
+          color: '#0d2810',
+          maxWidth: 880,
+          margin: '0 auto 24px',
+          position: 'relative',
+        }}>
+          The Healthcare Workforce Platform{' '}
+          <span style={{
+            fontStyle: 'italic',
+            fontWeight: 700,
+            color: '#113614',
+          }}>Nigeria</span>{' '}
+          Has Been Waiting For.
+        </h1>
+
+        {/* Subheadline */}
+        <p style={{
+          fontSize: 'clamp(16px, 1.8vw, 20px)',
+          lineHeight: 1.7,
+          color: '#4a5e4d',
+          maxWidth: 640,
+          margin: '0 auto 16px',
+          position: 'relative',
+        }}>
+          Whether you&apos;re advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform.
+        </p>
+        <p style={{
+          fontSize: 16,
+          fontWeight: 600,
+          color: '#113614',
+          marginBottom: 40,
+          position: 'relative',
+        }}>
+          Healthcare is complex. Managing your workforce shouldn&apos;t be.
+        </p>
+
+        {/* CTAs */}
+        <div style={{
+          display: 'flex',
+          gap: 12,
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          position: 'relative',
+        }}>
+          <a href="/waitlist?role=professional" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: '#113614', color: '#fff',
+            padding: '14px 28px', borderRadius: 999,
+            fontWeight: 700, fontSize: 16,
+            textDecoration: 'none',
+            boxShadow: '0 4px 16px rgba(17,54,20,0.25)',
+            transition: 'transform 0.15s, box-shadow 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(17,54,20,0.3)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 16px rgba(17,54,20,0.25)'; }}>
+            Join as a Healthcare Professional
+          </a>
+          <a href="/waitlist?role=employer" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: 'transparent', color: '#113614',
+            padding: '14px 28px', borderRadius: 999,
+            fontWeight: 700, fontSize: 16,
+            textDecoration: 'none',
+            border: '2px solid #113614',
+            transition: 'background 0.15s, color 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background='#113614'; e.currentTarget.style.color='#fff'; }}
+          onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#113614'; }}>
+            Hire Healthcare Professionals
+          </a>
+        </div>
+
+        {/* Caption */}
+        <p style={{ fontSize: 13, color: '#7a8c7d', marginTop: 20, position: 'relative' }}>
+          Free to join. No credit card required.
+        </p>
       </section>
 
       {/* PARTNERS TICKER */}
