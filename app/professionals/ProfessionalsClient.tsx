@@ -259,7 +259,7 @@ export default function ProfessionalsClient() {
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 20, letterSpacing: '-0.02em' }}>Your Next Opportunity Starts Here</h2>
             <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>Whether you&apos;re searching for a better role, building new skills, completing CPD, or planning your long-term career, PSL gives you the tools to move forward with confidence.</p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="/waitlist?role=professional" className="btn-primary">
+              <a href="/waitlist?role=professional" className="btn-primary" style={{ border: '2px solid rgba(255,255,255,0.4)' }}>
                 Create Your Free Profile
                 <span className="btn-primary__icon">
                   <ArrowRight size={15} className="arrow-a" />
