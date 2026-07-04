@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { ArrowRight, CheckCircle2, Users } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Users, Briefcase, FileCheck, BookOpen, Calendar, Shield, TrendingUp } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
@@ -83,38 +83,60 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0' }}>
-        <div className="container" style={{ maxWidth: 720 }}>
+      <section style={{ padding: '80px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <AnimateOnScroll>
-          <SectionTag label="Our Mission" />
-          <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, marginBottom: 32, letterSpacing: '-0.02em' }}>Solving One of Healthcare&apos;s Biggest Challenges</h2>
-          </AnimateOnScroll>
-          <AnimateOnScroll delay={100}>
-          <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 24 }}>
-            Nigeria&apos;s healthcare workforce faces a difficult reality.
-          </p>
-          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {[
-              'Professionals struggle to find transparent opportunities.',
-              'Credentials are often managed manually.',
-              'CPD tracking is fragmented.',
-              'Facilities battle staff shortages.',
-              'Scheduling is time-consuming.',
-              'Compliance is difficult to monitor.',
-              'Workforce planning is often reactive instead of proactive.',
-            ].map((item, i) => (
-              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.6 }}>
-                <span style={{ color: '#C09D59', fontWeight: 700, flexShrink: 0, marginTop: 2 }}>—</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-          <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 20 }}>
-            PSL was created to solve these problems with technology designed specifically for the Nigerian healthcare system.
-          </p>
-          <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)' }}>
-            We&apos;re building a connected platform where healthcare professionals can grow their careers while hospitals and clinics can build stronger, more compliant, and better-managed teams.
-          </p>
+            <div style={{ background: '#0d2810', borderRadius: 20, padding: '48px' }}>
+              <SectionTag label="Our Mission" variant="white" />
+              <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 16, letterSpacing: '-0.02em', marginTop: 16 }}>
+                Solving One of Healthcare&apos;s Biggest Challenges
+              </h2>
+              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 32 }}>
+                Nigeria&apos;s healthcare workforce faces a difficult reality.
+              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 32 }}>
+                {[
+                  { icon: 'Briefcase', text: 'Professionals struggle to find transparent opportunities' },
+                  { icon: 'FileCheck', text: 'Credentials are often managed manually' },
+                  { icon: 'BookOpen', text: 'CPD tracking is fragmented' },
+                  { icon: 'Users', text: 'Facilities battle staff shortages' },
+                  { icon: 'Calendar', text: 'Scheduling is time-consuming' },
+                  { icon: 'Shield', text: 'Compliance is difficult to monitor' },
+                  { icon: 'TrendingUp', text: 'Workforce planning is often reactive instead of proactive' },
+                  { icon: 'ArrowRight', text: 'PSL fixes all of this', highlight: true },
+                ].map((item, i) => (
+                  <div key={i} style={{
+                    padding: '14px 18px',
+                    background: item.highlight ? 'rgba(192,157,89,0.15)' : 'rgba(255,255,255,0.06)',
+                    borderRadius: 10,
+                    border: item.highlight ? '1px solid rgba(192,157,89,0.4)' : '1px solid rgba(255,255,255,0.08)',
+                    display: 'flex', alignItems: 'flex-start', gap: 12,
+                  }}>
+                    <span style={{ color: '#C09D59', fontSize: 16, flexShrink: 0, marginTop: 2 }}>
+                      {item.icon === 'Briefcase' && <Briefcase size={16} />}
+                      {item.icon === 'FileCheck' && <FileCheck size={16} />}
+                      {item.icon === 'BookOpen' && <BookOpen size={16} />}
+                      {item.icon === 'Users' && <Users size={16} />}
+                      {item.icon === 'Calendar' && <Calendar size={16} />}
+                      {item.icon === 'Shield' && <Shield size={16} />}
+                      {item.icon === 'TrendingUp' && <TrendingUp size={16} />}
+                      {item.icon === 'ArrowRight' && <ArrowRight size={16} />}
+                    </span>
+                    <span style={{ fontSize: 14, color: item.highlight ? '#C09D59' : 'rgba(255,255,255,0.75)', lineHeight: 1.6, fontWeight: item.highlight ? 600 : 400 }}>
+                      {item.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ padding: '20px 24px', background: 'rgba(192,157,89,0.1)', borderRadius: 12, border: '1px solid rgba(192,157,89,0.25)' }}>
+                <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.9)', lineHeight: 1.8, margin: '0 0 12px' }}>
+                  PSL was created to solve these problems with technology designed specifically for the Nigerian healthcare system.
+                </p>
+                <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, margin: 0 }}>
+                  We&apos;re building a connected platform where healthcare professionals can grow their careers while hospitals and clinics can build stronger, more compliant, and better-managed teams.
+                </p>
+              </div>
+            </div>
           </AnimateOnScroll>
         </div>
       </section>
