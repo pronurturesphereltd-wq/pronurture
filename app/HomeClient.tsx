@@ -324,7 +324,21 @@ export default function HomeClient() {
                   <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=professional" style={{ marginTop: 'auto', paddingTop: 24, alignSelf: 'center', fontSize: 14 }}>Join as a Professional</PrimaryButton>
+              <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', justifyContent: 'center' }}>
+                <a href="/waitlist?role=professional" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: '#113614', color: '#fff',
+                  padding: '12px 24px', borderRadius: 999,
+                  fontWeight: 700, fontSize: 15,
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(17,54,20,0.25)',
+                  transition: 'transform 0.15s, box-shadow 0.15s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(17,54,20,0.3)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 16px rgba(17,54,20,0.25)'; }}>
+                  Join as a Healthcare Professional
+                </a>
+              </div>
             </div>
             </AnimateOnScroll>
             <AnimateOnScroll delay={150}>
@@ -351,7 +365,21 @@ export default function HomeClient() {
                   <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
                 </div>
               ))}
-              <PrimaryButton href="/waitlist?role=employer" style={{ marginTop: 'auto', paddingTop: 24, alignSelf: 'center', fontSize: 14 }}>Hire Healthcare Professionals</PrimaryButton>
+              <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', justifyContent: 'center' }}>
+                <a href="/waitlist?role=employer" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: '#113614', color: '#fff',
+                  padding: '12px 24px', borderRadius: 999,
+                  fontWeight: 700, fontSize: 15,
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(17,54,20,0.25)',
+                  transition: 'transform 0.15s, box-shadow 0.15s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(17,54,20,0.3)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 16px rgba(17,54,20,0.25)'; }}>
+                  Hire Healthcare Professionals
+                </a>
+              </div>
             </div>
             </AnimateOnScroll>
           </div>
