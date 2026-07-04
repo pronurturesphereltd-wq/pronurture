@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { CheckCircle2, Users, Briefcase } from 'lucide-react'
+import { CheckCircle2, Users, Briefcase, ArrowRight } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
@@ -114,31 +114,19 @@ export default function HomeClient() {
           justifyContent: 'center',
           position: 'relative',
         }}>
-          <a href="/waitlist?role=professional" style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: '#113614', color: '#fff',
-            padding: '12px 24px', borderRadius: 999,
-            fontWeight: 700, fontSize: 15,
-            textDecoration: 'none',
-            boxShadow: '0 4px 16px rgba(17,54,20,0.25)',
-            transition: 'transform 0.15s, box-shadow 0.15s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(17,54,20,0.3)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 16px rgba(17,54,20,0.25)'; }}>
+          <a href="/waitlist?role=professional" className="btn-primary">
             Join as a Healthcare Professional
+            <span className="btn-primary__icon">
+              <ArrowRight size={15} className="arrow-a" />
+              <ArrowRight size={15} className="arrow-b" />
+            </span>
           </a>
-          <a href="/waitlist?role=employer" style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: 'transparent', color: '#113614',
-            padding: '12px 24px', borderRadius: 999,
-            fontWeight: 700, fontSize: 15,
-            textDecoration: 'none',
-            border: '2px solid #113614',
-            transition: 'background 0.15s, color 0.15s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background='#113614'; e.currentTarget.style.color='#fff'; }}
-          onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#113614'; }}>
+          <a href="/waitlist?role=employer" className="btn-primary" style={{ background: 'transparent', color: '#113614', border: '2px solid #113614' }}>
             Hire Healthcare Professionals
+            <span className="btn-primary__icon" style={{ background: '#113614' }}>
+              <ArrowRight size={15} className="arrow-a" />
+              <ArrowRight size={15} className="arrow-b" />
+            </span>
           </a>
         </div>
 
@@ -325,18 +313,12 @@ export default function HomeClient() {
                 </div>
               ))}
               <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', justifyContent: 'center' }}>
-                <a href="/waitlist?role=professional" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  background: '#113614', color: '#fff',
-                  padding: '12px 24px', borderRadius: 999,
-                  fontWeight: 700, fontSize: 15,
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(17,54,20,0.25)',
-                  transition: 'transform 0.15s, box-shadow 0.15s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(17,54,20,0.3)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 16px rgba(17,54,20,0.25)'; }}>
+                <a href="/waitlist?role=professional" className="btn-primary">
                   Join as a Healthcare Professional
+                  <span className="btn-primary__icon">
+                    <ArrowRight size={15} className="arrow-a" />
+                    <ArrowRight size={15} className="arrow-b" />
+                  </span>
                 </a>
               </div>
             </div>
@@ -366,18 +348,12 @@ export default function HomeClient() {
                 </div>
               ))}
               <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', justifyContent: 'center' }}>
-                <a href="/waitlist?role=employer" style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  background: '#113614', color: '#fff',
-                  padding: '12px 24px', borderRadius: 999,
-                  fontWeight: 700, fontSize: 15,
-                  textDecoration: 'none',
-                  boxShadow: '0 4px 16px rgba(17,54,20,0.25)',
-                  transition: 'transform 0.15s, box-shadow 0.15s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(17,54,20,0.3)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 16px rgba(17,54,20,0.25)'; }}>
+                <a href="/waitlist?role=employer" className="btn-primary">
                   Hire Healthcare Professionals
+                  <span className="btn-primary__icon">
+                    <ArrowRight size={15} className="arrow-a" />
+                    <ArrowRight size={15} className="arrow-b" />
+                  </span>
                 </a>
               </div>
             </div>
