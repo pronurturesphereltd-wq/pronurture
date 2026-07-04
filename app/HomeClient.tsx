@@ -173,68 +173,72 @@ export default function HomeClient() {
       </section>
 
       {/* ONE PLATFORM */}
-      <section style={{ padding: '100px 24px', background: '#fff', position: 'relative', overflow: 'hidden' }}>
-        {/* Subtle grid texture */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: `linear-gradient(rgba(17,54,20,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(17,54,20,0.03) 1px, transparent 1px)`,
-          backgroundSize: '48px 48px', pointerEvents: 'none',
-        }} />
-
-        <div style={{ maxWidth: 800, margin: '0 auto', position: 'relative' }}>
+      <section style={{ padding: '100px 24px', background: 'var(--brand-offwhite)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', position: 'relative' }}>
           <AnimateOnScroll>
             <SectionTag label="The Platform" />
-            <h2 style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: 800, color: '#0d2810', lineHeight: 1.1, margin: '16px 0 24px', letterSpacing: '-0.02em' }}>
-              One Platform.<br />Every Workforce Need.
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: 800, color: '#0d2810', lineHeight: 1.1, margin: '16px 0 12px', letterSpacing: '-0.02em' }}>
+              One Platform. Every Workforce Need.
             </h2>
-            <p style={{ fontSize: 18, lineHeight: 1.7, color: '#4a5e4d', marginBottom: 64 }}>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: '#4a5e4d', marginBottom: 64, maxWidth: 560 }}>
               Healthcare organisations rely on too many disconnected systems.
             </p>
           </AnimateOnScroll>
 
-          {/* Animated pain points */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 0, marginBottom: 64 }}>
-            {[
-              { label: 'Recruitment happens in one place.', icon: '👥' },
-              { label: 'Staff records live somewhere else.', icon: '📁' },
-              { label: 'Schedules are managed on spreadsheets.', icon: '📊' },
-              { label: 'Training is tracked manually.', icon: '📋' },
-              { label: 'Compliance becomes a last-minute scramble.', icon: '⚠️' },
-            ].map((item, i) => (
-              <AnimateOnScroll key={i} delay={i * 120}>
-                <div
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 20,
-                    padding: '20px 0',
-                    borderBottom: '1px solid rgba(17,54,20,0.08)',
-                    transition: 'padding-left 0.3s ease',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.paddingLeft = '12px'; }}
-                  onMouseLeave={e => { e.currentTarget.style.paddingLeft = '0px'; }}
-                >
-                  <span style={{
-                    fontSize: 24, width: 48, height: 48,
+          {/* Timeline */}
+          <div style={{ position: 'relative' }}>
+            {/* Horizontal line */}
+            <div style={{
+              position: 'absolute', top: 32, left: 0, right: 0,
+              height: 1, background: 'rgba(17,54,20,0.12)', zIndex: 0,
+            }} />
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 8, position: 'relative', zIndex: 1 }}>
+              {[
+                { icon: '👥', label: 'Recruitment scattered across WhatsApp' },
+                { icon: '📁', label: 'Staff records in folders and filing cabinets' },
+                { icon: '📊', label: 'Schedules managed on spreadsheets' },
+                { icon: '📋', label: 'Training tracked manually' },
+                { icon: '⚠️', label: 'Compliance a last-minute scramble' },
+              ].map((item, i) => (
+                <AnimateOnScroll key={i} delay={i * 100}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                    <div style={{
+                      width: 64, height: 64, borderRadius: '50%',
+                      background: '#fff',
+                      border: '1px solid rgba(220,38,38,0.2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 24, marginBottom: 16,
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                    }}>{item.icon}</div>
+                    <p style={{ fontSize: 12, color: '#9aa89d', lineHeight: 1.5, margin: 0 }}>{item.label}</p>
+                  </div>
+                </AnimateOnScroll>
+              ))}
+
+              {/* PSL Logo endpoint */}
+              <AnimateOnScroll delay={600}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                  <div style={{
+                    width: 64, height: 64, borderRadius: '50%',
+                    background: '#113614',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: 'rgba(17,54,20,0.05)', borderRadius: 12, flexShrink: 0,
-                  }}>{item.icon}</span>
-                  <span style={{
-                    fontSize: 20, fontWeight: 500, color: '#1a3d1e',
-                    textDecoration: 'line-through', textDecorationColor: 'rgba(192,157,89,0.6)',
-                    textDecorationThickness: '2px',
-                  }}>{item.label}</span>
-                  <span style={{
-                    marginLeft: 'auto', fontSize: 13, fontWeight: 700,
-                    color: '#C09D59', letterSpacing: '0.05em', flexShrink: 0,
-                  }}>PSL FIXES THIS</span>
+                    marginBottom: 16,
+                    boxShadow: '0 4px 20px rgba(17,54,20,0.35)',
+                  }}>
+                    <img src="/Full_Color_Logo.svg" alt="PSL" style={{ width: 36, height: 36, filter: 'brightness(0) invert(1)' }} />
+                  </div>
+                  <p style={{ fontSize: 12, fontWeight: 700, color: '#113614', lineHeight: 1.5, margin: 0 }}>PSL</p>
                 </div>
               </AnimateOnScroll>
-            ))}
+            </div>
           </div>
 
           {/* Closing statement */}
-          <AnimateOnScroll delay={600}>
+          <AnimateOnScroll delay={700}>
             <div style={{
-              background: 'linear-gradient(135deg, #113614 0%, #1a4d1e 100%)',
+              marginTop: 64,
+              background: '#113614',
               borderRadius: 20, padding: '40px 48px',
               display: 'flex', alignItems: 'center', gap: 32,
             }}>
