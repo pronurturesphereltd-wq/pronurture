@@ -1,6 +1,5 @@
 'use client'
-import Link from 'next/link'
-import { ArrowRight, CheckCircle2, DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock } from 'lucide-react'
+import { ArrowRight, CheckCircle2, DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock, Briefcase, GraduationCap, CalendarCheck, TrendingUp } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
@@ -9,40 +8,34 @@ import { useEffect, useRef } from 'react'
 
 
 const defaultPainPoints = [
-  { headline: 'Jobs with no salary shown.', body: "You shouldn't have to apply blind. On PSL, every listing shows the pay — before you spend a minute on the application." },
-  { headline: "Listings that aren't even for you.", body: 'PSL filters by your discipline, specialty, and state. You only see roles that actually match what you do.' },
-  { headline: 'CPD deadlines with no system to track them.', body: 'PSL shows your NMCN or MDCN points balance in real time and sends you a WhatsApp reminder before your renewal is due.' },
-  { headline: 'Jobs that look nothing like the listing.', body: 'Every employer on PSL is verified before they can post. What you see is what you get. 52.5% of clinical professionals surveyed have experienced this.' },
-  { headline: 'No single place to manage your professional identity.', body: 'Your qualifications, registration, employment history, and licenses are scattered across emails, folders, and paper files. PSL gives you one verified professional profile — ready to share with any employer or regulator in one tap.' },
-  { headline: 'No visibility into your career growth or competency gaps.', body: 'PSL gives you a role-based learning path tied to your specialty so you always know what to study next and where you stand.' },
+  { title: 'Finding opportunities', body: "Job leads scattered across WhatsApp groups, word of mouth, and generic job boards that don't understand healthcare." },
+  { title: 'Tracking CPD', body: 'No single place to log completed courses, monitor your progress, or know exactly where you stand against renewal requirements.' },
+  { title: 'Renewing licences', body: 'Renewal deadlines sneak up with no system tracking them — leading to last-minute scrambles and compliance gaps.' },
+  { title: 'Managing credentials', body: 'Qualifications, certificates, and employment records scattered across emails, folders, and paper files.' },
+  { title: 'Applying for jobs', body: 'Uploading the same documents repeatedly to different employers with no unified professional profile to share.' },
+  { title: 'Keeping employment records', body: 'No verified, portable employment history — making it hard to prove your experience when it matters most.' },
 ]
 
 const defaultFeatures = [
-  { icon: 'DollarSign', title: 'Salary on every listing', description: 'Every job shows the pay range. No exceptions.' },
-  { icon: 'Filter', title: 'Specialty matching', description: 'Set your discipline and state once. Your feed updates automatically.' },
-  { icon: 'Zap', title: 'One-tap apply', description: 'Build your profile once. Apply to any job in a single tap.' },
-  { icon: 'BookOpen', title: 'CPD tracker', description: 'See your points, requirements, and deadline — all on one screen.' },
-  { icon: 'Smartphone', title: 'Accredited CPD on mobile', description: 'MDCN/NMCN-aligned courses, built for your phone. Download for offline study.' },
-  { icon: 'Wallet', title: 'Certificate wallet', description: 'Store all your credentials. Share them with employers or regulators in one tap.' },
-  { icon: 'ShieldCheck', title: 'Locum marketplace', description: 'Browse verified shifts near you. Transparent pay. No agencies.' },
-  { icon: 'Bell', title: 'WhatsApp CPD alerts', description: 'We remind you before your deadline — directly on WhatsApp.' },
-  { icon: 'UserCheck', title: 'Verified professional profile', description: 'One master profile covering your identity, qualifications, registration, employment history, and license status — always up to date, always shareable.' },
-  { icon: 'BarChart2', title: 'Competency tracking', description: 'Track your skills and progress against the requirements of your role. Know exactly where you stand.' },
-  { icon: 'Compass', title: 'Role-based learning paths', description: 'Curated training tied to your specialty. Know what to study next and why it matters for your career.' },
-  { icon: 'Clock', title: 'License and credential alerts', description: 'Never miss a renewal. PSL tracks your license expiry dates and alerts you well before they lapse.' },
+  { icon: 'Briefcase', title: 'Find Verified Healthcare Jobs', body: 'Discover opportunities from trusted hospitals, clinics, diagnostic centres, NGOs, and healthcare organisations across Nigeria. Every job includes transparent salary information so you know exactly what to expect before applying.' },
+  { icon: 'Zap', title: 'Apply Faster', body: 'Forget uploading the same documents repeatedly. Your verified PSL profile allows you to apply for opportunities in just a few clicks — less paperwork, more opportunities.' },
+  { icon: 'UserCheck', title: 'Build Your Verified Professional Profile', body: 'Create one secure digital identity covering your qualifications, registration details, employment history, licences, certifications, skills, and CPD records. Your profile stays with you throughout your career.' },
+  { icon: 'GraduationCap', title: 'Complete CPD Anywhere', body: "Access accredited CPD programmes, complete training online, earn credits, and monitor your progress — all from your dashboard. Learning shouldn't stop after graduation." },
+  { icon: 'CalendarCheck', title: 'Access Flexible Locum Opportunities', body: 'Choose when and where you work. Browse verified locum opportunities that match your speciality, location, and availability — enjoy greater flexibility while increasing your income.' },
+  { icon: 'Bell', title: 'Never Miss Licence Renewals', body: 'PSL automatically tracks important renewal dates and reminds you before licences, registrations, or certifications expire. Stay compliant without the stress.' },
+  { icon: 'TrendingUp', title: 'Track Your Professional Growth', body: 'Healthcare is constantly evolving. PSL helps you understand your strengths, identify competency gaps, and recommends learning paths that align with your specialty and career aspirations.' },
 ]
 
 const defaultFAQs = [
-  { question: 'Is PSL free?', answer: 'Yes. Free to join, free to browse, free to apply during early access. When we launch commercially, there will be a free tier and a paid Pro plan. Early access members get locked-in pricing.' },
-  { question: 'Do the CPD courses count toward my NMCN or MDCN renewal?', answer: 'Yes. Every course is accredited by the relevant professional body before it goes live. Points are added to your tracker automatically.' },
-  { question: 'Can I use PSL for locum work alongside my main job?', answer: 'Yes. Locum shifts are separate from full-time listings. Browse and pick up shifts that fit your schedule.' },
-  { question: 'How is PSL different from Jobberman or LinkedIn?', answer: "PSL is built only for clinical professionals. It understands your registration, your CPD cycle, and your discipline. Jobberman and LinkedIn weren't designed for you. PSL was." },
-  { question: 'What disciplines are on PSL?', answer: "Nurses, midwives, doctors, pharmacists, physiotherapists, lab scientists, radiographers, CHEWs, and all allied health professionals. If you're registered with a Nigerian professional body, you qualify." },
-  { question: 'What is a PSL professional profile?', answer: 'Your PSL profile is a verified record of your professional identity — your qualifications, registration number, employment history, licenses, and credentials. It stays with you across jobs and is shareable with employers or regulators in one tap.' },
-  { question: 'How does competency tracking work?', answer: 'PSL maps your completed training, CPD credits, and role experience against the requirements of your specialty. You can see where you meet the standard, where gaps exist, and what learning to prioritise next.' },
+  { question: 'Is PSL free for healthcare professionals?', answer: 'Yes. Creating your professional profile and applying for opportunities is completely free.' },
+  { question: 'How do I know employers are genuine?', answer: 'Every employer on PSL goes through a verification process before posting opportunities on the platform.' },
+  { question: "Can I use PSL even if I'm not looking for a new job?", answer: 'Absolutely. Many professionals use PSL to complete CPD training, manage credentials, track licence renewals, and maintain a verified professional profile.' },
+  { question: 'How does CPD work?', answer: 'Complete accredited courses directly on the platform, monitor your progress, and keep your professional development records organised in one place.' },
+  { question: 'What is a PSL Professional Profile?', answer: 'Your PSL profile is a verified digital record of your professional identity. It securely stores your qualifications, licences, employment history, certifications, skills, and CPD records, making it easy to share with employers whenever needed.' },
+  { question: 'Can I find locum opportunities?', answer: 'Yes. PSL connects healthcare professionals with verified locum opportunities across Nigeria, helping you work flexibly while expanding your experience and earning potential.' },
 ]
 
-const iconMap: Record<string, any> = { DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock }
+const iconMap: Record<string, any> = { DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock, Briefcase, GraduationCap, CalendarCheck, TrendingUp }
 
 export default function ProfessionalsClient() {
   const data: any = {}
@@ -50,7 +43,6 @@ export default function ProfessionalsClient() {
   const painPoints = data?.painPoints?.length ? data.painPoints : defaultPainPoints
   const features = data?.features?.length ? data.features : defaultFeatures
   const faqs = data?.faqs?.length ? data.faqs : defaultFAQs
-  const disciplines = data?.disciplines?.length ? data.disciplines : ['Registered Nurses','Nurse-Midwives','Doctors','Pharmacists','Physiotherapists','Medical Laboratory Scientists','Radiographers','CHEWs','Allied Health Professionals']
 
   return (
     <>
@@ -58,12 +50,22 @@ export default function ProfessionalsClient() {
         <AnimateOnScroll><div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
           <SectionTag label="For Healthcare Professionals" />
           <h1 style={{ fontSize: 'clamp(34px,5vw,56px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, marginTop: 20, marginBottom: 20 }}>
-            {data?.heroHeadline || 'Your career. Your credentials. One platform built for it.'}
+            One Platform. Every Opportunity. Your Entire Healthcare Career.
           </h1>
           <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 36, maxWidth: 540, margin: '0 auto 36px' }}>
-            {data?.heroSubheadline || 'Jobs with salary shown. CPD on your phone. Locum shifts when you need them. Your professional profile, credentials, and career growth — all in one place. For every registered clinical professional in Nigeria.'}
+            Whether you&apos;re looking for your next role, earning CPD credits, managing your professional credentials, or taking on flexible locum shifts, PSL gives you everything you need to build a successful healthcare career — all in one secure platform.
           </p>
-          <PrimaryButton href="/waitlist?role=professional">{data?.heroCta || 'Join free — no card required'}</PrimaryButton>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <PrimaryButton href="/waitlist?role=professional">Create Your Free Profile</PrimaryButton>
+            <a href="/professionals#jobs" className="btn-primary" style={{ background: 'transparent', color: '#113614', border: '2px solid #113614', padding: '3px 3px 3px 20px' }}>
+              Explore Healthcare Jobs
+              <span className="btn-primary__icon" style={{ background: '#113614', color: '#fff', flexShrink: 0 }}>
+                <ArrowRight size={15} className="arrow-a" />
+                <ArrowRight size={15} className="arrow-b" />
+              </span>
+            </a>
+          </div>
+          <p style={{ fontSize: 13, color: '#7a8c7d', marginTop: 16 }}>Always free for healthcare professionals.</p>
         </div></AnimateOnScroll>
       </section>
 
@@ -71,7 +73,8 @@ export default function ProfessionalsClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="The problems we fix" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>The system has been failing you. PSL fixes it.</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Stop Managing Your Career Across Multiple Platforms</h2>
+            <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.65, maxWidth: 560, margin: '16px auto 0' }}>Your professional journey shouldn&apos;t be scattered across WhatsApp groups, job boards, emails, spreadsheets, and paper files.</p>
           </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             {painPoints.map((p: any, i: number) => (
@@ -83,12 +86,17 @@ export default function ProfessionalsClient() {
                 <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(16,54,19,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
                   <CheckCircle2 size={18} color="var(--brand-dark)" />
                 </div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10, letterSpacing: '-0.01em' }}>{p.headline}</h3>
+                <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10, letterSpacing: '-0.01em' }}>{p.title || p.headline}</h3>
                 <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{p.body}</p>
               </div>
               </AnimateOnScroll>
             ))}
           </div>
+          <AnimateOnScroll delay={200}>
+            <p style={{ fontSize: 18, fontWeight: 600, color: 'var(--brand-dark)', textAlign: 'center', marginTop: 48 }}>
+              PSL brings everything together into one verified professional profile that grows with your career.
+            </p>
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -96,7 +104,7 @@ export default function ProfessionalsClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="What you get" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything your career needs. Nothing it does not.</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything Your Healthcare Career Needs</h2>
           </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
@@ -111,7 +119,7 @@ export default function ProfessionalsClient() {
                     <Icon size={22} color="#fff" />
                   </div>
                   <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
-                  <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.description}</p>
+                  <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.body || f.description}</p>
                 </div>
                 </AnimateOnScroll>
               )
@@ -120,21 +128,118 @@ export default function ProfessionalsClient() {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
-            <AnimateOnScroll><div>
-              <SectionTag label="Who PSL is for" />
-              <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, marginBottom: 20, letterSpacing: '-0.02em' }}>If you are registered, PSL is for you.</h2>
-              <p style={{ fontSize: 16, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 24 }}>Registered with MDCN, NMCN, PCN, or any recognised Nigerian professional body? PSL was built for you.</p>
-              <PrimaryButton href="/waitlist?role=professional">Create your free profile</PrimaryButton>
-            </div></AnimateOnScroll>
-            <AnimateOnScroll delay={150}><div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-              {disciplines.map((d: string) => (
-                <span key={d} style={{ padding: '10px 18px', borderRadius: 100, background: 'rgba(16,54,19,0.07)', fontSize: 14, fontWeight: 500, color: 'var(--brand-dark)', border: '1px solid rgba(16,54,19,0.12)' }}>{d}</span>
-              ))}
-            </div></AnimateOnScroll>
+      <section style={{ padding: '80px 24px', background: '#f5f5f0' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <AnimateOnScroll>
+            <SectionTag label="Why PSL" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 48, letterSpacing: '-0.02em' }}>More Than a Job Board</h2>
+          </AnimateOnScroll>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            <AnimateOnScroll delay={100}>
+              <div style={{ background: '#fff', borderRadius: 16, padding: '32px', border: '1px solid rgba(0,0,0,0.08)' }}>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: '#6b7280', marginBottom: 20 }}>Traditional Job Boards</h3>
+                {[
+                  'Only help you find jobs',
+                  'No credential management',
+                  'No CPD tracking',
+                  'No career development',
+                  'No professional profile',
+                  'No licence reminders',
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < 5 ? '1px solid rgba(0,0,0,0.06)' : 'none' }}>
+                    <span style={{ color: '#ef4444', fontSize: 18, flexShrink: 0 }}>✕</span>
+                    <span style={{ fontSize: 15, color: '#6b7280' }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={200}>
+              <div style={{ background: '#113614', borderRadius: 16, padding: '32px', border: '1px solid rgba(0,0,0,0.08)' }}>
+                <h3 style={{ fontSize: 18, fontWeight: 700, color: '#C09D59', marginBottom: 20 }}>PSL</h3>
+                {[
+                  'Verified professional profile',
+                  'Healthcare jobs',
+                  'CPD courses',
+                  'Career development',
+                  'Competency tracking',
+                  'Locum opportunities',
+                  'Credential management',
+                  'Licence reminders',
+                  'Career support',
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: i < 8 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
+                    <span style={{ color: '#7A863E', fontSize: 18, flexShrink: 0 }}>✓</span>
+                    <span style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)' }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </AnimateOnScroll>
           </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '80px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <AnimateOnScroll>
+            <SectionTag label="How it works" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 48, letterSpacing: '-0.02em' }}>Get Started in Three Simple Steps</h2>
+          </AnimateOnScroll>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+            {[
+              {
+                number: '01',
+                title: 'Create Your Professional Profile',
+                body: 'Add your qualifications, licences, employment history, and professional information. Verification only happens once.',
+              },
+              {
+                number: '02',
+                title: 'Unlock Career Opportunities',
+                body: 'Search jobs, book locum shifts, complete CPD, track your professional development, and manage your credentials — everything becomes available immediately.',
+              },
+              {
+                number: '03',
+                title: 'Keep Growing',
+                body: 'Apply with confidence. Stay compliant. Develop new skills. Advance your career.',
+              },
+            ].map((step, i) => (
+              <AnimateOnScroll key={i} delay={i * 120}>
+                <div style={{ background: '#f5f5f0', borderRadius: 16, padding: '32px', height: '100%', boxSizing: 'border-box' as const }}>
+                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#113614', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                    <span style={{ color: '#fff', fontWeight: 800, fontSize: 16 }}>{step.number}</span>
+                  </div>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: '#0d2810', marginBottom: 12 }}>{step.title}</h3>
+                  <p style={{ fontSize: 15, lineHeight: 1.7, color: '#4a5e4d', margin: 0 }}>{step.body}</p>
+                </div>
+              </AnimateOnScroll>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '80px 24px', background: '#f5f5f0' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <AnimateOnScroll>
+            <SectionTag label="Who it's for" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 16, letterSpacing: '-0.02em' }}>Built for Every Healthcare Professional</h2>
+            <p style={{ fontSize: 18, color: '#4a5e4d', lineHeight: 1.7, marginBottom: 40, maxWidth: 600 }}>Whether you&apos;re early in your career or an experienced specialist, PSL is designed to support your professional journey.</p>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay={100}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              {[
+                'Doctors', 'Nurses', 'Midwives', 'Pharmacists', 'Medical Laboratory Scientists',
+                'Radiographers', 'Physiotherapists', 'Dentists', 'Community Health Officers',
+                'Optometrists', 'Nutritionists', 'Healthcare Administrators',
+                'Public Health Professionals', 'Allied Health Professionals',
+              ].map((role, i) => (
+                <span key={i} style={{
+                  display: 'inline-block', padding: '8px 18px',
+                  background: '#fff', borderRadius: 999,
+                  border: '1px solid rgba(17,54,20,0.15)',
+                  fontSize: 14, fontWeight: 500, color: '#113614',
+                }}>{role}</span>
+              ))}
+            </div>
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -148,16 +253,35 @@ export default function ProfessionalsClient() {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-dark)' }}>
-        <AnimateOnScroll><div className="container" style={{ textAlign: 'center' }}>
-          <SectionTag label="Early access" variant="white" />
-          <h2 style={{ fontSize: 'clamp(28px,4vw,46px)', fontWeight: 700, color: '#fff', marginTop: 16, marginBottom: 16, letterSpacing: '-0.02em' }}>{data?.closingHeadline || 'Ready? Join free.'}</h2>
-          <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', marginBottom: 36, maxWidth: 400, margin: '0 auto 36px' }}>{data?.closingSubtext || 'No card. No commitment. Your career — finally, a platform built for it.'}</p>
-          <Link href="/waitlist?role=professional" className="btn-primary btn-primary--white">
-            Create your free profile
-            <span className="btn-primary__icon"><ArrowRight size={15} className="arrow-a" /><ArrowRight size={15} className="arrow-b" /></span>
-          </Link>
-        </div></AnimateOnScroll>
+      <section style={{ padding: '80px 24px', background: '#113614' }}>
+        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
+          <AnimateOnScroll>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 20, letterSpacing: '-0.02em' }}>Your Next Opportunity Starts Here</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>Whether you&apos;re searching for a better role, building new skills, completing CPD, or planning your long-term career, PSL gives you the tools to move forward with confidence.</p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="/waitlist?role=professional" className="btn-primary">
+                Create Your Free Profile
+                <span className="btn-primary__icon">
+                  <ArrowRight size={15} className="arrow-a" />
+                  <ArrowRight size={15} className="arrow-b" />
+                </span>
+              </a>
+              <a href="/professionals#jobs" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: 'transparent', color: '#fff',
+                padding: '3px 3px 3px 20px', borderRadius: 999,
+                fontWeight: 700, fontSize: 15,
+                textDecoration: 'none',
+                border: '2px solid rgba(255,255,255,0.4)',
+              }}>
+                Browse Healthcare Jobs
+                <span style={{ width: 33, height: 33, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ArrowRight size={15} color="#fff" />
+                </span>
+              </a>
+            </div>
+          </AnimateOnScroll>
+        </div>
       </section>
 
     </>

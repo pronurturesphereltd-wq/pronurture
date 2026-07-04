@@ -1,8 +1,8 @@
 import ProfessionalsClient from './ProfessionalsClient'
 
 export const metadata = {
-  title: 'For Healthcare Professionals | PSL',
-  description: 'Find healthcare jobs with salary shown, track your CPD, pick up locum shifts, and manage your professional credentials — all in one platform built for Nigerian healthcare professionals.',
+  title: 'Healthcare Professionals | Find Jobs, CPD & Career Growth | PSL',
+  description: 'Discover healthcare jobs with transparent salaries, complete CPD courses, manage your professional credentials, access verified locum opportunities, and grow your career with Nigeria\'s leading healthcare workforce platform.',
 }
 
 export default function Page() {
