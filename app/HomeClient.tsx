@@ -121,9 +121,9 @@ export default function HomeClient() {
               <ArrowRight size={15} className="arrow-b" />
             </span>
           </a>
-          <a href="/waitlist?role=employer" className="btn-primary" style={{ background: 'transparent', color: '#113614', border: '2px solid #113614' }}>
+          <a href="/waitlist?role=employer" className="btn-primary" style={{ background: 'transparent', color: '#113614', border: '2px solid #113614', padding: '3px 3px 3px 20px' }}>
             Hire Healthcare Professionals
-            <span className="btn-primary__icon" style={{ background: '#113614' }}>
+            <span className="btn-primary__icon" style={{ background: '#113614', color: '#fff', flexShrink: 0 }}>
               <ArrowRight size={15} className="arrow-a" />
               <ArrowRight size={15} className="arrow-b" />
             </span>
