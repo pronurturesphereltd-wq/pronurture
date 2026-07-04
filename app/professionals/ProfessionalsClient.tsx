@@ -57,7 +57,7 @@ export default function ProfessionalsClient() {
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
             <PrimaryButton href="/waitlist?role=professional">Create Your Free Profile</PrimaryButton>
-            <a href="/professionals#jobs" className="btn-primary" style={{ background: 'transparent', color: '#113614', border: '2px solid #113614', padding: '3px 3px 3px 20px' }}>
+            <a href="/waitlist?role=professional" className="btn-primary" style={{ background: 'transparent', color: '#113614', border: '2px solid #113614', padding: '3px 3px 3px 20px' }}>
               Explore Healthcare Jobs
               <span className="btn-primary__icon" style={{ background: '#113614', color: '#fff', flexShrink: 0 }}>
                 <ArrowRight size={15} className="arrow-a" />
@@ -266,17 +266,11 @@ export default function ProfessionalsClient() {
                   <ArrowRight size={15} className="arrow-b" />
                 </span>
               </a>
-              <a href="/professionals#jobs" style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: 'transparent', color: '#fff',
-                padding: '3px 3px 3px 20px', borderRadius: 999,
-                fontWeight: 700, fontSize: 15,
-                textDecoration: 'none',
-                border: '2px solid rgba(255,255,255,0.4)',
-              }}>
+              <a href="/waitlist?role=professional" className="btn-primary" style={{ background: 'transparent', color: '#fff', border: '2px solid rgba(255,255,255,0.4)', padding: '3px 3px 3px 20px' }}>
                 Browse Healthcare Jobs
-                <span style={{ width: 33, height: 33, borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ArrowRight size={15} color="#fff" />
+                <span className="btn-primary__icon" style={{ background: 'rgba(255,255,255,0.15)', flexShrink: 0 }}>
+                  <ArrowRight size={15} className="arrow-a" />
+                  <ArrowRight size={15} className="arrow-b" />
                 </span>
               </a>
             </div>
