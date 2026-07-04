@@ -234,7 +234,14 @@ export default function EmployersClient() {
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 24, letterSpacing: '-0.02em' }}>More Than Recruitment. A Complete Workforce Management Platform.</h2>
             <p style={{ fontSize: 18, lineHeight: 1.8, color: '#4a5e4d', marginBottom: 16 }}>Most recruitment platforms stop after you&apos;ve hired someone. PSL is built for everything that comes next.</p>
             <p style={{ fontSize: 18, lineHeight: 1.8, color: '#4a5e4d', marginBottom: 16 }}>From onboarding and scheduling to compliance, CPD tracking, attendance, workforce planning, and analytics, PSL supports every stage of the employee lifecycle.</p>
-            <p style={{ fontSize: 18, lineHeight: 1.8, color: '#4a5e4d' }}>That means fewer systems to manage, less administrative work, better visibility, and a stronger, more engaged workforce.</p>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: '#4a5e4d', marginBottom: 40 }}>That means fewer systems to manage, less administrative work, better visibility, and a stronger, more engaged workforce.</p>
+            <a href="/waitlist?role=employer" className="btn-primary">
+              Create Your Facility Account
+              <span className="btn-primary__icon">
+                <ArrowRight size={15} className="arrow-a" />
+                <ArrowRight size={15} className="arrow-b" />
+              </span>
+            </a>
           </AnimateOnScroll>
         </div>
       </section>
