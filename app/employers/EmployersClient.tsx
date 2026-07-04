@@ -1,31 +1,30 @@
 'use client'
 import Link from 'next/link'
-import { ArrowRight, ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle, Database, CalendarDays, TrendingUp, ClipboardList, PieChart } from 'lucide-react'
+import { ArrowRight, ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle, Database, CalendarDays, TrendingUp, ClipboardList, PieChart, UserPlus, Calendar } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 
 const defaultPainPoints = [
-  { headline: "You're filling vacancies through WhatsApp and walk-ins.", body: "Months of messages. Candidates who don't show. By the time you've verified someone, the nurse you wanted has already taken another offer. PSL fixes the pipeline.", source: '' },
-  { headline: "You've hired someone whose licence had lapsed.", body: "Or you nearly did. On PSL, every candidate's MDCN or NMCN registration is confirmed before they apply. You only see qualified, licence-current professionals.", source: '' },
-  { headline: "Your staff manage their own CPD. You have no idea who's at risk.", body: "80% of facilities in our survey have no system for tracking staff CPD. PSL gives you a dashboard showing every staff member's status.", source: 'PSL Employer Survey, May 2026' },
-  { headline: "You have no visibility into staffing gaps until it's too late.", body: "You discover you're understaffed the day before a shift, not three weeks earlier when you could have done something about it. Gaps that blindside you cost more — in agency fees, overtime, and patient care.", source: '' },
-  { headline: "Onboarding new staff is inconsistent and compliance gaps slip through.", body: "Every new hire goes through a different version of onboarding depending on who handles it. Documents get missed, training gets skipped, and the gaps only show up during audits.", source: '' },
+  { title: 'Recruitment takes too long', body: 'Vacancies stay open for months while departments operate understaffed, increasing pressure on existing staff and affecting patient care.' },
+  { title: 'Staff shortages happen without warning', body: "You discover you're understaffed the day before a shift — not weeks earlier when you could have done something about it." },
+  { title: 'Shift schedules constantly change', body: 'Last-minute changes, no-shows, and manual roster updates consume hours of administrative time every week.' },
+  { title: 'Attendance is difficult to monitor', body: 'Paper-based attendance records are slow, error-prone, and impossible to analyse without significant manual effort.' },
+  { title: 'Compliance is tracked manually', body: "Licence renewals, certifications, and CPD deadlines get missed because there's no system proactively tracking them." },
+  { title: 'Training records are scattered', body: 'Employee training and CPD records live across spreadsheets, emails, and filing cabinets — making audits stressful and time-consuming.' },
+  { title: 'Disconnected systems cost time and money', body: 'These fragmented processes waste time, increase costs, and ultimately put patient care at risk.' },
 ]
 
 const defaultFeatures = [
-  { icon: 'ShieldCheck', title: 'Verified candidates', description: "Every applicant's MDCN/NMCN registration confirmed before they reach your inbox." },
-  { icon: 'BarChart2', title: 'CPD compliance dashboard', description: "See your whole team's CPD status in one place. Automatic reminders before deadlines." },
-  { icon: 'Archive', title: 'Digital staff records', description: 'Contracts, certificates, credentials — stored, searchable, inspection-ready.' },
-  { icon: 'Users', title: 'Vacancy posting', description: 'Post a role with salary range. Receive verified applicants directly.' },
-  { icon: 'Clock', title: 'Locum on demand', description: 'Post a locum request and reach available professionals in your state within hours.' },
-  { icon: 'MessageCircle', title: 'Named support on WhatsApp', description: 'A real person you can call. 4/5 employers said this was their number one trust requirement.' },
-  { icon: 'Database', title: 'Staff Registry', description: 'One master profile per worker — identity, role, employer, location, license status, and employment history. Always current. Always accessible.' },
-  { icon: 'CalendarDays', title: 'Attendance & Leave Management', description: 'Track daily attendance, manage leave requests, and maintain accurate records — all within the same platform as your roster and payroll.' },
-  { icon: 'TrendingUp', title: 'Staffing Forecasts', description: 'See your workforce gaps weeks in advance. Plan recruitment and shift coverage before shortages hit patient care.' },
-  { icon: 'ClipboardList', title: 'Onboarding Checklists', description: 'Standardised onboarding for every new hire. Documents, training requirements, and compliance checks — nothing falls through the cracks.' },
-  { icon: 'PieChart', title: 'Workforce Analytics', description: 'Dashboards for turnover, vacancy trends, CPD completion, and geographic staff distribution. Real data for better workforce decisions.' },
+  { icon: 'UserPlus', title: 'Recruit Qualified Professionals Faster', body: 'Access a growing network of verified healthcare professionals across multiple specialties. Post vacancies, review applications, verify credentials, and hire with confidence.' },
+  { icon: 'Database', title: 'Maintain a Digital Staff Registry', body: 'Create one secure profile for every employee. Store professional licences, qualifications, employment history, certifications, compliance records, and workforce information in one place — no more searching through multiple files or spreadsheets.' },
+  { icon: 'Calendar', title: 'Simplify Shift Scheduling', body: 'Create staff rosters in minutes. Assign shifts, manage rotations, handle last-minute replacements, and ensure every department has the coverage it needs.' },
+  { icon: 'CalendarDays', title: 'Attendance & Leave Management', body: 'Track attendance in real time, approve leave requests digitally, monitor absenteeism, and generate attendance reports instantly — everything stays organised automatically.' },
+  { icon: 'ClipboardList', title: 'Onboard New Employees Efficiently', body: 'Standardise your onboarding process with digital checklists. Track documentation, verify credentials, assign mandatory training, and ensure every employee starts fully prepared and compliant.' },
+  { icon: 'ShieldCheck', title: 'Monitor Compliance', body: 'Never lose track of licence renewals, certifications, mandatory training, or CPD completion. Receive automatic alerts before compliance issues become operational risks.' },
+  { icon: 'TrendingUp', title: 'Workforce Planning & Forecasting', body: 'Use workforce insights to anticipate vacancies, monitor turnover trends, and identify staffing gaps before they impact patient care. Plan proactively instead of reacting to emergencies.' },
+  { icon: 'PieChart', title: 'Workforce Analytics', body: 'Transform workforce data into actionable insights. Monitor staff utilisation, vacancy trends, turnover, attendance, CPD completion, compliance rates, and department performance — make workforce decisions backed by data, not guesswork.' },
 ]
 
 const defaultStats = [
@@ -37,16 +36,15 @@ const defaultStats = [
 ]
 
 const defaultFAQs = [
-  { question: 'What will PSL cost?', answer: "PSL is free during early access. When we launch commercially, we'll have a Starter plan for smaller facilities and a Growth plan for mid-size facilities. Early access members get pricing locked in." },
-  { question: 'How fast can I fill a vacancy?', answer: 'Once you post, applications arrive from pre-verified candidates immediately. On the Growth plan, we guarantee a qualified shortlist within 14 days or we refund the month.' },
-  { question: 'Who are the candidates on PSL?', answer: 'Registered nurses, midwives, doctors, pharmacists, physiotherapists, lab scientists, radiographers, CHEWs, and allied health professionals — all with verified MDCN, NMCN, or PCN registration.' },
-  { question: 'What does early access include?', answer: "Early access members receive priority onboarding with dedicated support, discounted subscription rates locked in for the first 12 months, and direct input into the product roadmap. You'll be among the first facilities to go live with all platform capabilities — staff registry, scheduling, attendance, CPD tracking, credential verification, staffing forecasts, and workforce analytics — at no cost until full commercial launch." },
-  { question: 'Does PSL include attendance and leave management?', answer: 'Yes. You can track daily attendance, manage and approve leave requests, and generate attendance reports — all within the same platform as your shift scheduling and payroll.' },
-  { question: 'Can I forecast my staffing needs in advance?', answer: "Yes. PSL's staffing forecast dashboard shows projected workforce gaps based on scheduled leave, upcoming contract ends, and vacancy trends — so you can plan ahead, not react after the fact." },
-  { question: 'What is the PSL staff registry?', answer: 'The PSL staff registry is a master profile for every worker in your facility — their identity, qualifications, role, employment history, license status, and compliance records. It gives you a single, always-current view of your entire workforce.' },
+  { question: 'Can I recruit permanent and locum staff?', answer: 'Yes. PSL supports both permanent recruitment and verified locum staffing, giving you the flexibility to meet changing workforce demands.' },
+  { question: 'How are healthcare professionals verified?', answer: 'Professional registrations, licences, qualifications, and employment information are verified before candidates become available to employers. This helps reduce recruitment risks and saves valuable screening time.' },
+  { question: 'Does PSL support attendance and leave management?', answer: 'Absolutely. Track attendance, approve leave requests, monitor absenteeism, and generate reports from one integrated dashboard.' },
+  { question: 'Can PSL help with workforce planning?', answer: 'Yes. Our workforce forecasting tools help you identify staffing shortages, monitor vacancy trends, and prepare for future workforce needs before they become operational challenges.' },
+  { question: 'Is CPD included?', answer: 'Yes. Managers can monitor CPD completion across teams, assign required learning, and ensure employees remain compliant with professional development requirements.' },
+  { question: 'Can PSL integrate with our existing HR or payroll system?', answer: 'PSL is designed to work alongside existing HR and payroll processes while reducing manual administration. Integration capabilities continue to expand as the platform evolves.' },
 ]
 
-const iconMap: Record<string, any> = { ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle, Database, CalendarDays, TrendingUp, ClipboardList, PieChart }
+const iconMap: Record<string, any> = { ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle, Database, CalendarDays, TrendingUp, ClipboardList, PieChart, UserPlus, Calendar }
 
 export default function EmployersClient() {
   const data: any = {}
@@ -62,24 +60,27 @@ export default function EmployersClient() {
     <>
       <section style={{ padding: '56px 0 72px', background: 'var(--brand-dark)' }}>
         <AnimateOnScroll><div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
-          <SectionTag label="For Healthcare Facilities" variant="white" />
+          <SectionTag label="For Healthcare Employers" variant="white" />
           <h1 style={{ fontSize: 'clamp(34px,5vw,56px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.15, marginTop: 20, marginBottom: 20 }}>
-            {data?.heroHeadline || 'Stop hiring blind.'}
+            Build Stronger Healthcare Teams with One Intelligent Workforce Platform
           </h1>
           <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, marginBottom: 36, maxWidth: 560, margin: '0 auto 36px' }}>
-            {data?.heroSubheadline || "PSL gives Nigerian hospitals, clinics, and healthcare facilities the tools to register, roster, schedule, verify, develop, and retain their workforce — all in one platform."}
+            From recruitment and onboarding to scheduling, compliance, CPD, attendance, and workforce analytics, PSL gives hospitals, clinics, and healthcare organisations everything they need to attract, manage, and retain exceptional healthcare professionals — all in one secure platform.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/waitlist?role=employer" className="btn-primary btn-primary--white">
-              {data?.heroCta || 'Post your first vacancy free'}
+              Book a Demo
               <span className="btn-primary__icon"><ArrowRight size={15} className="arrow-a" /><ArrowRight size={15} className="arrow-b" /></span>
             </Link>
-            {whatsapp && (
-              <a href={`https://wa.me/${whatsapp.replace(/\D/g,'')}`} className="btn-text" target="_blank" rel="noopener noreferrer">
-                {data?.heroSecondaryCta || 'Prefer to talk first? WhatsApp us'} <ArrowRight size={15} />
-              </a>
-            )}
+            <a href="/waitlist?role=employer" className="btn-primary" style={{ background: 'transparent', color: '#fff', border: '2px solid rgba(255,255,255,0.4)', padding: '3px 3px 3px 20px' }}>
+              Create Your Facility Account
+              <span className="btn-primary__icon" style={{ background: 'rgba(255,255,255,0.2)', width: 33, height: 33, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <ArrowRight size={15} className="arrow-a" />
+                <ArrowRight size={15} className="arrow-b" />
+              </span>
+            </a>
           </div>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 16 }}>Built for hospitals, clinics, diagnostic centres, HMOs, NGOs, and healthcare organisations of every size.</p>
         </div></AnimateOnScroll>
       </section>
 
@@ -87,7 +88,8 @@ export default function EmployersClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="Sound familiar?" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>The hiring process is broken. We know because we asked.</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Healthcare Workforce Management Shouldn&apos;t Be This Difficult</h2>
+            <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.65, marginTop: 16, maxWidth: 560, margin: '16px auto 0' }}>Managing a healthcare workforce is one of the biggest challenges facing healthcare organisations today.</p>
           </div></AnimateOnScroll>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 820, margin: '0 auto' }}>
             {painPoints.map((p: any, i: number) => (
@@ -100,45 +102,16 @@ export default function EmployersClient() {
                   <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--brand-dark)' }}>0{i+1}</span>
                 </div>
                 <div>
-                  <h3 style={{ fontSize: 19, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>{p.headline}</h3>
+                  <h3 style={{ fontSize: 19, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>{p.title}</h3>
                   <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{p.body}</p>
-                  {p.source && <p style={{ fontSize: 12, color: 'var(--brand-gray)', marginTop: 8, opacity: 0.7 }}>Source: {p.source}</p>}
                 </div>
               </div>
               </AnimateOnScroll>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section style={{ padding: 'var(--section-padding-y) 0' }}>
-        <div className="container">
-          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <SectionTag label="The transformation" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>What changes when you use PSL.</h2>
-          </div></AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            {[
-              { before: 'Chasing candidates on WhatsApp', after: 'Verified professionals come to you', body: "Every professional on PSL has a checked registration, verified credentials, and a complete work history — ready to review before you ever speak to them." },
-              { before: 'CPD tracking on paper or not at all', after: "Your whole team's compliance, at a glance", body: "See which staff are up to date, who needs to renew, and what courses they've completed — without chasing anyone." },
-              { before: 'Scattered staff records and paper files', after: 'One verified profile per worker', body: 'Every team member has a live digital record — identity, role, licenses, CPD status, and employment history — always current, always accessible.' },
-              { before: 'Reactive hiring', after: 'Proactive workforce planning', body: "Instead of filling gaps as they appear, you see vacancies, turnover trends, and staffing forecasts weeks in advance. Workforce decisions become data-driven, not crisis-driven." },
-            ].map((card, i) => (
-              <AnimateOnScroll key={i} delay={i * 100}>
-              <div style={{ padding: 32, borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: 13, color: 'var(--brand-gray)', opacity: 0.7, textDecoration: 'line-through' }}>{card.before}</span>
-                  <span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>→</span>
-                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--brand-dark)' }}>{card.after}</span>
-                </div>
-                <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{card.body}</p>
-              </div>
-              </AnimateOnScroll>
-            ))}
-          </div>
+          <AnimateOnScroll delay={100}>
+            <p style={{ textAlign: 'center', fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.7, maxWidth: 620, margin: '40px auto 0' }}>PSL replaces fragmented systems with one integrated platform that helps you manage your entire workforce with confidence.</p>
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -146,7 +119,7 @@ export default function EmployersClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="What you get" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything you need to run your clinical workforce.</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything You Need to Manage Your Workforce</h2>
           </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
@@ -161,42 +134,108 @@ export default function EmployersClient() {
                     <Icon size={22} color="#fff" />
                   </div>
                   <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
-                  <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.description}</p>
+                  <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.body}</p>
                 </div>
                 </AnimateOnScroll>
               )
             })}
           </div>
-          <p style={{ textAlign: 'center', fontWeight: 600, color: 'var(--brand-dark)', fontSize: 18, marginTop: 32 }}>All eleven capabilities in one subscription. No per-module pricing.</p>
         </div>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0' }}>
-        <div className="container">
-          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
+      <section style={{ padding: '80px 24px', background: '#f5f5f0' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <AnimateOnScroll>
+            <SectionTag label="Why PSL" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 48, letterSpacing: '-0.02em' }}>From Reactive Workforce Management to Strategic Workforce Planning</h2>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay={100}>
+            <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.08)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                <div style={{ padding: '16px 24px', background: '#f5f5f0', fontWeight: 700, fontSize: 14, color: '#6b7280', letterSpacing: '0.05em' }}>TRADITIONAL APPROACH</div>
+                <div style={{ padding: '16px 24px', background: '#113614', fontWeight: 700, fontSize: 14, color: '#C09D59', letterSpacing: '0.05em' }}>WITH PSL</div>
+              </div>
+              {[
+                ['Recruitment is slow', 'Hire verified professionals faster'],
+                ['Staff records are scattered', 'One digital workforce registry'],
+                ['Shift scheduling is manual', 'Intelligent workforce scheduling'],
+                ['Compliance is difficult to monitor', 'Real-time compliance tracking'],
+                ['Attendance is paper-based', 'Digital attendance management'],
+                ['Staffing gaps are discovered too late', 'Workforce forecasting prevents shortages'],
+                ['Reports take days to prepare', 'Real-time workforce analytics'],
+              ].map(([before, after], i) => (
+                <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                  <div style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ color: '#ef4444', flexShrink: 0 }}>✕</span>
+                    <span style={{ fontSize: 15, color: '#6b7280' }}>{before}</span>
+                  </div>
+                  <div style={{ padding: '16px 24px', background: 'rgba(17,54,20,0.03)', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ color: '#7A863E', flexShrink: 0 }}>✓</span>
+                    <span style={{ fontSize: 15, color: '#113614', fontWeight: 500 }}>{after}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </AnimateOnScroll>
+        </div>
+      </section>
+
+      <section style={{ padding: '80px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <AnimateOnScroll>
+            <SectionTag label="Who it's for" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 16, letterSpacing: '-0.02em' }}>Designed for Every Healthcare Organisation</h2>
+            <p style={{ fontSize: 18, color: '#4a5e4d', lineHeight: 1.7, marginBottom: 40, maxWidth: 600 }}>Whether you manage ten employees or ten thousand, PSL scales with your organisation.</p>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay={100}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              {[
+                'Teaching Hospitals', 'General Hospitals', 'Specialist Hospitals', 'Private Hospitals',
+                'Medical Centres', 'Primary Healthcare Centres', 'Diagnostic Centres', 'Fertility Clinics',
+                'Mental Health Facilities', 'NGOs', 'HMOs', 'Public Health Agencies', 'Medical Training Institutions',
+              ].map((org, i) => (
+                <span key={i} style={{ display: 'inline-block', padding: '8px 18px', background: '#f5f5f0', borderRadius: 999, border: '1px solid rgba(17,54,20,0.15)', fontSize: 14, fontWeight: 500, color: '#113614' }}>{org}</span>
+              ))}
+            </div>
+          </AnimateOnScroll>
+        </div>
+      </section>
+
+      <section style={{ padding: '80px 24px', background: '#f5f5f0' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <AnimateOnScroll>
             <SectionTag label="How it works" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Up and running in 3 simple steps.</h2>
-          </div></AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 48, letterSpacing: '-0.02em' }}>Get Started in Three Simple Steps</h2>
+          </AnimateOnScroll>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {[
-              { n: '01', t: 'Create your facility profile and post your first shift', b: 'Set up your hospital or clinic in minutes. Add your departments, staffing requirements, and post your first open shift. No technical training required — your HR team can be live the same day.' },
-              { n: '02', t: 'Browse verified professionals and build your workforce', b: 'Review applications from qualified professionals whose credentials have already been checked. See licence status, CPD completion, work history, and competency records at a glance — then confirm with one click.' },
-              { n: '03', t: 'Manage your whole workforce from one dashboard', b: 'Shifts, attendance, leave, payroll, CPD compliance, staffing forecasts, and workforce analytics — all in one place. Your HR team gets hours back every week.' },
+              { number: '01', title: 'Create Your Facility Profile', body: 'Register your organisation, add departments, define staffing needs, and invite your HR team.' },
+              { number: '02', title: 'Build Your Workforce', body: 'Recruit verified professionals, onboard employees, assign shifts, manage attendance, and monitor compliance from one central platform.' },
+              { number: '03', title: 'Optimise Your Operations', body: 'Use workforce analytics, staffing forecasts, and performance insights to improve operational efficiency and support better patient outcomes.' },
             ].map((step, i) => (
               <AnimateOnScroll key={i} delay={i * 120}>
-              <div style={{ padding: 28, borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)', height: '100%' }}>
-                <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                  <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{step.n}</span>
+                <div style={{ background: '#fff', borderRadius: 16, padding: '32px', height: '100%', boxSizing: 'border-box' as const }}>
+                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#113614', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                    <span style={{ color: '#fff', fontWeight: 800, fontSize: 16 }}>{step.number}</span>
+                  </div>
+                  <h3 style={{ fontSize: 18, fontWeight: 700, color: '#0d2810', marginBottom: 12 }}>{step.title}</h3>
+                  <p style={{ fontSize: 15, lineHeight: 1.7, color: '#4a5e4d', margin: 0 }}>{step.body}</p>
                 </div>
-                <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 10, letterSpacing: '-0.01em', lineHeight: 1.3 }}>{step.t}</h4>
-                <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{step.b}</p>
-              </div>
               </AnimateOnScroll>
             ))}
           </div>
-          <AnimateOnScroll delay={200}><div style={{ textAlign: 'center', marginTop: 40 }}>
-            <PrimaryButton href="/waitlist?role=employer">Start Your Facility Profile</PrimaryButton>
-          </div></AnimateOnScroll>
+        </div>
+      </section>
+
+      <section style={{ padding: '80px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+          <AnimateOnScroll>
+            <SectionTag label="Why PSL" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 24, letterSpacing: '-0.02em' }}>More Than Recruitment. A Complete Workforce Management Platform.</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: '#4a5e4d', marginBottom: 16 }}>Most recruitment platforms stop after you&apos;ve hired someone. PSL is built for everything that comes next.</p>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: '#4a5e4d', marginBottom: 16 }}>From onboarding and scheduling to compliance, CPD tracking, attendance, workforce planning, and analytics, PSL supports every stage of the employee lifecycle.</p>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: '#4a5e4d' }}>That means fewer systems to manage, less administrative work, better visibility, and a stronger, more engaged workforce.</p>
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -233,23 +272,30 @@ export default function EmployersClient() {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-dark)' }}>
-        <AnimateOnScroll><div className="container" style={{ textAlign: 'center' }}>
-          <SectionTag label="Get started" variant="white" />
-          <h2 style={{ fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 700, color: '#fff', marginTop: 16, marginBottom: 16, letterSpacing: '-0.02em' }}>{data?.closingHeadline || "We're real people. Here's how to reach us."}</h2>
-          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)', marginBottom: 36, maxWidth: 500, margin: '0 auto 36px', lineHeight: 1.65 }}>{data?.closingSubtext || 'Every PSL employer account comes with a named contact reachable on WhatsApp. Not a helpdesk. Not a ticket number. A person who knows your facility.'}</p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/waitlist?role=employer" className="btn-primary btn-primary--white">
-              Post your first vacancy free
-              <span className="btn-primary__icon"><ArrowRight size={15} className="arrow-a" /><ArrowRight size={15} className="arrow-b" /></span>
-            </Link>
-            {whatsapp && (
-              <a href={`https://wa.me/${whatsapp.replace(/\D/g,'')}`} className="btn-text" target="_blank" rel="noopener noreferrer">
-                Talk to us on WhatsApp <ArrowRight size={15} />
+      <section style={{ padding: '80px 24px', background: '#113614' }}>
+        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
+          <AnimateOnScroll>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 20, letterSpacing: '-0.02em' }}>Build the Workforce Your Patients Deserve</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 12 }}>Exceptional healthcare begins with exceptional people.</p>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>PSL gives your organisation the tools to recruit smarter, manage more efficiently, stay compliant, and build a workforce prepared for the future of healthcare.</p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="/waitlist?role=employer" className="btn-primary" style={{ border: '2px solid rgba(255,255,255,0.4)' }}>
+                Book a Demo
+                <span className="btn-primary__icon">
+                  <ArrowRight size={15} className="arrow-a" />
+                  <ArrowRight size={15} className="arrow-b" />
+                </span>
               </a>
-            )}
-          </div>
-        </div></AnimateOnScroll>
+              <a href="/waitlist?role=employer" className="btn-primary" style={{ background: 'transparent', color: '#fff', border: '2px solid rgba(255,255,255,0.4)', padding: '3px 3px 3px 20px' }}>
+                Create Your Facility Account
+                <span className="btn-primary__icon" style={{ background: 'rgba(255,255,255,0.2)', width: 33, height: 33, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <ArrowRight size={15} className="arrow-a" />
+                  <ArrowRight size={15} className="arrow-b" />
+                </span>
+              </a>
+            </div>
+          </AnimateOnScroll>
+        </div>
       </section>
 
     </>

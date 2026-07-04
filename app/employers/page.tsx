@@ -1,8 +1,8 @@
 import EmployersClient from './EmployersClient'
 
 export const metadata = {
-  title: 'For Healthcare Employers | PSL',
-  description: 'Ditch spreadsheets and WhatsApp rosters. PSL gives Nigerian facilities a staff registry, shift scheduling, attendance tracking, credential verification, staffing forecasts, CPD tracking, and workforce analytics — all in one platform.',
+  title: 'Healthcare Workforce Management for Hospitals & Clinics | PSL',
+  description: 'Recruit verified healthcare professionals, manage staff, streamline scheduling, monitor compliance, and build a high-performing workforce with Nigeria\'s all-in-one healthcare workforce management platform.',
 }
 
 export default function Page() {
