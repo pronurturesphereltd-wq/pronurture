@@ -268,7 +268,7 @@ export default function ProfessionalsClient() {
               </a>
               <a href="/waitlist?role=professional" className="btn-primary" style={{ background: 'transparent', color: '#fff', border: '2px solid rgba(255,255,255,0.4)', padding: '3px 3px 3px 20px' }}>
                 Browse Healthcare Jobs
-                <span className="btn-primary__icon" style={{ background: 'rgba(255,255,255,0.15)', flexShrink: 0 }}>
+                <span className="btn-primary__icon" style={{ background: 'rgba(255,255,255,0.2)', width: 33, height: 33, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <ArrowRight size={15} className="arrow-a" />
                   <ArrowRight size={15} className="arrow-b" />
                 </span>
