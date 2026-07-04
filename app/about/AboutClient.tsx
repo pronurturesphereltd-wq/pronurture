@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { CheckCircle2, Users } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Users } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
@@ -69,12 +69,15 @@ export default function AboutClient() {
       <section style={{ padding: '72px 0', background: 'var(--brand-offwhite)' }}>
         <div className="container" style={{ maxWidth: 780 }}>
           <AnimateOnScroll>
-          <SectionTag label="Our story" />
+          <SectionTag label="About PSL" />
           <h1 style={{ fontSize: 'clamp(32px,5vw,54px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.2, marginTop: 20 }}>
-            {typeof data?.heroHeadline === 'string' ? data.heroHeadline : 'We built PSL because the system was failing the people running it.'}
+            We&apos;re Building the Infrastructure Behind a Stronger Healthcare Workforce
           </h1>
           <p style={{ fontSize: 20, lineHeight: 1.7, color: 'var(--brand-gray)', maxWidth: 720, margin: '24px auto 0' }}>
-            ProNurtureSphere Limited exists at the intersection of education, technology, and healthcare delivery — nurturing, equipping, deploying, managing, and sustaining competent healthcare professionals across Nigeria and beyond.
+            PSL exists to help healthcare professionals thrive and healthcare organisations operate more effectively. We believe the future of healthcare in Nigeria depends on connected people, connected systems, and smarter workforce management.
+          </p>
+          <p style={{ fontSize: 20, lineHeight: 1.7, color: 'var(--brand-gray)', maxWidth: 720, margin: '16px auto 0' }}>
+            Our mission is simple: make it easier to find, develop, manage, and retain the healthcare workforce Nigeria needs.
           </p>
           </AnimateOnScroll>
         </div>
@@ -84,75 +87,115 @@ export default function AboutClient() {
         <div className="container" style={{ maxWidth: 720 }}>
           <AnimateOnScroll>
           <SectionTag label="Our Mission" />
-          <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, marginBottom: 32, letterSpacing: '-0.02em' }}>Built to fix the workforce crisis.</h2>
+          <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, marginBottom: 32, letterSpacing: '-0.02em' }}>Solving One of Healthcare&apos;s Biggest Challenges</h2>
           </AnimateOnScroll>
           <AnimateOnScroll delay={100}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)' }}>ProNurtureSphere exists to solve Nigeria's healthcare workforce crisis — not with more paperwork, but with better infrastructure. We build the systems that connect the right professionals to the right facilities, at the right time — and the tools that keep them scheduled, compliant, and performing once they are there.</p>
-            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)' }}>We believe every Nigerian deserves safe, well-staffed healthcare. That starts with giving healthcare workers the tools to practise sustainably — verified profiles, CPD tracking, learning paths, and career support — and giving healthcare facilities the confidence to build compliant, capable teams through workforce management tools that actually work in the Nigerian context.</p>
-            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)' }}>We are building the workforce layer that Nigerian healthcare has always needed.</p>
-          </div>
-          </AnimateOnScroll>
-        </div>
-      </section>
-
-      <section style={{ padding: 'var(--section-padding-y) 0' }}>
-        <div className="container">
-          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <SectionTag label="How we work" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>The professional lifecycle, end to end.</h2>
-          </div></AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }}>
+          <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 24 }}>
+            Nigeria&apos;s healthcare workforce faces a difficult reality.
+          </p>
+          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { n: '01', t: 'Training', b: 'Accredited CPD courses and role-based learning paths that build clinical competency from day one.' },
-              { n: '02', t: 'Mentorship', b: 'Structured guidance and peer support that helps professionals grow within their specialty.' },
-              { n: '03', t: 'Deployment', b: 'Verified job placements and locum shifts matched to the right facility, at the right time.' },
-              { n: '04', t: 'Leadership', b: 'Tools and pathways that help experienced professionals move into senior and management roles.' },
-            ].map((step, i) => (
-              <AnimateOnScroll key={i} delay={i * 100}>
-              <div style={{ padding: 28, borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)', height: '100%' }}>
-                <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                  <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{step.n}</span>
-                </div>
-                <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 10, letterSpacing: '-0.01em', lineHeight: 1.3 }}>{step.t}</h4>
-                <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{step.b}</p>
-              </div>
-              </AnimateOnScroll>
+              'Professionals struggle to find transparent opportunities.',
+              'Credentials are often managed manually.',
+              'CPD tracking is fragmented.',
+              'Facilities battle staff shortages.',
+              'Scheduling is time-consuming.',
+              'Compliance is difficult to monitor.',
+              'Workforce planning is often reactive instead of proactive.',
+            ].map((item, i) => (
+              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.6 }}>
+                <span style={{ color: '#C09D59', fontWeight: 700, flexShrink: 0, marginTop: 2 }}>—</span>
+                {item}
+              </li>
             ))}
-          </div>
-          <AnimateOnScroll delay={200}><div style={{ maxWidth: 680, margin: '40px auto 0', textAlign: 'center' }}>
-            <p style={{ fontSize: 16, color: 'var(--brand-gray)', lineHeight: 1.75, marginBottom: 16 }}>This is not a job board. It is a career infrastructure — built to support every stage of a clinical professional's working life.</p>
-            <p style={{ fontSize: 16, color: 'var(--brand-gray)', lineHeight: 1.75 }}>Underpinned by PSL's workforce management tools — staff registry, shift scheduling, attendance, compliance tracking, and analytics — that keep operations running at every stage.</p>
-          </div></AnimateOnScroll>
+          </ul>
+          <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 20 }}>
+            PSL was created to solve these problems with technology designed specifically for the Nigerian healthcare system.
+          </p>
+          <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)' }}>
+            We&apos;re building a connected platform where healthcare professionals can grow their careers while hospitals and clinics can build stronger, more compliant, and better-managed teams.
+          </p>
+          </AnimateOnScroll>
         </div>
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
         <div className="container">
-          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <SectionTag label="What we do" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Six arms. One mission.</h2>
-          </div></AnimateOnScroll>
+          <AnimateOnScroll>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <SectionTag label="How we work" />
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>More Than Recruitment</h2>
+            <p style={{ fontSize: 18, color: 'var(--brand-gray)', marginTop: 12 }}>PSL supports the entire healthcare workforce lifecycle:</p>
+          </div>
+          </AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {[
-              { title: 'PSL Workforce Solutions', body: 'Verified healthcare staffing and workforce management for hospitals and clinics across Nigeria — locum placements, permanent recruitment, shift scheduling, attendance tracking, staffing forecasts, staff registry, and workforce analytics.' },
-              { title: 'PSL Academy', body: 'Accredited CPD training and continuing education for Nigerian healthcare professionals — online, mobile-first, and recognised by NMCN and MDCN.' },
-              { title: 'PSL Mentorship', body: 'Structured mentorship programmes connecting early-career professionals with experienced clinical leaders across Nigeria.' },
-              { title: 'PSL Research', body: 'Evidence-based workforce data and research on the Nigerian healthcare labour market — informing policy, planning, and practice.' },
-              { title: 'PSL Foundation', body: 'Scholarships, grants, and support programmes for underserved healthcare professionals and communities across Nigeria.' },
-              { title: 'PSL Diaspora', body: 'Supporting Nigerian healthcare professionals abroad — CPD tracking, registration support, and pathways back to practice in Nigeria.' },
-            ].map((card, i) => (
-              <AnimateOnScroll key={i} delay={i * 80}>
-              <div style={{ padding: 24, borderRadius: 12, border: '1px solid rgba(0,0,0,0.08)', background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
-              >
-                <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 10, color: 'var(--brand-dark)', letterSpacing: '-0.01em' }}>{card.title}</h4>
-                <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{card.body}</p>
+              { number: '01', title: 'Train', body: 'CPD & Learning' },
+              { number: '02', title: 'Connect', body: 'Professionals & Employers' },
+              { number: '03', title: 'Hire', body: 'Verified Recruitment' },
+              { number: '04', title: 'Manage', body: 'Scheduling & Attendance' },
+              { number: '05', title: 'Comply', body: 'Licences & CPD' },
+              { number: '06', title: 'Grow', body: 'Analytics & Workforce Planning' },
+            ].map((step, i) => (
+              <AnimateOnScroll key={i} delay={i * 100}>
+              <div style={{ padding: 28, borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', background: '#fff', height: '100%' }}>
+                <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                  <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{step.number}</span>
+                </div>
+                <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8, color: '#113614', letterSpacing: '-0.01em' }}>{step.title}</h4>
+                <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{step.body}</p>
               </div>
               </AnimateOnScroll>
             ))}
           </div>
+          <AnimateOnScroll delay={200}>
+          <p style={{ fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.75, maxWidth: 680, margin: '40px auto 0', textAlign: 'center' }}>
+            By connecting these stages, we help healthcare organisations move from reactive workforce management to proactive workforce strategy.
+          </p>
+          </AnimateOnScroll>
+        </div>
+      </section>
+
+      <section style={{ padding: 'var(--section-padding-y) 0' }}>
+        <div className="container" style={{ textAlign: 'center' }}>
+          <AnimateOnScroll>
+          <SectionTag label="Who we serve" />
+          <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em', marginBottom: 16 }}>Built for the Entire Healthcare Ecosystem</h2>
+          <p style={{ fontSize: 18, color: 'var(--brand-gray)', marginBottom: 32 }}>PSL serves:</p>
+          </AnimateOnScroll>
+          <AnimateOnScroll delay={100}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
+            {[
+              'Healthcare professionals across all specialties',
+              'Hospitals and clinics',
+              'Diagnostic centres',
+              'HMOs',
+              'NGOs',
+              'Public health organisations',
+              'Medical training institutions',
+              'Healthcare workforce leaders',
+            ].map((tag, i) => (
+              <span key={i} style={{ padding: '8px 20px', borderRadius: 999, border: '1.5px solid var(--brand-dark)', color: 'var(--brand-dark)', fontSize: 15, fontWeight: 500, background: '#fff' }}>{tag}</span>
+            ))}
+          </div>
+          </AnimateOnScroll>
+        </div>
+      </section>
+
+      <section style={{ padding: '80px 24px', background: '#113614' }}>
+        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+          <AnimateOnScroll>
+            <SectionTag label="Our Vision" variant="white" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 24, letterSpacing: '-0.02em' }}>
+              To become the digital backbone of healthcare workforce management in Africa.
+            </h2>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'rgba(255,255,255,0.8)', marginBottom: 16 }}>
+              We envision a future where healthcare professionals can build careers with confidence, healthcare organisations can manage teams with clarity, and healthcare systems can make workforce decisions with real-time data.
+            </p>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'rgba(255,255,255,0.7)' }}>
+              PSL is building the infrastructure that helps make that future possible.
+            </p>
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -161,11 +204,40 @@ export default function AboutClient() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
             <AnimateOnScroll>
             <div>
-              <SectionTag label="The founding story" />
-              <div style={{ marginTop: 24, fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.75 }}>
-                {(typeof data?.story === 'string' ? data.story : "Nurses applying through WhatsApp groups and hearing nothing back. Doctors taking jobs where the salary was never shown. Midwives falling behind on CPD because tracking it was too complicated. Medical Directors spending months filling one vacancy through walk-ins.\n\nThese are not rare situations. They are the daily reality for Nigerian healthcare professionals and the facilities that employ them.\n\nProNurtureSphere was founded to close that gap. We started with a simple question: what would Nigerian healthcare look like if staffing, scheduling, credentialing, compliance, payroll, and CPD all worked together — seamlessly, compliantly, and fairly? That question became our product. Today we are building the workforce layer that connects every part of the Nigerian healthcare ecosystem — one verified professional at a time.").split('\n\n').map((para: string, i: number) => (
-                  <p key={i} style={{ marginBottom: 20 }}>{para}</p>
-                ))}
+              <SectionTag label="How PSL Started" />
+              <div style={{ marginTop: 24 }}>
+                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 24 }}>
+                  PSL began with a simple observation: healthcare professionals and healthcare employers were using too many disconnected tools.
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {[
+                    'Jobs were shared in WhatsApp groups.',
+                    'Credentials lived in email folders.',
+                    'Staff records sat in spreadsheets.',
+                    'Schedules were managed manually.',
+                    'Compliance was checked during audits instead of continuously.',
+                  ].map((item, i) => (
+                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.6 }}>
+                      <span style={{ color: '#C09D59', fontWeight: 700, flexShrink: 0, marginTop: 2 }}>—</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 24 }}>
+                  Despite the incredible work being done across Nigeria&apos;s healthcare system, the workforce infrastructure supporting that work was fragmented.
+                </p>
+                <p style={{ fontSize: 18, lineHeight: 1.8, color: '#0d2810', fontWeight: 600, marginBottom: 8 }}>
+                  So we asked a different question:
+                </p>
+                <p style={{ fontSize: 20, lineHeight: 1.7, color: '#113614', fontWeight: 700, fontStyle: 'italic', marginBottom: 24, padding: '20px 24px', background: 'rgba(17,54,20,0.05)', borderLeft: '4px solid #C09D59', borderRadius: '0 8px 8px 0' }}>
+                  What would healthcare look like if recruitment, credentialing, CPD, scheduling, compliance, attendance, and workforce planning all worked together in one connected system?
+                </p>
+                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 20 }}>
+                  That question became PSL.
+                </p>
+                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)' }}>
+                  Today, we&apos;re building the workforce layer that helps connect every part of Nigeria&apos;s healthcare ecosystem — one verified professional and one healthcare facility at a time.
+                </p>
               </div>
             </div>
             </AnimateOnScroll>
@@ -199,28 +271,27 @@ export default function AboutClient() {
       </section>
 
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-dark)' }}>
-        <div className="container">
+        <div className="container" style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
           <AnimateOnScroll>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <SectionTag label="What we believe" variant="white" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, color: '#fff', marginTop: 16, letterSpacing: '-0.02em' }}>
-              Four things we will never compromise on.
-            </h2>
-          </div>
+          <SectionTag label="What we believe" variant="white" />
+          <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, color: '#fff', marginTop: 16, marginBottom: 40, letterSpacing: '-0.02em' }}>
+            Healthcare Works Better When the Workforce Works Better
+          </h2>
           </AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            {values.map((v: any, i: number) => (
-              <AnimateOnScroll key={i} delay={i * 100}>
-              <div style={{ padding: '32px', borderRadius: 20, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)', height: '100%' }}>
-                <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--brand-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
-                  <span style={{ color: '#fff', fontWeight: 700, fontSize: 13 }}>0{i+1}</span>
-                </div>
-                <h3 style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 10, letterSpacing: '-0.01em' }}>{v.headline}</h3>
-                <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65 }}>{v.body}</p>
-              </div>
-              </AnimateOnScroll>
-            ))}
-          </div>
+          <AnimateOnScroll delay={100}>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'rgba(255,255,255,0.85)', marginBottom: 20 }}>
+              We believe healthcare professionals deserve tools that help them build sustainable, rewarding careers.
+            </p>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'rgba(255,255,255,0.85)', marginBottom: 20 }}>
+              We believe healthcare organisations deserve systems that reduce administrative burden and improve workforce visibility.
+            </p>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'rgba(255,255,255,0.85)', marginBottom: 32 }}>
+              And we believe patients benefit when the right professionals are in the right places, with the right support, at the right time.
+            </p>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', fontStyle: 'italic' }}>
+              Everything we build is designed around that belief.
+            </p>
+          </AnimateOnScroll>
         </div>
       </section>
 
@@ -279,14 +350,33 @@ export default function AboutClient() {
         </AnimateOnScroll>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
+      <section style={{ padding: '80px 24px', background: '#f5f5f0' }}>
+        <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
           <AnimateOnScroll>
-          <h2 style={{ fontSize: 'clamp(28px,4vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 36 }}>Join PSL from day one.</h2>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <PrimaryButton href="/waitlist?role=professional">I am a healthcare professional — join free</PrimaryButton>
-            <PrimaryButton href="/waitlist?role=employer" variant="white">I manage a clinical team — post a vacancy</PrimaryButton>
-          </div>
+            <SectionTag label="Join us" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 20, letterSpacing: '-0.02em' }}>Join the Movement</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: '#4a5e4d', marginBottom: 40 }}>
+              Whether you&apos;re a healthcare professional looking for better opportunities or a healthcare organisation building a stronger workforce, PSL is creating the platform designed for the future of healthcare in Nigeria.
+            </p>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
+              <a href="/waitlist?role=professional" className="btn-primary">
+                Join as a Professional
+                <span className="btn-primary__icon">
+                  <ArrowRight size={15} className="arrow-a" />
+                  <ArrowRight size={15} className="arrow-b" />
+                </span>
+              </a>
+              <a href="/waitlist?role=employer" className="btn-primary" style={{ background: 'transparent', color: '#113614', border: '2px solid #113614', padding: '3px 3px 3px 20px' }}>
+                Join as a Healthcare Employer
+                <span className="btn-primary__icon" style={{ background: '#113614', width: 33, height: 33, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <ArrowRight size={15} className="arrow-a" />
+                  <ArrowRight size={15} className="arrow-b" />
+                </span>
+              </a>
+            </div>
+            <p style={{ fontSize: 15, color: '#7a8c7d', fontStyle: 'italic' }}>
+              Let&apos;s build a stronger healthcare workforce together.
+            </p>
           </AnimateOnScroll>
         </div>
       </section>
