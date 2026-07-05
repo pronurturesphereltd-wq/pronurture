@@ -9,6 +9,10 @@ export const employersPage = defineType({
     defineField({ name: 'heroSubheadline', title: 'Hero Subheadline', type: 'text', rows: 2, initialValue: 'Every candidate verified before they reach you.' }),
     defineField({ name: 'heroCta', title: 'Hero CTA Label', type: 'string', initialValue: 'Post your first vacancy free' }),
     defineField({ name: 'heroSecondaryCta', title: 'Hero Secondary CTA', type: 'string', initialValue: 'Prefer to talk first? WhatsApp us' }),
+    defineField({ name: 'heroEyebrow', title: 'Hero Eyebrow', type: 'string' }),
+    defineField({ name: 'heroCaption', title: 'Hero Caption', type: 'string' }),
+    defineField({ name: 'painPointsHeading', title: 'Pain Points Section Heading', type: 'string' }),
+    defineField({ name: 'featuresHeading', title: 'Features Section Heading', type: 'string' }),
     defineField({
       name: 'painPoints',
       title: 'Pain Points',

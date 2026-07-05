@@ -11,6 +11,10 @@ export const homepage = defineType({
     defineField({ name: 'heroCta1', title: 'Hero CTA 1 Label', type: 'string', initialValue: "I'm a healthcare professional" }),
     defineField({ name: 'heroCta2', title: 'Hero CTA 2 Label', type: 'string', initialValue: 'I run a healthcare facility' }),
     defineField({ name: 'heroNote', title: 'Hero Note (below CTAs)', type: 'string', initialValue: 'Free to join. No credit card required.' }),
+    defineField({ name: 'painPointsHeading', title: 'Pain Points Section Heading', type: 'string' }),
+    defineField({ name: 'featuresHeading', title: 'Features Section Heading', type: 'string' }),
+    defineField({ name: 'professionalsHeading', title: 'Professionals Section Heading', type: 'string' }),
+    defineField({ name: 'facilitiesHeading', title: 'Facilities Section Heading', type: 'string' }),
     defineField({ name: 'heroImage', title: 'Hero Image (upload here)', type: 'image', options: { hotspot: true } }),
     defineField({ name: 'heroVideo', title: 'Hero Video URL (optional, overrides image)', type: 'url' }),
     defineField({

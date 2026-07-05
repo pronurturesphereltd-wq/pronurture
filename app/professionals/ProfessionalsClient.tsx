@@ -4,7 +4,8 @@ import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
-import { useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { getProfessionalsPage } from '@/lib/sanity'
 
 
 const defaultPainPoints = [
@@ -38,7 +39,10 @@ const defaultFAQs = [
 const iconMap: Record<string, any> = { DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock, Briefcase, GraduationCap, CalendarCheck, TrendingUp }
 
 export default function ProfessionalsClient() {
-  const data: any = {}
+  const [data, setData] = useState<any>(null)
+  useEffect(() => {
+    getProfessionalsPage().then(setData).catch(() => setData({}))
+  }, [])
 
   const painPoints = data?.painPoints?.length ? data.painPoints : defaultPainPoints
   const features = data?.features?.length ? data.features : defaultFeatures
@@ -48,12 +52,12 @@ export default function ProfessionalsClient() {
     <>
       <section style={{ padding: '56px 0 72px', background: 'var(--brand-offwhite)' }}>
         <AnimateOnScroll><div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
-          <SectionTag label="For Healthcare Professionals" />
+          <SectionTag label={data?.heroEyebrow || 'For Healthcare Professionals'} />
           <h1 style={{ fontSize: 'clamp(34px,5vw,56px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, marginTop: 20, marginBottom: 20 }}>
-            One Platform. Every Opportunity. Your Entire Healthcare Career.
+            {data?.heroHeadline || 'One Platform. Every Opportunity. Your Entire Healthcare Career.'}
           </h1>
           <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 36, maxWidth: 540, margin: '0 auto 36px' }}>
-            Whether you&apos;re looking for your next role, earning CPD credits, managing your professional credentials, or taking on flexible locum shifts, PSL gives you everything you need to build a successful healthcare career — all in one secure platform.
+            {data?.heroSubheadline || "Whether you're looking for your next role, earning CPD credits, managing your professional credentials, or taking on flexible locum shifts, PSL gives you everything you need to build a successful healthcare career — all in one secure platform."}
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
             <PrimaryButton href="/waitlist?role=professional">Create Your Free Profile</PrimaryButton>
@@ -73,7 +77,7 @@ export default function ProfessionalsClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="The problems we fix" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Stop Managing Your Career Across Multiple Platforms</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>{data?.painPointsHeading || 'Stop Managing Your Career Across Multiple Platforms'}</h2>
             <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.65, maxWidth: 560, margin: '16px auto 0' }}>Your professional journey shouldn&apos;t be scattered across WhatsApp groups, job boards, emails, spreadsheets, and paper files.</p>
           </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
@@ -104,7 +108,7 @@ export default function ProfessionalsClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="What you get" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything Your Healthcare Career Needs</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>{data?.featuresHeading || 'Everything Your Healthcare Career Needs'}</h2>
           </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
@@ -256,8 +260,8 @@ export default function ProfessionalsClient() {
       <section style={{ padding: '80px 24px', background: '#113614' }}>
         <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
           <AnimateOnScroll>
-            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 20, letterSpacing: '-0.02em' }}>Your Next Opportunity Starts Here</h2>
-            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>Whether you&apos;re searching for a better role, building new skills, completing CPD, or planning your long-term career, PSL gives you the tools to move forward with confidence.</p>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 20, letterSpacing: '-0.02em' }}>{data?.closingHeadline || 'Your Next Opportunity Starts Here'}</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>{data?.closingSubtext || "Whether you're searching for a better role, building new skills, completing CPD, or planning your long-term career, PSL gives you the tools to move forward with confidence."}</p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <a href="/waitlist?role=professional" className="btn-primary" style={{ border: '2px solid rgba(255,255,255,0.4)' }}>
                 Create Your Free Profile

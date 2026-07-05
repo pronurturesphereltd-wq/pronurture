@@ -6,6 +6,8 @@ export const aboutPage = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'heroHeadline', title: 'Hero Headline', type: 'string', initialValue: 'We built PSL because the system was failing the people running it.' }),
+    defineField({ name: 'heroSubheadline', title: 'Hero Subheadline', type: 'text' }),
+    defineField({ name: 'missionHeading', title: 'Mission Section Heading', type: 'string' }),
     defineField({ name: 'heroHeadlineLegacy', title: 'Hero Headline (legacy object)', type: 'object', hidden: true, fields: [
       { name: 'text', title: 'Text', type: 'string' },
     ]}),

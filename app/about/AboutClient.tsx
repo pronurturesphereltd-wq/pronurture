@@ -7,20 +7,6 @@ import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import { getAboutPage, urlFor } from '@/lib/sanity'
 import FAQAccordion from '@/components/ui/FAQAccordion'
 
-const defaultValues = [
-  { headline: 'Salary should always be shown.', body: 'No clinical professional should waste time applying for a role without knowing the pay. Every job on PSL shows the salary range before you spend a minute on the application.' },
-  { headline: 'Clinical professionals deserve career tools built for them.', body: 'Not tools designed for office workers, adapted for healthcare. PSL was built from scratch for nurses, doctors, pharmacists, and every registered clinical professional in Nigeria.' },
-  { headline: 'Trust is earned with specifics, not promises.', body: 'We show our research. We cite our sources. Every employer gets a named contact they can call on WhatsApp — not a helpdesk ticket. Every candidate is verified before they reach your inbox.' },
-  { headline: 'PSL is a launchpad, not just a listing site.', body: 'We are building something that helps Nigerian healthcare professionals grow — not just move between jobs. CPD on your phone. Credentials in one place. A career, not just a gig.' },
-]
-
-const defaultSurveyStats = [
-  '52.5% have taken a job that turned out different from its listing',
-  "62.5% are behind on or don't know their CPD requirements",
-  '87% would complete CPD entirely on mobile if quality is right',
-  '97.5% are open to new job opportunities',
-  '80% of facilities have no system for tracking staff CPD',
-]
 
 const generalFAQs = [
   {
@@ -60,8 +46,6 @@ export default function AboutClient() {
     getAboutPage().then(setData).catch(() => setData({}))
   }, [])
 
-  const surveyStats = data?.surveyStats?.length ? data.surveyStats : defaultSurveyStats
-  const values = data?.values?.length ? data.values : defaultValues
   const team = data?.team || []
 
   return (
@@ -71,7 +55,7 @@ export default function AboutClient() {
           <AnimateOnScroll>
           <SectionTag label="About PSL" />
           <h1 style={{ fontSize: 'clamp(32px,5vw,54px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.2, marginTop: 20 }}>
-            We&apos;re Building the Infrastructure Behind a Stronger Healthcare Workforce
+            {data?.heroHeadline || "We're Building the Infrastructure Behind a Stronger Healthcare Workforce"}
           </h1>
           <p style={{ fontSize: 20, lineHeight: 1.7, color: 'var(--brand-gray)', maxWidth: 720, margin: '24px auto 0' }}>
             PSL exists to help healthcare professionals thrive and healthcare organisations operate more effectively. We believe the future of healthcare in Nigeria depends on connected people, connected systems, and smarter workforce management.

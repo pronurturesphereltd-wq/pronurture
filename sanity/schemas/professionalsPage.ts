@@ -8,6 +8,10 @@ export const professionalsPage = defineType({
     defineField({ name: 'heroHeadline', title: 'Hero Headline', type: 'string', initialValue: 'Your career. Finally, a platform built for it.' }),
     defineField({ name: 'heroSubheadline', title: 'Hero Subheadline', type: 'text', rows: 2, initialValue: 'Jobs with salary shown. CPD on your phone. Locum shifts when you need them. For every registered clinical professional in Nigeria.' }),
     defineField({ name: 'heroCta', title: 'Hero CTA Label', type: 'string', initialValue: 'Join free — no card required' }),
+    defineField({ name: 'heroEyebrow', title: 'Hero Eyebrow', type: 'string' }),
+    defineField({ name: 'heroCaption', title: 'Hero Caption', type: 'string' }),
+    defineField({ name: 'painPointsHeading', title: 'Pain Points Section Heading', type: 'string' }),
+    defineField({ name: 'featuresHeading', title: 'Features Section Heading', type: 'string' }),
     defineField({
       name: 'painPoints',
       title: 'Pain Points',

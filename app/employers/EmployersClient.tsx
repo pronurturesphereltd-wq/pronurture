@@ -1,5 +1,7 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { getEmployersPage } from '@/lib/sanity'
 import { ArrowRight, ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle, Database, CalendarDays, TrendingUp, ClipboardList, PieChart, UserPlus, Calendar } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
@@ -47,7 +49,10 @@ const defaultFAQs = [
 const iconMap: Record<string, any> = { ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle, Database, CalendarDays, TrendingUp, ClipboardList, PieChart, UserPlus, Calendar }
 
 export default function EmployersClient() {
-  const data: any = {}
+  const [data, setData] = useState<any>(null)
+  useEffect(() => {
+    getEmployersPage().then(setData).catch(() => setData({}))
+  }, [])
   const contactData: any = {}
 
   const painPoints = data?.painPoints?.length ? data.painPoints : defaultPainPoints
@@ -60,12 +65,12 @@ export default function EmployersClient() {
     <>
       <section style={{ padding: '56px 0 72px', background: 'var(--brand-dark)' }}>
         <AnimateOnScroll><div className="container" style={{ maxWidth: 760, textAlign: 'center' }}>
-          <SectionTag label="For Healthcare Employers" variant="white" />
+          <SectionTag label={data?.heroEyebrow || 'For Healthcare Employers'} variant="white" />
           <h1 style={{ fontSize: 'clamp(34px,5vw,56px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.15, marginTop: 20, marginBottom: 20 }}>
-            Build Stronger Healthcare Teams with One Intelligent Workforce Platform
+            {data?.heroHeadline || 'Build Stronger Healthcare Teams with One Intelligent Workforce Platform'}
           </h1>
           <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.75)', lineHeight: 1.65, marginBottom: 36, maxWidth: 560, margin: '0 auto 36px' }}>
-            From recruitment and onboarding to scheduling, compliance, CPD, attendance, and workforce analytics, PSL gives hospitals, clinics, and healthcare organisations everything they need to attract, manage, and retain exceptional healthcare professionals — all in one secure platform.
+            {data?.heroSubheadline || "From recruitment and onboarding to scheduling, compliance, CPD, attendance, and workforce analytics, PSL gives hospitals, clinics, and healthcare organisations everything they need to attract, manage, and retain exceptional healthcare professionals — all in one secure platform."}
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/waitlist?role=employer" className="btn-primary btn-primary--white">
@@ -88,7 +93,7 @@ export default function EmployersClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="Sound familiar?" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Healthcare Workforce Management Shouldn&apos;t Be This Difficult</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>{data?.painPointsHeading || "Healthcare Workforce Management Shouldn't Be This Difficult"}</h2>
             <p style={{ fontSize: 18, color: 'var(--brand-gray)', lineHeight: 1.65, marginTop: 16, maxWidth: 560, margin: '16px auto 0' }}>Managing a healthcare workforce is one of the biggest challenges facing healthcare organisations today.</p>
           </div></AnimateOnScroll>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 820, margin: '0 auto' }}>
@@ -102,7 +107,7 @@ export default function EmployersClient() {
                   <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--brand-dark)' }}>0{i+1}</span>
                 </div>
                 <div>
-                  <h3 style={{ fontSize: 19, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>{p.title}</h3>
+                  <h3 style={{ fontSize: 19, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>{p.title || p.headline}</h3>
                   <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65 }}>{p.body}</p>
                 </div>
               </div>
@@ -119,7 +124,7 @@ export default function EmployersClient() {
         <div className="container">
           <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 56 }}>
             <SectionTag label="What you get" />
-            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Everything You Need to Manage Your Workforce</h2>
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>{data?.featuresHeading || 'Everything You Need to Manage Your Workforce'}</h2>
           </div></AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
@@ -134,7 +139,7 @@ export default function EmployersClient() {
                     <Icon size={22} color="#fff" />
                   </div>
                   <h4 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
-                  <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.body}</p>
+                  <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.body || f.description}</p>
                 </div>
                 </AnimateOnScroll>
               )
@@ -282,9 +287,8 @@ export default function EmployersClient() {
       <section style={{ padding: '80px 24px', background: '#113614' }}>
         <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
           <AnimateOnScroll>
-            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 20, letterSpacing: '-0.02em' }}>Build the Workforce Your Patients Deserve</h2>
-            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 12 }}>Exceptional healthcare begins with exceptional people.</p>
-            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>PSL gives your organisation the tools to recruit smarter, manage more efficiently, stay compliant, and build a workforce prepared for the future of healthcare.</p>
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#fff', marginBottom: 20, letterSpacing: '-0.02em' }}>{data?.closingHeadline || 'Build the Workforce Your Patients Deserve'}</h2>
+            <p style={{ fontSize: 18, lineHeight: 1.7, color: 'rgba(255,255,255,0.8)', marginBottom: 40 }}>{data?.closingSubtext || "Exceptional healthcare begins with exceptional people. PSL gives your organisation the tools to recruit smarter, manage more efficiently, stay compliant, and build a workforce prepared for the future of healthcare."}</p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <a href="/waitlist?role=employer" className="btn-primary" style={{ border: '2px solid rgba(255,255,255,0.4)' }}>
                 Book a Demo

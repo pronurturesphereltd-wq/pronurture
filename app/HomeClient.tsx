@@ -1,5 +1,7 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { getHomepage } from '@/lib/sanity'
 import { CheckCircle2, Users, Briefcase, ArrowRight } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
@@ -23,7 +25,10 @@ const defaultQuotes = [
 ]
 
 export default function HomeClient() {
-  const data: any = {}
+  const [data, setData] = useState<any>(null)
+  useEffect(() => {
+    getHomepage().then(setData).catch(() => setData({}))
+  }, [])
   const stats = data?.stats?.length ? data.stats : defaultStats
   const quotes = data?.quotes?.length ? data.quotes : defaultQuotes
 
@@ -65,6 +70,11 @@ export default function HomeClient() {
           pointerEvents: 'none',
         }} />
 
+        {/* Eyebrow */}
+        <div style={{ position: 'relative', marginBottom: 20 }}>
+          <SectionTag label={data?.heroEyebrow || 'Trusted by Healthcare Professionals, Hospitals & Clinics Across Nigeria'} />
+        </div>
+
         {/* Headline */}
         <h1 style={{
           fontSize: 'clamp(32px, 4.5vw, 58px)',
@@ -76,13 +86,7 @@ export default function HomeClient() {
           margin: '0 auto 16px',
           position: 'relative',
         }}>
-          The Healthcare Workforce Platform{' '}
-          <span style={{
-            fontStyle: 'italic',
-            fontWeight: 700,
-            color: '#113614',
-          }}>Nigeria</span>{' '}
-          Has Been Waiting For.
+          {data?.heroHeadline || 'The Healthcare Workforce Platform Nigeria Has Been Waiting For.'}
         </h1>
 
         {/* Subheadline */}
@@ -94,7 +98,7 @@ export default function HomeClient() {
           margin: '0 auto 12px',
           position: 'relative',
         }}>
-          Whether you&apos;re advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform.
+          {data?.heroSubheadline || "Whether you're advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform."}
         </p>
         <p style={{
           fontSize: 14,
