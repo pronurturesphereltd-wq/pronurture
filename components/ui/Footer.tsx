@@ -115,8 +115,7 @@ export default function Footer({
           ))}
         </div>
 
-        <div style={{ borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <p style={{ fontSize: 13, color: 'var(--brand-gray)' }}>© {new Date().getFullYear()} {copyright}</p>
+        <div style={{ borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             {socialLinks?.linkedin && <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}><LinkedInIcon /></a>}
             {socialLinks?.youtube && <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-gray)', transition: 'color 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand-dark)')} onMouseLeave={e => (e.currentTarget.style.color = 'var(--brand-gray)')}><YouTubeIcon /></a>}
@@ -126,6 +125,7 @@ export default function Footer({
             {socialLinks?.whatsapp && <a href={socialLinks.whatsapp} target="_blank" rel="noopener noreferrer" style={{ color: '#25D366', transition: 'opacity 0.15s ease' }} onMouseEnter={e => (e.currentTarget.style.opacity = '0.7')} onMouseLeave={e => (e.currentTarget.style.opacity = '1')}><WhatsAppIcon /></a>}
             <a href={`mailto:${email}`} style={{ fontSize: 13, color: 'var(--brand-gray)', textDecoration: 'none' }}>{email}</a>
           </div>
+          <p style={{ fontSize: 13, color: 'var(--brand-gray)' }}>© {new Date().getFullYear()} {copyright}</p>
         </div>
       </div>
 
