@@ -21,8 +21,8 @@
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 h1,h2,h3,h4,h5,h6,p,figure { margin: 0; }
-html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
-body { font-family: var(--font-primary); background: #ffffff; color: var(--brand-near-black); font-size: 17px; line-height: 1.6; letter-spacing: -0.01em; overflow-x: hidden; max-width: 100vw; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
+body { font-family: var(--font-primary); background: #ffffff; color: var(--brand-near-black); font-size: 17px; line-height: 1.6; letter-spacing: -0.01em; overflow-x: hidden; }
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -131,6 +131,9 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
 
   /* Section padding on mobile */
   section { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Allow button text to wrap on mobile so it doesn't overflow narrow containers */
+  .btn-primary { white-space: normal; }
 
   /* Hero section mobile */
   .hero-mobile-stack { flex-direction: column !important; gap: 12px !important; }
