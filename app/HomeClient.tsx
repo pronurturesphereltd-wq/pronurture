@@ -339,11 +339,11 @@ export default function HomeClient() {
       </section>
 
       {/* AUDIENCE CARDS */}
-      <section style={{ paddingTop: 48, paddingBottom: 'var(--section-padding-y)', borderTop: '1px solid rgba(0,0,0,0.06)', marginTop: 32 }}>
+      <section style={{ padding: 'var(--section-padding-y) 0' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             <AnimateOnScroll delay={0}>
-            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
+            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: '32px 28px', background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
             >
@@ -378,7 +378,7 @@ export default function HomeClient() {
             </div>
             </AnimateOnScroll>
             <AnimateOnScroll delay={150}>
-            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: 36, background: 'var(--brand-offwhite)', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
+            <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: '32px 28px', background: 'var(--brand-offwhite)', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
             >
