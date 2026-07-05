@@ -21,8 +21,8 @@
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 h1,h2,h3,h4,h5,h6,p,figure { margin: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: var(--font-primary); background: #ffffff; color: var(--brand-near-black); font-size: 17px; line-height: 1.6; letter-spacing: -0.01em; }
+html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100vw; }
+body { font-family: var(--font-primary); background: #ffffff; color: var(--brand-near-black); font-size: 17px; line-height: 1.6; letter-spacing: -0.01em; overflow-x: hidden; max-width: 100vw; }
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -138,12 +138,22 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
   /* Card padding reduction on mobile */
   .mobile-pad-sm { padding: 20px !important; }
 
-  /* Hide horizontal scroll overflow */
-  body { overflow-x: hidden; }
-
   /* Comparison table mobile — stack columns */
   .comparison-grid { display: block !important; }
   .comparison-grid > div { border-right: none !important; border-bottom: 1px solid rgba(0,0,0,0.08) !important; }
+
+  /* Named grid collapse */
+  .grid-2col { grid-template-columns: 1fr !important; }
+  .steps-3col { grid-template-columns: 1fr !important; }
+  .mission-cards { grid-template-columns: 1fr !important; }
+  .story-split { grid-template-columns: 1fr !important; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr) !important; }
+  .stat-number { font-size: 20px !important; }
+  .grid-footer { grid-template-columns: 1fr 1fr !important; }
+
+  /* ONE PLATFORM closing box — stack button below text */
+  .platform-closing { flex-direction: column !important; padding: 28px 24px !important; }
+  .platform-closing > a { align-self: flex-start !important; white-space: normal !important; }
 }
 
 /* Small mobile */

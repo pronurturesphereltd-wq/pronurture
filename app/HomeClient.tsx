@@ -7,6 +7,7 @@ import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import CountUp from '@/components/ui/CountUp'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 
 const defaultStats = [
@@ -31,6 +32,7 @@ export default function HomeClient() {
   }, [])
   const stats = data?.stats?.length ? data.stats : defaultStats
   const quotes = data?.quotes?.length ? data.quotes : defaultQuotes
+  const isMobile = useIsMobile()
 
   return (
     <>
@@ -179,14 +181,9 @@ export default function HomeClient() {
           </AnimateOnScroll>
 
           {/* Timeline */}
-          <div style={{ position: 'relative' }}>
-            {/* Horizontal line */}
-            <div style={{
-              position: 'absolute', top: 32, left: 0, right: 0,
-              height: 1, background: 'rgba(17,54,20,0.12)', zIndex: 0,
-            }} />
-
-            <div className="grid-6col" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 8, position: 'relative', zIndex: 1 }}>
+          {isMobile ? (
+            /* Vertical stepper — mobile */
+            <div>
               {[
                 { icon: '👥', label: 'Recruitment scattered across WhatsApp' },
                 { icon: '📁', label: 'Staff records in folders and filing cabinets' },
@@ -194,42 +191,94 @@ export default function HomeClient() {
                 { icon: '📋', label: 'Training tracked manually' },
                 { icon: '⚠️', label: 'Compliance a last-minute scramble' },
               ].map((item, i) => (
-                <AnimateOnScroll key={i} delay={i * 100}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                    <div style={{
-                      width: 64, height: 64, borderRadius: '50%',
-                      background: '#fff',
-                      border: '1px solid rgba(220,38,38,0.2)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 24, marginBottom: 16,
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                    }}>{item.icon}</div>
-                    <p style={{ fontSize: 12, color: '#9aa89d', lineHeight: 1.5, margin: 0 }}>{item.label}</p>
+                <AnimateOnScroll key={i} delay={i * 80}>
+                  <div style={{ display: 'flex', gap: 16 }}>
+                    {/* Circle + vertical connector */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+                      <div style={{
+                        width: 48, height: 48, borderRadius: '50%',
+                        background: '#fff',
+                        border: '1px solid rgba(220,38,38,0.2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 20, flexShrink: 0,
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                      }}>{item.icon}</div>
+                      <div style={{ width: 1, flex: 1, minHeight: 20, background: 'rgba(17,54,20,0.12)', marginTop: 4 }} />
+                    </div>
+                    {/* Label */}
+                    <div style={{ paddingTop: 10, paddingBottom: 28 }}>
+                      <p style={{ fontSize: 14, color: '#9aa89d', lineHeight: 1.55, margin: 0 }}>{item.label}</p>
+                    </div>
                   </div>
                 </AnimateOnScroll>
               ))}
-
-              {/* PSL Logo endpoint */}
-              <AnimateOnScroll delay={600}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+              {/* PSL endpoint */}
+              <AnimateOnScroll delay={500}>
+                <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
                   <div style={{
-                    width: 64, height: 64, borderRadius: '50%',
+                    width: 48, height: 48, borderRadius: '50%',
                     background: '#113614',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: 16,
                     boxShadow: '0 4px 20px rgba(17,54,20,0.35)',
+                    flexShrink: 0,
                   }}>
-                    <img src="/Full_Color_Logo.svg" alt="PSL" style={{ width: 36, height: 36, filter: 'brightness(0) invert(1)' }} />
+                    <img src="/Full_Color_Logo.svg" alt="PSL" style={{ width: 28, height: 28, filter: 'brightness(0) invert(1)' }} />
                   </div>
-                  <p style={{ fontSize: 12, fontWeight: 700, color: '#113614', lineHeight: 1.5, margin: 0 }}>PSL</p>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: '#113614', lineHeight: 1.5, margin: 0 }}>PSL — One platform, everything connected</p>
                 </div>
               </AnimateOnScroll>
             </div>
-          </div>
+          ) : (
+            /* Horizontal timeline — desktop */
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                position: 'absolute', top: 32, left: 0, right: 0,
+                height: 1, background: 'rgba(17,54,20,0.12)', zIndex: 0,
+              }} />
+              <div className="grid-6col" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 8, position: 'relative', zIndex: 1 }}>
+                {[
+                  { icon: '👥', label: 'Recruitment scattered across WhatsApp' },
+                  { icon: '📁', label: 'Staff records in folders and filing cabinets' },
+                  { icon: '📊', label: 'Schedules managed on spreadsheets' },
+                  { icon: '📋', label: 'Training tracked manually' },
+                  { icon: '⚠️', label: 'Compliance a last-minute scramble' },
+                ].map((item, i) => (
+                  <AnimateOnScroll key={i} delay={i * 100}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                      <div style={{
+                        width: 64, height: 64, borderRadius: '50%',
+                        background: '#fff',
+                        border: '1px solid rgba(220,38,38,0.2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 24, marginBottom: 16,
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                      }}>{item.icon}</div>
+                      <p style={{ fontSize: 12, color: '#9aa89d', lineHeight: 1.5, margin: 0 }}>{item.label}</p>
+                    </div>
+                  </AnimateOnScroll>
+                ))}
+                {/* PSL Logo endpoint */}
+                <AnimateOnScroll delay={600}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                    <div style={{
+                      width: 64, height: 64, borderRadius: '50%',
+                      background: '#113614',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      marginBottom: 16,
+                      boxShadow: '0 4px 20px rgba(17,54,20,0.35)',
+                    }}>
+                      <img src="/Full_Color_Logo.svg" alt="PSL" style={{ width: 36, height: 36, filter: 'brightness(0) invert(1)' }} />
+                    </div>
+                    <p style={{ fontSize: 12, fontWeight: 700, color: '#113614', lineHeight: 1.5, margin: 0 }}>PSL</p>
+                  </div>
+                </AnimateOnScroll>
+              </div>
+            </div>
+          )}
 
           {/* Closing statement */}
           <AnimateOnScroll delay={700}>
-            <div style={{
+            <div className="platform-closing" style={{
               marginTop: 64,
               background: '#113614',
               borderRadius: 20, padding: '40px 48px',
