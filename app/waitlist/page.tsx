@@ -35,7 +35,7 @@ export default function WaitlistPage() {
               <p style={{ fontSize: 22, fontWeight: 700, color: 'var(--brand-near-black)', letterSpacing: '-0.02em', lineHeight: 1.2 }}>97.5% of clinical professionals are open to new job opportunities.</p>
             </div>
           </div>
-          <div style={{ background: '#fff', borderRadius: 24, padding: '40px', border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
+          <div className="card-mobile" style={{ background: '#fff', borderRadius: 24, padding: '40px', border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
             <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>Create your free account</h2>
             <p style={{ fontSize: 14, color: 'var(--brand-gray)', marginBottom: 28 }}>No credit card. No commitment.</p>
             <Suspense fallback={<p style={{ color: 'var(--brand-gray)', fontSize: 14 }}>Loading...</p>}>

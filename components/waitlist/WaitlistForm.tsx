@@ -191,7 +191,7 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
         </div>
       )}
 
-      <button type="submit" disabled={submitting} className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '14px 20px 14px 24px', fontSize: 16, opacity: submitting ? 0.7 : 1 }}>
+      <button type="submit" disabled={submitting} className="btn-primary btn-waitlist-cta" style={{ width: '100%', justifyContent: 'center', padding: '14px 20px 14px 24px', fontSize: 16, opacity: submitting ? 0.7 : 1 }}>
         {submitting ? (
           <><Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} /> Joining waitlist...</>
         ) : (
