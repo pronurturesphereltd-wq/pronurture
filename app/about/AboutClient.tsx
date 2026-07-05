@@ -221,17 +221,20 @@ export default function AboutClient() {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
-            <AnimateOnScroll>
-            <div>
-              <SectionTag label="How PSL Started" />
-              <div style={{ marginTop: 24 }}>
-                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 24 }}>
+      <section style={{ padding: '80px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <AnimateOnScroll>
+            <SectionTag label="Our Story" />
+            <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 40, letterSpacing: '-0.02em', marginTop: 16 }}>How PSL Started</h2>
+          </AnimateOnScroll>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 32 }}>
+            <AnimateOnScroll delay={100}>
+              <div>
+                <p style={{ fontSize: 16, color: '#4a5e4d', lineHeight: 1.8, marginBottom: 20 }}>
                   PSL began with a simple observation: healthcare professionals and healthcare employers were using too many disconnected tools.
                 </p>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {[
                     'Jobs were shared in WhatsApp groups.',
                     'Credentials lived in email folders.',
@@ -239,56 +242,71 @@ export default function AboutClient() {
                     'Schedules were managed manually.',
                     'Compliance was checked during audits instead of continuously.',
                   ].map((item, i) => (
-                    <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontSize: 17, color: 'var(--brand-gray)', lineHeight: 1.6 }}>
-                      <span style={{ color: '#C09D59', fontWeight: 700, flexShrink: 0, marginTop: 2 }}>—</span>
+                    <div key={i} style={{
+                      display: 'flex', gap: 10, fontSize: 14, color: '#6b7280',
+                      padding: '10px 14px', background: '#f9f9f7',
+                      borderRadius: 8, borderLeft: '3px solid #ef4444',
+                      lineHeight: 1.5,
+                    }}>
                       {item}
-                    </li>
+                    </div>
                   ))}
-                </ul>
-                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 24 }}>
+                </div>
+                <p style={{ fontSize: 15, color: '#4a5e4d', lineHeight: 1.8, marginTop: 20 }}>
                   Despite the incredible work being done across Nigeria&apos;s healthcare system, the workforce infrastructure supporting that work was fragmented.
                 </p>
-                <p style={{ fontSize: 18, lineHeight: 1.8, color: '#0d2810', fontWeight: 600, marginBottom: 8 }}>
-                  So we asked a different question:
+              </div>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll delay={200}>
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#0d2810', letterSpacing: '0.05em', marginBottom: 12 }}>
+                  SO WE ASKED A DIFFERENT QUESTION:
                 </p>
-                <p style={{ fontSize: 20, lineHeight: 1.7, color: '#113614', fontWeight: 700, fontStyle: 'italic', marginBottom: 24, padding: '20px 24px', background: 'rgba(17,54,20,0.05)', borderLeft: '4px solid #C09D59', borderRadius: '0 8px 8px 0' }}>
-                  What would healthcare look like if recruitment, credentialing, CPD, scheduling, compliance, attendance, and workforce planning all worked together in one connected system?
-                </p>
-                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)', marginBottom: 20 }}>
+                <blockquote style={{
+                  fontSize: 18, fontStyle: 'italic', color: '#0d2810',
+                  lineHeight: 1.7, padding: '20px 24px',
+                  background: 'rgba(17,54,20,0.05)',
+                  borderLeft: '4px solid #C09D59',
+                  borderRadius: '0 12px 12px 0',
+                  margin: '0 0 24px',
+                }}>
+                  &ldquo;What would healthcare look like if recruitment, credentialing, CPD, scheduling, compliance, attendance, and workforce planning all worked together in one connected system?&rdquo;
+                </blockquote>
+                <p style={{ fontSize: 15, color: '#4a5e4d', lineHeight: 1.8, marginBottom: 12 }}>
                   That question became PSL.
                 </p>
-                <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--brand-gray)' }}>
+                <p style={{ fontSize: 15, color: '#4a5e4d', lineHeight: 1.8 }}>
                   Today, we&apos;re building the workforce layer that helps connect every part of Nigeria&apos;s healthcare ecosystem — one verified professional and one healthcare facility at a time.
                 </p>
               </div>
-            </div>
             </AnimateOnScroll>
-            <AnimateOnScroll delay={150}>
-            <div>
-              <SectionTag label="What we found" />
-              <h3 style={{ fontSize: 22, fontWeight: 700, marginTop: 20, marginBottom: 8, letterSpacing: '-0.01em' }}>Before building anything, we asked.</h3>
-              <p style={{ fontSize: 15, color: 'var(--brand-gray)', marginBottom: 24, lineHeight: 1.65 }}>
-                In May 2026, we surveyed 40 clinical professionals and 5 healthcare facility managers across 13 Nigerian states. Here is what they told us:
+          </div>
+
+          <AnimateOnScroll delay={300}>
+            <div style={{ background: '#0d2810', borderRadius: 16, padding: '28px 32px' }}>
+              <p style={{ fontSize: 11, letterSpacing: '0.1em', color: '#C09D59', fontWeight: 700, marginBottom: 20 }}>
+                WHAT THE DATA SHOWED — PSL CLINICAL WORKFORCE SURVEY, MAY 2026 — 40 PROFESSIONALS · 5 FACILITIES · 13 STATES
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                {surveyStats.map((s: string, i: number) => (
-                  <AnimateOnScroll key={i} delay={i * 80}>
-                  <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                    <CheckCircle2 size={18} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 2 }} />
-                    <p style={{ fontSize: 15, color: 'var(--brand-near-black)', lineHeight: 1.55 }}>{s}</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16, marginBottom: 20 }}>
+                {[
+                  { stat: '52.5%', label: 'took a job different from its listing' },
+                  { stat: '62.5%', label: 'behind on or unaware of CPD requirements' },
+                  { stat: '87%', label: 'would complete CPD on mobile if quality is right' },
+                  { stat: '97.5%', label: 'open to new job opportunities' },
+                  { stat: '80%', label: 'of facilities have no CPD tracking system' },
+                ].map((item, i) => (
+                  <div key={i} style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 26, fontWeight: 800, color: '#C09D59', marginBottom: 6 }}>{item.stat}</div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>{item.label}</div>
                   </div>
-                  </AnimateOnScroll>
                 ))}
               </div>
-              <p style={{ fontSize: 12, color: 'var(--brand-gray)', marginTop: 20, opacity: 0.7 }}>
-                {data?.surveySource || 'Source: PSL Clinical Workforce Survey, May 2026'}
-              </p>
-              <p style={{ fontSize: 15, color: 'var(--brand-gray)', marginTop: 20, lineHeight: 1.65, fontStyle: 'italic' }}>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 16, margin: 0 }}>
                 Everything we have built since came from those answers.
               </p>
             </div>
-            </AnimateOnScroll>
-          </div>
+          </AnimateOnScroll>
         </div>
       </section>
 
