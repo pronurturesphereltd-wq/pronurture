@@ -82,7 +82,7 @@ export default function Footer({
   return (
     <footer style={{ background: 'var(--brand-offwhite)', borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: 64, paddingBottom: 40 }}>
       <div className="container">
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 56 }}>
+        <div className="grid-footer" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 56 }}>
           <div>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', marginBottom: 16 }}>
               <img src="/Full_Color_Logo.svg" alt="ProNurtureSphere" style={{ height: 36, width: 'auto' }} />

@@ -156,7 +156,7 @@ export default function EmployersClient() {
           </AnimateOnScroll>
           <AnimateOnScroll delay={100}>
             <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.08)' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+              <div className="comparison-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
                 <div style={{ padding: '16px 24px', background: '#f5f5f0', fontWeight: 700, fontSize: 14, color: '#6b7280', letterSpacing: '0.05em' }}>TRADITIONAL APPROACH</div>
                 <div style={{ padding: '16px 24px', background: '#113614', fontWeight: 700, fontSize: 14, color: '#C09D59', letterSpacing: '0.05em' }}>WITH PSL</div>
               </div>
@@ -169,7 +169,7 @@ export default function EmployersClient() {
                 ['Staffing gaps are discovered too late', 'Workforce forecasting prevents shortages'],
                 ['Reports take days to prepare', 'Real-time workforce analytics'],
               ].map(([before, after], i) => (
-                <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                <div key={i} className="comparison-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
                   <div style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
                     <span style={{ color: '#ef4444', flexShrink: 0 }}>✕</span>
                     <span style={{ fontSize: 15, color: '#6b7280' }}>{before}</span>
@@ -212,7 +212,7 @@ export default function EmployersClient() {
             <SectionTag label="How it works" />
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 48, letterSpacing: '-0.02em' }}>Get Started in Three Simple Steps</h2>
           </AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          <div className="steps-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {[
               { number: '01', title: 'Create Your Facility Profile', body: 'Register your organisation, add departments, define staffing needs, and invite your HR team.' },
               { number: '02', title: 'Build Your Workforce', body: 'Recruit verified professionals, onboard employees, assign shifts, manage attendance, and monitor compliance from one central platform.' },

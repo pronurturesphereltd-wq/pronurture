@@ -128,6 +128,22 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
 
   /* Waitlist form grid */
   .form-name-grid { grid-template-columns: 1fr !important; }
+
+  /* Section padding on mobile */
+  section { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Hero section mobile */
+  .hero-mobile-stack { flex-direction: column !important; gap: 12px !important; }
+
+  /* Card padding reduction on mobile */
+  .mobile-pad-sm { padding: 20px !important; }
+
+  /* Hide horizontal scroll overflow */
+  body { overflow-x: hidden; }
+
+  /* Comparison table mobile — stack columns */
+  .comparison-grid { display: block !important; }
+  .comparison-grid > div { border-right: none !important; border-bottom: 1px solid rgba(0,0,0,0.08) !important; }
 }
 
 /* Small mobile */

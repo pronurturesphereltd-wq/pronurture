@@ -64,7 +64,8 @@ export default function HomeClient() {
           top: '-10%',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '900px',
+          width: '100%',
+          maxWidth: '900px',
           height: '600px',
           background: 'radial-gradient(ellipse at center, rgba(17,54,20,0.07) 0%, transparent 70%)',
           pointerEvents: 'none',
@@ -111,7 +112,7 @@ export default function HomeClient() {
         </p>
 
         {/* CTAs */}
-        <div style={{
+        <div className="hero-mobile-stack" style={{
           display: 'flex',
           gap: 12,
           flexWrap: 'wrap',
@@ -185,7 +186,7 @@ export default function HomeClient() {
               height: 1, background: 'rgba(17,54,20,0.12)', zIndex: 0,
             }} />
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 8, position: 'relative', zIndex: 1 }}>
+            <div className="grid-6col" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 8, position: 'relative', zIndex: 1 }}>
               {[
                 { icon: '👥', label: 'Recruitment scattered across WhatsApp' },
                 { icon: '📁', label: 'Staff records in folders and filing cabinets' },
@@ -423,7 +424,7 @@ export default function HomeClient() {
             <SectionTag label="How it works" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Get Started in Three Simple Steps</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64 }}>
+          <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64 }}>
             {[
               { label: "If you're a healthcare professional", color: 'var(--brand-dark)', steps: [
                 { n:'01', t:'Create Your Account', b:"Choose whether you're joining as a healthcare professional or healthcare employer." },

@@ -78,7 +78,7 @@ export default function AboutClient() {
               <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 32 }}>
                 Nigeria&apos;s healthcare workforce faces a difficult reality.
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 32 }}>
+              <div className="mission-cards" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 32 }}>
                 {[
                   { icon: 'Briefcase', text: 'Professionals struggle to find transparent opportunities' },
                   { icon: 'FileCheck', text: 'Credentials are often managed manually' },
@@ -134,7 +134,7 @@ export default function AboutClient() {
             <p style={{ fontSize: 18, color: 'var(--brand-gray)', marginTop: 12 }}>PSL supports the entire healthcare workforce lifecycle:</p>
           </div>
           </AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+          <div className="steps-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {[
               { number: '01', title: 'Train', body: 'CPD & Learning' },
               { number: '02', title: 'Connect', body: 'Professionals & Employers' },
@@ -212,7 +212,7 @@ export default function AboutClient() {
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 40, letterSpacing: '-0.02em', marginTop: 16 }}>How PSL Started</h2>
           </AnimateOnScroll>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 32 }}>
+          <div className="story-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, marginBottom: 32 }}>
             <AnimateOnScroll delay={100}>
               <div>
                 <p style={{ fontSize: 16, color: '#4a5e4d', lineHeight: 1.8, marginBottom: 20 }}>
@@ -272,7 +272,7 @@ export default function AboutClient() {
               <p style={{ fontSize: 11, letterSpacing: '0.1em', color: '#C09D59', fontWeight: 700, marginBottom: 20 }}>
                 WHAT THE DATA SHOWED — PSL CLINICAL WORKFORCE SURVEY, MAY 2026 — 40 PROFESSIONALS · 5 FACILITIES · 13 STATES
               </p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16, marginBottom: 20 }}>
+              <div className="stats-bar" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 16, marginBottom: 20 }}>
                 {[
                   { stat: '52.5%', label: 'took a job different from its listing' },
                   { stat: '62.5%', label: 'behind on or unaware of CPD requirements' },
@@ -281,7 +281,7 @@ export default function AboutClient() {
                   { stat: '80%', label: 'of facilities have no CPD tracking system' },
                 ].map((item, i) => (
                   <div key={i} style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 26, fontWeight: 800, color: '#C09D59', marginBottom: 6 }}>{item.stat}</div>
+                    <div className="stat-number" style={{ fontSize: 26, fontWeight: 800, color: '#C09D59', marginBottom: 6 }}>{item.stat}</div>
                     <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>{item.label}</div>
                   </div>
                 ))}

@@ -138,7 +138,7 @@ export default function ProfessionalsClient() {
             <SectionTag label="Why PSL" />
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 48, letterSpacing: '-0.02em' }}>More Than a Job Board</h2>
           </AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'stretch' }}>
+          <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'stretch' }}>
             <AnimateOnScroll delay={100}>
               <div style={{ background: '#fff', borderRadius: 16, padding: '32px', border: '1px solid rgba(0,0,0,0.08)', height: '100%', boxSizing: 'border-box' as const }}>
                 <h3 style={{ fontSize: 18, fontWeight: 700, color: '#6b7280', marginBottom: 20 }}>Traditional Job Boards</h3>
@@ -188,7 +188,7 @@ export default function ProfessionalsClient() {
             <SectionTag label="How it works" />
             <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 800, color: '#0d2810', marginBottom: 48, letterSpacing: '-0.02em' }}>Get Started in Three Simple Steps</h2>
           </AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          <div className="steps-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {[
               {
                 number: '01',
