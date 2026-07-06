@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
+import AutoFitButtons from '@/components/ui/AutoFitButtons'
 import { getSiteSettings } from '@/lib/sanity'
 
 export const metadata: Metadata = {
@@ -19,8 +20,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body>
         <Navbar ctaLabel={settings?.navCta || 'Join the Waitlist'} />
-<main style={{ paddingTop: 68 }}>{children}</main>
+        <main style={{ paddingTop: 68 }}>{children}</main>
         <Footer tagline={settings?.footerTagline} email={settings?.footerEmail} copyright={settings?.footerCopyright} socialLinks={settings?.socialLinks} />
+        <AutoFitButtons />
       </body>
     </html>
   )

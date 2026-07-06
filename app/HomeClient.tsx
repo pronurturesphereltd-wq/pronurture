@@ -25,39 +25,10 @@ const defaultQuotes = [
   { quote: 'By the time we find someone through WhatsApp, the person we wanted has taken another role.', attribution: 'Medical Director, Private Hospital, Edo State' },
 ]
 
-function DebugOverlay() {
-  const [info, setInfo] = useState<Record<string, string>>({})
-  useEffect(() => {
-    const btn = document.querySelector<HTMLElement>('.btn-card-cta') || document.querySelector<HTMLElement>('.btn-primary')
-    const cs = btn ? window.getComputedStyle(btn) : null
-    setInfo({
-      'innerWidth': String(window.innerWidth),
-      'devicePixelRatio': String(window.devicePixelRatio),
-      'btn fontSize': cs ? cs.fontSize : 'n/a',
-      'btn width': btn ? String(Math.round(btn.getBoundingClientRect().width)) + 'px' : 'n/a',
-      'userAgent': navigator.userAgent,
-    })
-  }, [])
-  return (
-    <div style={{
-      position: 'fixed', bottom: 12, left: 8, right: 8, zIndex: 9999,
-      background: 'rgba(0,0,0,0.88)', color: '#0f0', borderRadius: 8,
-      padding: '10px 12px', fontSize: 11, fontFamily: 'monospace', lineHeight: 1.7,
-      wordBreak: 'break-all',
-    }}>
-      {Object.entries(info).map(([k, v]) => (
-        <div key={k}><strong style={{ color: '#ff0' }}>{k}:</strong> {v}</div>
-      ))}
-    </div>
-  )
-}
-
 export default function HomeClient() {
   const [data, setData] = useState<any>(null)
-  const [showDebug, setShowDebug] = useState(false)
   useEffect(() => {
     getHomepage().then(setData).catch(() => setData({}))
-    setShowDebug(new URLSearchParams(window.location.search).get('debug') === 'true')
   }, [])
   const stats = data?.stats?.length ? data.stats : defaultStats
   const quotes = data?.quotes?.length ? data.quotes : defaultQuotes
@@ -65,7 +36,6 @@ export default function HomeClient() {
 
   return (
     <>
-      {showDebug && <DebugOverlay />}
       {/* HERO */}
       <section style={{
         height: 'calc(100vh - 72px)',
