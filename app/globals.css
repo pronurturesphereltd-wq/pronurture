@@ -37,7 +37,7 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
 .section-tag--gold .section-tag__dot { background: var(--brand-gold); }
 .section-tag--gold span { color: var(--brand-gold); font-weight: 500; font-size: 15px; }
 
-.btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-dark); color: #ffffff; border-radius: var(--radius-pill); padding: 3px 3px 3px 20px; font-size: 15px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: opacity 0.15s ease, transform 0.15s ease; white-space: nowrap; font-family: var(--font-primary); }
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--brand-dark); color: #ffffff; border-radius: var(--radius-pill); padding: 3px 3px 3px 20px; font-size: clamp(13px, 3.5vw, 15px); font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: opacity 0.15s ease, transform 0.15s ease; white-space: nowrap; font-family: var(--font-primary); }
 .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
 .btn-primary:active { transform: translateY(0); }
 .btn-primary--white { background: #ffffff; color: var(--brand-near-black); }
@@ -132,8 +132,11 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
   /* Section padding on mobile */
   section { padding-left: 16px !important; padding-right: 16px !important; }
 
-  /* Allow button text to wrap on mobile so it doesn't overflow narrow containers */
-  .btn-primary { white-space: normal; }
+  /* Tighten button internal spacing on mobile so text fits at narrower viewports */
+  .btn-primary { padding-left: 14px; gap: 8px; }
+
+  /* Audience-card CTAs: full-width pill with text on left, icon pinned right */
+  .btn-card-cta { width: 100%; justify-content: space-between; white-space: normal; }
 
   /* Waitlist submit button — tighter size so text fits on one line in the form card */
   .btn-waitlist-cta { font-size: 14px !important; padding: 12px 16px 12px 20px !important; }
