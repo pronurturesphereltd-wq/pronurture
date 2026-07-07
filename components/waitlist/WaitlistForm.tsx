@@ -14,6 +14,8 @@ interface FormData {
   discipline?: string
   disciplineOther?: string
   facilityName?: string
+  facilityType?: string
+  staffCount?: string
   state: string
   hearAbout?: string
 }
@@ -30,6 +32,32 @@ const NIGERIAN_STATES = [
   'Jigawa','Kaduna','Kano','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa',
   'Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba',
   'Yobe','Zamfara',
+]
+
+const FACILITY_TYPES = [
+  'Teaching Hospital',
+  'General Hospital',
+  'Specialist Hospital',
+  'Private Hospital',
+  'Medical Centre',
+  'Primary Healthcare Centre',
+  'Diagnostic Centre',
+  'Fertility Clinic',
+  'Mental Health Facility',
+  'NGO',
+  'HMO',
+  'Public Health Agency',
+  'Medical Training Institution',
+  'Other',
+]
+
+const STAFF_COUNTS = [
+  '1-10 staff',
+  '11-50 staff',
+  '51-100 staff',
+  '101-250 staff',
+  '251-500 staff',
+  '500+ staff',
 ]
 
 const WEBHOOK_URL = process.env.NEXT_PUBLIC_MAKE_WEBHOOK_URL!
@@ -165,6 +193,28 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
           <label style={labelStyle}>Facility name *</label>
           <input {...register('facilityName', { required: role === 'employer' ? 'Required' : false })} style={inputStyle} placeholder="Lagos Island General Hospital" />
           {errors.facilityName && <p style={errorStyle}>{errors.facilityName.message}</p>}
+        </div>
+      )}
+
+      {role === 'employer' && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Facility type *</label>
+          <select {...register('facilityType', { required: role === 'employer' ? 'Required' : false })} style={{ ...inputStyle, cursor: 'pointer' }}>
+            <option value="">Select facility type</option>
+            {FACILITY_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+          {errors.facilityType && <p style={errorStyle}>{errors.facilityType.message}</p>}
+        </div>
+      )}
+
+      {role === 'employer' && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Approximate staff count *</label>
+          <select {...register('staffCount', { required: role === 'employer' ? 'Required' : false })} style={{ ...inputStyle, cursor: 'pointer' }}>
+            <option value="">Select staff count</option>
+            {STAFF_COUNTS.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+          {errors.staffCount && <p style={errorStyle}>{errors.staffCount.message}</p>}
         </div>
       )}
 
