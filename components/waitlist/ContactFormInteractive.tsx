@@ -17,7 +17,6 @@ export default function ContactFormInteractive() {
       await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        mode: 'no-cors',
         body: JSON.stringify({ ...form, type: 'contact', submittedAt: new Date().toISOString() }),
       })
       setState('done')

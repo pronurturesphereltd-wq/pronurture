@@ -80,7 +80,6 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
       await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        mode: 'no-cors',
         body: JSON.stringify({
           ...data,
           submittedAt: new Date().toISOString(),
