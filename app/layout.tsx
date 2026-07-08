@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import './globals.css'
 import Navbar from '@/components/ui/Navbar'
 import Footer from '@/components/ui/Footer'
@@ -19,6 +20,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-MZ6CTSYGBE"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MZ6CTSYGBE');
+          `}
+        </Script>
         <Navbar ctaLabel={settings?.navCta || 'Join the Waitlist'} />
         <main style={{ paddingTop: 68 }}>{children}</main>
         <Footer tagline={settings?.footerTagline} email={settings?.footerEmail} copyright={settings?.footerCopyright} socialLinks={settings?.socialLinks} />

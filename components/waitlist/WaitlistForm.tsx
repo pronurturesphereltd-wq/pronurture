@@ -86,6 +86,9 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
           source: 'psl-website',
         }),
       })
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'waitlist_signup', { role: data.role })
+      }
       setSubmitted(true)
     } catch {
       setError('Something went wrong. Please try again or email us at uwa@pronurture.com.ng')

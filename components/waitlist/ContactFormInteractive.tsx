@@ -19,6 +19,9 @@ export default function ContactFormInteractive() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, type: 'contact', submittedAt: new Date().toISOString() }),
       })
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'contact_form_submit')
+      }
       setState('done')
     } catch { setState('error') }
   }
