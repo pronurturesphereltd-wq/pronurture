@@ -16,6 +16,10 @@ interface FormData {
   facilityName?: string
   facilityType?: string
   staffCount?: string
+  registrationNumber?: string
+  registrationCouncil?: string
+  cacNumber?: string
+  facilityLicenseNumber?: string
   state: string
   hearAbout?: string
 }
@@ -24,6 +28,19 @@ const DISCIPLINES = [
   'Registered Nurse', 'Nurse-Midwife', 'Doctor', 'Pharmacist',
   'Physiotherapist', 'Medical Laboratory Scientist', 'Radiographer',
   'CHEW', 'Allied Health Professional', 'Other',
+]
+
+const REGISTRATION_COUNCILS = [
+  { council: 'MDCN', label: 'MDCN — Medical and Dental Council of Nigeria (Doctors & Dentists)' },
+  { council: 'NMCN', label: 'NMCN — Nursing and Midwifery Council of Nigeria (Nurses & Midwives)' },
+  { council: 'PCN', label: 'PCN — Pharmacists Council of Nigeria (Pharmacists)' },
+  { council: 'MLSCN', label: 'MLSCN — Medical Laboratory Science Council of Nigeria (Lab Scientists)' },
+  { council: 'RRBN', label: 'RRBN — Radiographers Registration Board of Nigeria (Radiographers)' },
+  { council: 'MRBN', label: 'MRBN — Medical Rehabilitation Therapists Board (Physiotherapists & Occupational Therapists)' },
+  { council: 'ODORBN', label: 'ODORBN — Optometrists & Dispensing Opticians Registration Board (Optometrists)' },
+  { council: 'NMCHN', label: 'NMCHN — Nigerian Institute of Medical Herbalists (Medical Herbalists)' },
+  { council: 'CSNO', label: 'CSNO — Community Health Practitioners Registration Board (CHEWs & CHOs)' },
+  { council: 'Other', label: 'Other regulatory council' },
 ]
 
 const NIGERIAN_STATES = [
@@ -190,6 +207,40 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
         </div>
       )}
 
+      {role === 'professional' && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Professional regulatory council *</label>
+          <select
+            {...register('registrationCouncil', { required: role === 'professional' ? 'Required' : false })}
+            style={{ ...inputStyle, cursor: 'pointer' }}
+          >
+            <option value="">Select your regulatory council</option>
+            {REGISTRATION_COUNCILS.map((c) => (
+              <option key={c.council} value={c.council}>{c.label}</option>
+            ))}
+          </select>
+          {errors.registrationCouncil && <p style={errorStyle}>{errors.registrationCouncil.message}</p>}
+        </div>
+      )}
+
+      {role === 'professional' && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Registration/licence number *</label>
+          <input
+            {...register('registrationNumber', {
+              required: role === 'professional' ? 'Required' : false,
+              minLength: { value: 4, message: 'Please enter a valid registration number' },
+            })}
+            placeholder="e.g. MDCN/12345 or NMCN/67890"
+            style={inputStyle}
+          />
+          {errors.registrationNumber && <p style={errorStyle}>{errors.registrationNumber.message}</p>}
+          <p style={{ fontSize: 12, color: '#7a8c7d', marginTop: 6 }}>
+            Enter your council registration or licence number exactly as it appears on your certificate. This is used to verify your professional status.
+          </p>
+        </div>
+      )}
+
       {role === 'employer' && (
         <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>Facility name *</label>
@@ -217,6 +268,42 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
             {STAFF_COUNTS.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
           {errors.staffCount && <p style={errorStyle}>{errors.staffCount.message}</p>}
+        </div>
+      )}
+
+      {role === 'employer' && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>CAC registration number *</label>
+          <input
+            {...register('cacNumber', {
+              required: role === 'employer' ? 'Required' : false,
+              minLength: { value: 4, message: 'Please enter a valid CAC number' },
+            })}
+            placeholder="e.g. RC123456 or BN123456"
+            style={inputStyle}
+          />
+          {errors.cacNumber && <p style={errorStyle}>{errors.cacNumber.message}</p>}
+          <p style={{ fontSize: 12, color: '#7a8c7d', marginTop: 6 }}>
+            Enter your Corporate Affairs Commission (CAC) registration number.
+          </p>
+        </div>
+      )}
+
+      {role === 'employer' && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Facility operating licence number *</label>
+          <input
+            {...register('facilityLicenseNumber', {
+              required: role === 'employer' ? 'Required' : false,
+              minLength: { value: 4, message: 'Please enter a valid licence number' },
+            })}
+            placeholder="e.g. MOH/2024/12345"
+            style={inputStyle}
+          />
+          {errors.facilityLicenseNumber && <p style={errorStyle}>{errors.facilityLicenseNumber.message}</p>}
+          <p style={{ fontSize: 12, color: '#7a8c7d', marginTop: 6 }}>
+            Enter your facility operating licence number issued by your state Ministry of Health or relevant regulatory body.
+          </p>
         </div>
       )}
 
