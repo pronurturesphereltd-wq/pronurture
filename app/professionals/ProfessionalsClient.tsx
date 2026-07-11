@@ -77,14 +77,14 @@ export default function ProfessionalsClient() {
 
   const renderGalleryImage = (src: any, alt: string, caption: string, delay: number) => (
     <AnimateOnScroll delay={delay}>
-      <figure style={{ margin: 0, maxWidth: isMobile ? 'none' : 200, marginLeft: isMobile ? 0 : 'auto', marginRight: isMobile ? 0 : 'auto' }}>
+      <figure style={{ margin: 0, maxWidth: isMobile ? 'none' : 180, marginLeft: isMobile ? 0 : 'auto', marginRight: isMobile ? 0 : 'auto' }}>
         <Image
           src={src}
           alt={alt}
-          sizes={isMobile ? '100vw' : '200px'}
+          sizes={isMobile ? '100vw' : '180px'}
           style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
         />
-        <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: isMobile ? 8 : 16 }}>{caption}</figcaption>
+        <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: isMobile ? 8 : 12 }}>{caption}</figcaption>
       </figure>
     </AnimateOnScroll>
   )
@@ -258,9 +258,9 @@ export default function ProfessionalsClient() {
         </div>
       </section>
 
-      <section style={{ padding: '56px 0', background: '#fff' }}>
+      <section style={{ padding: isMobile ? '56px 0' : '40px 0', background: '#fff' }}>
         <div className="container">
-          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: isMobile ? 32 : 24 }}>
             <SectionTag label="See it in action" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Built Around Your Career</h2>
           </div></AnimateOnScroll>
