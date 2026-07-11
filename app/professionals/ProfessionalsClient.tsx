@@ -75,6 +75,20 @@ export default function ProfessionalsClient() {
     )
   }
 
+  const renderGalleryImage = (src: any, alt: string, caption: string, delay: number) => (
+    <AnimateOnScroll delay={delay}>
+      <figure style={{ margin: 0, maxWidth: isMobile ? 'none' : 200, marginLeft: isMobile ? 0 : 'auto', marginRight: isMobile ? 0 : 'auto' }}>
+        <Image
+          src={src}
+          alt={alt}
+          sizes={isMobile ? '100vw' : '200px'}
+          style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
+        />
+        <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: isMobile ? 8 : 16 }}>{caption}</figcaption>
+      </figure>
+    </AnimateOnScroll>
+  )
+
   const renderCompactFeatureCard = (f: any, i: number) => {
     const Icon = iconMap[f.icon] || CheckCircle2
     return (
@@ -244,46 +258,16 @@ export default function ProfessionalsClient() {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--section-padding-y) 0', background: '#fff' }}>
+      <section style={{ padding: '56px 0', background: '#fff' }}>
         <div className="container">
-          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 32 }}>
             <SectionTag label="See it in action" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Built Around Your Career</h2>
           </div></AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
-            <AnimateOnScroll delay={100}>
-              <figure style={{ margin: 0 }}>
-                <Image
-                  src={professionalJobs}
-                  alt="PSL job listings showing verified healthcare vacancies with transparent salary details"
-                  sizes="(max-width: 809px) 100vw, 33vw"
-                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
-                />
-                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Browse verified jobs with transparent salaries</figcaption>
-              </figure>
-            </AnimateOnScroll>
-            <AnimateOnScroll delay={200}>
-              <figure style={{ margin: 0 }}>
-                <Image
-                  src={professionalCpd}
-                  alt="PSL CPD dashboard showing accredited courses and completion progress"
-                  sizes="(max-width: 809px) 100vw, 33vw"
-                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
-                />
-                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Track CPD progress and stay compliant</figcaption>
-              </figure>
-            </AnimateOnScroll>
-            <AnimateOnScroll delay={300}>
-              <figure style={{ margin: 0 }}>
-                <Image
-                  src={professionalShifts}
-                  alt="PSL mobile app showing a professional's upcoming shifts"
-                  sizes="(max-width: 809px) 100vw, 33vw"
-                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
-                />
-                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Pick up flexible locum shifts on the go</figcaption>
-              </figure>
-            </AnimateOnScroll>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: isMobile ? 16 : 24 }}>
+            {renderGalleryImage(professionalJobs, 'PSL job listings showing verified healthcare vacancies with transparent salary details', 'Browse verified jobs with transparent salaries', 100)}
+            {renderGalleryImage(professionalCpd, 'PSL CPD dashboard showing accredited courses and completion progress', 'Track CPD progress and stay compliant', 200)}
+            {renderGalleryImage(professionalShifts, "PSL mobile app showing a professional's upcoming shifts", 'Pick up flexible locum shifts on the go', 300)}
           </div>
         </div>
       </section>
