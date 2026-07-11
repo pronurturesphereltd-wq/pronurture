@@ -1,12 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getEmployersPage } from '@/lib/sanity'
 import { ArrowRight, ShieldCheck, BarChart2, Archive, Users, Clock, MessageCircle, Database, CalendarDays, TrendingUp, ClipboardList, PieChart, UserPlus, Calendar } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import FAQAccordion from '@/components/ui/FAQAccordion'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
+import facilityDashboard from '@/assets/facility-dashboard.png'
+import facilityScheduling from '@/assets/facility-scheduling.png'
+import facilityVacancies from '@/assets/facility-vacancies.png'
 
 const defaultPainPoints = [
   { title: 'Recruitment takes too long', body: 'Vacancies stay open for months while departments operate understaffed, increasing pressure on existing staff and affecting patient care.' },
@@ -126,6 +130,16 @@ export default function EmployersClient() {
             <SectionTag label="What you get" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>{data?.featuresHeading || 'Everything You Need to Manage Your Workforce'}</h2>
           </div></AnimateOnScroll>
+          <AnimateOnScroll delay={50}>
+            <div style={{ maxWidth: 880, margin: '0 auto 56px' }}>
+              <Image
+                src={facilityDashboard}
+                alt="PSL facility dashboard showing workforce overview, compliance status, and staff registry at a glance"
+                sizes="(max-width: 809px) 100vw, 880px"
+                style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', display: 'block' }}
+              />
+            </div>
+          </AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
               const Icon = iconMap[f.icon] || ShieldCheck
@@ -182,6 +196,39 @@ export default function EmployersClient() {
               ))}
             </div>
           </AnimateOnScroll>
+        </div>
+      </section>
+
+      <section style={{ padding: 'var(--section-padding-y) 0', background: '#f5f5f0' }}>
+        <div className="container">
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <SectionTag label="See it in action" />
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Built for Scheduling and Recruitment</h2>
+          </div></AnimateOnScroll>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            <AnimateOnScroll delay={100}>
+              <figure style={{ margin: 0 }}>
+                <Image
+                  src={facilityScheduling}
+                  alt="PSL scheduling view showing a weekly staff rota and open shifts"
+                  sizes="(max-width: 809px) 100vw, 50vw"
+                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
+                />
+                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Intelligent shift scheduling and rostering</figcaption>
+              </figure>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={200}>
+              <figure style={{ margin: 0 }}>
+                <Image
+                  src={facilityVacancies}
+                  alt="PSL recruitment view showing open vacancies and verified candidate applications"
+                  sizes="(max-width: 809px) 100vw, 50vw"
+                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
+                />
+                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Faster recruitment with verified candidates</figcaption>
+              </figure>
+            </AnimateOnScroll>
+          </div>
         </div>
       </section>
 

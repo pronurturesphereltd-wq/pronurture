@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { ArrowRight, CheckCircle2, DollarSign, Filter, BookOpen, ShieldCheck, Smartphone, Zap, Bell, Wallet, UserCheck, BarChart2, Compass, Clock, Briefcase, GraduationCap, CalendarCheck, TrendingUp } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
@@ -6,6 +7,10 @@ import FAQAccordion from '@/components/ui/FAQAccordion'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import { useState, useEffect, useRef } from 'react'
 import { getProfessionalsPage } from '@/lib/sanity'
+import professionalHome from '@/assets/professional-home.png'
+import professionalJobs from '@/assets/professional-jobs.png'
+import professionalCpd from '@/assets/professional-cpd.png'
+import professionalShifts from '@/assets/professional-shifts.png'
 
 
 const defaultPainPoints = [
@@ -110,6 +115,16 @@ export default function ProfessionalsClient() {
             <SectionTag label="What you get" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>{data?.featuresHeading || 'Everything Your Healthcare Career Needs'}</h2>
           </div></AnimateOnScroll>
+          <AnimateOnScroll delay={50}>
+            <div style={{ maxWidth: 880, margin: '0 auto 56px' }}>
+              <Image
+                src={professionalHome}
+                alt="PSL professional dashboard showing a verified profile, upcoming shifts, and career overview"
+                sizes="(max-width: 809px) 100vw, 880px"
+                style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', display: 'block' }}
+              />
+            </div>
+          </AnimateOnScroll>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
             {features.map((f: any, i: number) => {
               const Icon = iconMap[f.icon] || CheckCircle2
@@ -177,6 +192,50 @@ export default function ProfessionalsClient() {
                   </div>
                 ))}
               </div>
+            </AnimateOnScroll>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: 'var(--section-padding-y) 0', background: '#fff' }}>
+        <div className="container">
+          <AnimateOnScroll><div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <SectionTag label="See it in action" />
+            <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Built Around Your Career</h2>
+          </div></AnimateOnScroll>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+            <AnimateOnScroll delay={100}>
+              <figure style={{ margin: 0 }}>
+                <Image
+                  src={professionalJobs}
+                  alt="PSL job listings showing verified healthcare vacancies with transparent salary details"
+                  sizes="(max-width: 809px) 100vw, 33vw"
+                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
+                />
+                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Browse verified jobs with transparent salaries</figcaption>
+              </figure>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={200}>
+              <figure style={{ margin: 0 }}>
+                <Image
+                  src={professionalCpd}
+                  alt="PSL CPD dashboard showing accredited courses and completion progress"
+                  sizes="(max-width: 809px) 100vw, 33vw"
+                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
+                />
+                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Track CPD progress and stay compliant</figcaption>
+              </figure>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={300}>
+              <figure style={{ margin: 0 }}>
+                <Image
+                  src={professionalShifts}
+                  alt="PSL mobile app showing a professional's upcoming shifts"
+                  sizes="(max-width: 809px) 100vw, 33vw"
+                  style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 12px 40px rgba(0,0,0,0.08)', display: 'block' }}
+                />
+                <figcaption style={{ fontSize: 14, color: 'var(--brand-gray)', textAlign: 'center', marginTop: 16 }}>Pick up flexible locum shifts on the go</figcaption>
+              </figure>
             </AnimateOnScroll>
           </div>
         </div>
