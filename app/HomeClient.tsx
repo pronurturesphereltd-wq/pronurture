@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { getHomepage } from '@/lib/sanity'
-import { CheckCircle2, Users, Briefcase, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
 import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
@@ -334,84 +334,6 @@ export default function HomeClient() {
               </div>
               </AnimateOnScroll>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* AUDIENCE CARDS */}
-      <section style={{ padding: 'var(--section-padding-y) 0' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-            <AnimateOnScroll delay={0}>
-            <div className="card-mobile" style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: '32px 28px', background: '#fff', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
-            >
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16,54,19,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                <Users size={22} color="var(--brand-dark)" />
-              </div>
-              <SectionTag label="For Healthcare Professionals" />
-              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 12, letterSpacing: '-0.02em' }}>Everything You Need to Build a Successful Healthcare Career</h3>
-              <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 20 }}>Your career deserves more than another job board. PSL helps you discover opportunities, build your professional profile, manage your credentials, complete CPD, access verified locum shifts, and keep your career moving forward from one secure platform.</p>
-              {[
-                { t: 'Find Better Opportunities', b: 'Browse verified healthcare jobs with transparent salaries and apply in just a few clicks.' },
-                { t: 'Build a Verified Professional Profile', b: 'Keep your qualifications, licences, employment history, and credentials securely stored and instantly shareable.' },
-                { t: 'Complete CPD Anytime', b: 'Access accredited CPD courses, monitor your progress, and stay compliant with professional requirements.' },
-                { t: 'Pick Up Verified Locum Shifts', b: 'Choose flexible work opportunities that match your schedule and location.' },
-                { t: 'Follow Your Career Roadmap', b: 'Receive personalised learning recommendations based on your role, specialty, and career goals.' },
-                { t: 'Stay Ready for Every Opportunity', b: 'Never miss licence renewals or important compliance deadlines with automated reminders.' },
-              ].map((item) => (
-                <div key={item.t} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
-                  <CheckCircle2 size={17} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
-                </div>
-              ))}
-              <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', justifyContent: 'center' }}>
-                <a href="/waitlist?role=professional" className="btn-primary btn-card-cta">
-                  Join as a Healthcare Professional
-                  <span className="btn-primary__icon">
-                    <ArrowRight size={15} className="arrow-a" />
-                    <ArrowRight size={15} className="arrow-b" />
-                  </span>
-                </a>
-              </div>
-            </div>
-            </AnimateOnScroll>
-            <AnimateOnScroll delay={150}>
-            <div className="card-mobile" style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: 24, padding: '32px 28px', background: 'var(--brand-offwhite)', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease', display: 'flex', flexDirection: 'column' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
-            >
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(16,54,19,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                <Briefcase size={22} color="var(--brand-dark)" />
-              </div>
-              <SectionTag label="For Healthcare Facilities" />
-              <h3 style={{ fontSize: 'clamp(20px,2.5vw,26px)', fontWeight: 700, marginTop: 12, marginBottom: 12, letterSpacing: '-0.02em' }}>Everything You Need to Build a Stronger Workforce</h3>
-              <p style={{ fontSize: 15, color: 'var(--brand-gray)', lineHeight: 1.65, marginBottom: 20 }}>Healthcare workforce management shouldn't involve spreadsheets, WhatsApp groups, paperwork, and disconnected software. PSL gives healthcare facilities one intelligent platform to recruit, onboard, schedule, develop, and retain exceptional healthcare professionals.</p>
-              {[
-                { t: 'Verified Staff Registry', b: 'Maintain one secure digital profile for every member of your workforce.' },
-                { t: 'Recruitment Made Simple', b: 'Post vacancies, review verified applicants, and hire qualified professionals faster.' },
-                { t: 'Smart Shift Scheduling', b: 'Build staff rosters, manage attendance, approve leave requests, and reduce scheduling conflicts.' },
-                { t: 'Workforce Planning', b: 'Identify staffing shortages before they affect operations using predictive workforce insights.' },
-                { t: 'Compliance & CPD', b: 'Monitor staff licences, certifications, and CPD completion from one dashboard.' },
-                { t: 'Workforce Analytics', b: 'Make informed workforce decisions using real-time reports and operational insights.' },
-              ].map((item) => (
-                <div key={item.t} style={{ display: 'flex', gap: 10, marginBottom: 10, alignItems: 'flex-start' }}>
-                  <CheckCircle2 size={17} color="var(--brand-dark)" style={{ flexShrink: 0, marginTop: 2 }} />
-                  <div><span style={{ fontSize: 15, fontWeight: 600, color: 'var(--brand-near-black)' }}>{item.t}.</span>{' '}<span style={{ fontSize: 15, color: 'var(--brand-gray)' }}>{item.b}</span></div>
-                </div>
-              ))}
-              <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', justifyContent: 'center' }}>
-                <a href="/waitlist?role=employer" className="btn-primary btn-card-cta">
-                  Hire Healthcare Professionals
-                  <span className="btn-primary__icon">
-                    <ArrowRight size={15} className="arrow-a" />
-                    <ArrowRight size={15} className="arrow-b" />
-                  </span>
-                </a>
-              </div>
-            </div>
-            </AnimateOnScroll>
           </div>
         </div>
       </section>
