@@ -7,6 +7,7 @@ import FAQAccordion from '@/components/ui/FAQAccordion'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import { useState, useEffect, useRef } from 'react'
 import { getProfessionalsPage } from '@/lib/sanity'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import professionalHome from '@/assets/professional-home.png'
 import professionalJobs from '@/assets/professional-jobs.png'
 import professionalCpd from '@/assets/professional-cpd.png'
@@ -52,6 +53,27 @@ export default function ProfessionalsClient() {
   const painPoints = data?.painPoints?.length ? data.painPoints : defaultPainPoints
   const features = data?.features?.length ? data.features : defaultFeatures
   const faqs = data?.faqs?.length ? data.faqs : defaultFAQs
+  const isMobile = useIsMobile()
+  const primaryFeatures = features.slice(0, 3)
+  const remainingFeatures = features.slice(3)
+
+  const renderFeatureCard = (f: any, i: number) => {
+    const Icon = iconMap[f.icon] || CheckCircle2
+    return (
+      <AnimateOnScroll key={i} delay={i * 80}>
+        <div style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.07)', background: '#fff', textAlign: 'center', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+        >
+          <div style={{ width: 50, height: 50, borderRadius: 14, background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 1px 20px rgba(0,0,0,0.12)' }}>
+            <Icon size={22} color="#fff" />
+          </div>
+          <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
+          <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.body || f.description}</p>
+        </div>
+      </AnimateOnScroll>
+    )
+  }
 
   return (
     <>
@@ -115,34 +137,41 @@ export default function ProfessionalsClient() {
             <SectionTag label="What you get" />
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>{data?.featuresHeading || 'Everything Your Healthcare Career Needs'}</h2>
           </div></AnimateOnScroll>
-          <AnimateOnScroll delay={50}>
-            <div style={{ maxWidth: 880, margin: '0 auto 56px' }}>
-              <Image
-                src={professionalHome}
-                alt="PSL professional dashboard showing a verified profile, upcoming shifts, and career overview"
-                sizes="(max-width: 809px) 100vw, 880px"
-                style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', display: 'block' }}
-              />
-            </div>
-          </AnimateOnScroll>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
-            {features.map((f: any, i: number) => {
-              const Icon = iconMap[f.icon] || CheckCircle2
-              return (
-                <AnimateOnScroll key={i} delay={i * 80}>
-                <div style={{ padding: '28px 24px', borderRadius: 20, border: '1px solid rgba(0,0,0,0.07)', background: '#fff', textAlign: 'center', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
-                >
-                  <div style={{ width: 50, height: 50, borderRadius: 14, background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 1px 20px rgba(0,0,0,0.12)' }}>
-                    <Icon size={22} color="#fff" />
-                  </div>
-                  <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
-                  <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.body || f.description}</p>
+          {isMobile ? (
+            <>
+              <AnimateOnScroll delay={50}>
+                <div style={{ maxWidth: 320, margin: '0 auto 40px' }}>
+                  <Image
+                    src={professionalHome}
+                    alt="PSL professional dashboard showing a verified profile, upcoming shifts, and career overview"
+                    sizes="100vw"
+                    style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', display: 'block' }}
+                  />
                 </div>
-                </AnimateOnScroll>
-              )
-            })}
+              </AnimateOnScroll>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginBottom: 40 }}>
+                {primaryFeatures.map((f: any, i: number) => renderFeatureCard(f, i))}
+              </div>
+            </>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 48, marginBottom: 56 }}>
+              <AnimateOnScroll delay={50}>
+                <div style={{ flex: '0 0 32%', maxWidth: 300 }}>
+                  <Image
+                    src={professionalHome}
+                    alt="PSL professional dashboard showing a verified profile, upcoming shifts, and career overview"
+                    sizes="300px"
+                    style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 20px 60px rgba(0,0,0,0.12)', display: 'block' }}
+                  />
+                </div>
+              </AnimateOnScroll>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {primaryFeatures.map((f: any, i: number) => renderFeatureCard(f, i))}
+              </div>
+            </div>
+          )}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+            {remainingFeatures.map((f: any, i: number) => renderFeatureCard(f, i + 3))}
           </div>
         </div>
       </section>
