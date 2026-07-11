@@ -54,8 +54,8 @@ export default function ProfessionalsClient() {
   const features = data?.features?.length ? data.features : defaultFeatures
   const faqs = data?.faqs?.length ? data.faqs : defaultFAQs
   const isMobile = useIsMobile()
-  const primaryFeatures = features.slice(0, 3)
-  const remainingFeatures = features.slice(3)
+  const primaryFeatures = features.slice(0, 4)
+  const remainingFeatures = features.slice(4)
 
   const renderFeatureCard = (f: any, i: number) => {
     const Icon = iconMap[f.icon] || CheckCircle2
@@ -70,6 +70,24 @@ export default function ProfessionalsClient() {
           </div>
           <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{f.title}</h4>
           <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{f.body || f.description}</p>
+        </div>
+      </AnimateOnScroll>
+    )
+  }
+
+  const renderCompactFeatureCard = (f: any, i: number) => {
+    const Icon = iconMap[f.icon] || CheckCircle2
+    return (
+      <AnimateOnScroll key={i} delay={i * 80}>
+        <div style={{ padding: '18px 16px', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', background: '#fff', textAlign: 'center', height: '100%', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+        >
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--brand-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', boxShadow: '0 1px 20px rgba(0,0,0,0.12)' }}>
+            <Icon size={16} color="#fff" />
+          </div>
+          <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{f.title}</h4>
+          <p style={{ fontSize: 12.5, color: 'var(--brand-gray)', lineHeight: 1.45 }}>{f.body || f.description}</p>
         </div>
       </AnimateOnScroll>
     )
@@ -154,7 +172,7 @@ export default function ProfessionalsClient() {
               </div>
             </>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 48, marginBottom: 56 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 40, marginBottom: 56 }}>
               <AnimateOnScroll delay={50}>
                 <div style={{ flex: '0 0 32%', maxWidth: 300 }}>
                   <Image
@@ -165,13 +183,13 @@ export default function ProfessionalsClient() {
                   />
                 </div>
               </AnimateOnScroll>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 20 }}>
-                {primaryFeatures.map((f: any, i: number) => renderFeatureCard(f, i))}
+              <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                {primaryFeatures.map((f: any, i: number) => renderCompactFeatureCard(f, i))}
               </div>
             </div>
           )}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
-            {remainingFeatures.map((f: any, i: number) => renderFeatureCard(f, i + 3))}
+            {remainingFeatures.map((f: any, i: number) => renderFeatureCard(f, i + 4))}
           </div>
         </div>
       </section>
