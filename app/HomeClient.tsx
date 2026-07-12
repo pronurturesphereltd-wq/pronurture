@@ -28,6 +28,15 @@ const defaultQuotes = [
   { quote: 'By the time we find someone through WhatsApp, the person we wanted has taken another role.', attribution: 'Medical Director, Private Hospital, Edo State' },
 ]
 
+const defaultRegulatoryBodies = [
+  { name: 'Medical and Dental Council of Nigeria', abbreviation: 'MDCN' },
+  { name: 'Nursing and Midwifery Council of Nigeria', abbreviation: 'NMCN' },
+  { name: 'Pharmacists Council of Nigeria', abbreviation: 'PCN' },
+  { name: 'Medical Laboratory Science Council of Nigeria', abbreviation: 'MLSCN' },
+  { name: 'Nigerian Medical Association', abbreviation: 'NMA' },
+  { name: 'Radiographers Registration Board of Nigeria', abbreviation: 'RRBN' },
+]
+
 export default function HomeClient() {
   const [data, setData] = useState<any>(null)
   useEffect(() => {
@@ -35,6 +44,7 @@ export default function HomeClient() {
   }, [])
   const stats = data?.stats?.length ? data.stats : defaultStats
   const quotes = data?.quotes?.length ? data.quotes : defaultQuotes
+  const regulatoryBodies = data?.regulatoryBodies?.length ? data.regulatoryBodies : defaultRegulatoryBodies
   const isMobile = useIsMobile()
 
   return (
@@ -149,20 +159,20 @@ export default function HomeClient() {
       {/* PARTNERS TICKER */}
       <section style={{ padding: '32px 0 0', borderBottom: 'none', overflow: 'hidden', position: 'relative', background: '#fff' }}>
         <p style={{ textAlign: 'center', fontSize: 18, fontWeight: 700, color: 'var(--brand-near-black)', marginBottom: 12, letterSpacing: '-0.01em' }}>
-          Built for Every Part of Nigeria's Healthcare Workforce
+          Aligned With the Bodies That Govern Nigeria's Healthcare Workforce
         </p>
         <p style={{ textAlign: 'center', fontSize: 15, color: 'var(--brand-gray)', maxWidth: 640, margin: '0 auto 24px' }}>
-          Trusted by healthcare professionals, hospitals, clinics, diagnostic centres, NGOs, training institutions, and healthcare organisations committed to building a stronger healthcare system.
+          PSL is built around the credentialing and compliance standards set by Nigeria's leading regulatory and healthcare bodies — and we're actively building formal partnerships across this ecosystem.
         </p>
         <div style={{ position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 140, background: 'linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 140, background: 'linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
           <div className="ticker-track" style={{ display: 'flex', alignItems: 'center', width: 'max-content' }}>
-            {['MDCN', 'NMCN', 'PCN', 'MLSCN', 'WHO', 'NMA', 'RRBN', 'WCFN', 'MDCN', 'NMCN', 'PCN', 'MLSCN', 'WHO', 'NMA', 'RRBN', 'WCFN'].map((name, i) => (
+            {[...regulatoryBodies, ...regulatoryBodies].map((body: any, i: number) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', flexShrink: 0, padding: '0 40px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 20px', borderRadius: 100, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)' }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--brand-dark)', opacity: 0.4 }} />
-                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--brand-near-black)', letterSpacing: '0.04em', opacity: 0.6, whiteSpace: 'nowrap' }}>{name}</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--brand-near-black)', letterSpacing: '0.04em', opacity: 0.6, whiteSpace: 'nowrap' }}>{body.abbreviation}</span>
                 </div>
               </div>
             ))}

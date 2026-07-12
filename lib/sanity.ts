@@ -30,7 +30,7 @@ export async function getSiteSettings() {
 }
 
 export async function getHomepage() {
-  return client.fetch(`*[_type == "homepage"][0]{..., heroImage{...}}`)
+  return client.fetch(`*[_type == "homepage"][0]{..., heroImage{...}, regulatoryBodies[]{..., logo{...}}}`)
 }
 
 export async function getProfessionalsPage() {

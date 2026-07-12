@@ -18,6 +18,22 @@ export const homepage = defineType({
     defineField({ name: 'heroImage', title: 'Hero Image (upload here)', type: 'image', options: { hotspot: true } }),
     defineField({ name: 'heroVideo', title: 'Hero Video URL (optional, overrides image)', type: 'url' }),
     defineField({
+      name: 'regulatoryBodies',
+      title: 'Regulatory & Partner Bodies',
+      description: 'Regulatory councils and healthcare bodies shown in the "Aligned With..." ticker on the homepage.',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          { name: 'name', title: 'Full Name', type: 'string' },
+          { name: 'abbreviation', title: 'Abbreviation', type: 'string' },
+          { name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true } },
+          { name: 'link', title: 'Link (optional)', type: 'url' },
+        ],
+        preview: { select: { title: 'abbreviation', subtitle: 'name', media: 'logo' } },
+      }],
+    }),
+    defineField({
       name: 'stats',
       title: 'Stats Section',
       type: 'array',
