@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { getHomepage } from '@/lib/sanity'
 import { ArrowRight } from 'lucide-react'
 import SectionTag from '@/components/ui/SectionTag'
@@ -8,6 +9,8 @@ import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import CountUp from '@/components/ui/CountUp'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import facilityScheduling from '@/assets/facility-scheduling.png'
+import professionalHome from '@/assets/professional-home.png'
 
 
 const defaultStats = [
@@ -275,6 +278,78 @@ export default function HomeClient() {
               </div>
             </div>
           )}
+
+          {/* ONE PLATFORM, TWO EXPERIENCES */}
+          <div style={{ marginTop: 80, marginBottom: 24, textAlign: 'center' }}>
+            <AnimateOnScroll>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <SectionTag label="One Platform, Two Experiences" />
+              </div>
+              <h2 style={{ fontSize: 'clamp(28px,3.5vw,42px)', fontWeight: 800, color: '#0d2810', lineHeight: 1.15, margin: '16px auto 12px', letterSpacing: '-0.02em', maxWidth: 620 }}>
+                Built for Facilities. Designed for the People Who Show Up.
+              </h2>
+              <p style={{ fontSize: 17, lineHeight: 1.7, color: '#4a5e4d', margin: '0 auto', maxWidth: 560 }}>
+                Facilities get a real-time view of scheduling, compliance, and staffing gaps. Professionals get their license status, CPD progress, and next shift — all in one place, on any device.
+              </p>
+            </AnimateOnScroll>
+
+            {isMobile ? (
+              <AnimateOnScroll delay={150}>
+                <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20 }}>
+                  <div style={{ width: '100%', maxWidth: 320 }}>
+                    <Image
+                      src={facilityScheduling}
+                      alt="PSL facility dashboard showing real-time scheduling and staffing coverage"
+                      sizes="320px"
+                      style={{ width: '100%', height: 'auto', borderRadius: 16, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 16px 40px rgba(0,0,0,0.12)', display: 'block' }}
+                    />
+                  </div>
+                  <div style={{ width: '100%', maxWidth: 180 }}>
+                    <Image
+                      src={professionalHome}
+                      alt="PSL professional app showing license status, CPD progress, and next shift"
+                      sizes="180px"
+                      style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 16px 40px rgba(0,0,0,0.15)', display: 'block' }}
+                    />
+                  </div>
+                </div>
+              </AnimateOnScroll>
+            ) : (
+              <AnimateOnScroll delay={150}>
+                <div style={{ position: 'relative', width: '100%', maxWidth: 480, margin: '48px auto 0', aspectRatio: '100 / 89' }}>
+                  <div style={{ position: 'absolute', top: 0, left: 0, width: '74%' }}>
+                    <Image
+                      src={facilityScheduling}
+                      alt="PSL facility dashboard showing real-time scheduling and staffing coverage"
+                      sizes="360px"
+                      style={{ width: '100%', height: 'auto', borderRadius: 16, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.15)', display: 'block' }}
+                    />
+                  </div>
+                  <div style={{ position: 'absolute', top: '22%', right: 0, width: '32%', zIndex: 1 }}>
+                    <Image
+                      src={professionalHome}
+                      alt="PSL professional app showing license status, CPD progress, and next shift"
+                      sizes="160px"
+                      style={{ width: '100%', height: 'auto', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', boxShadow: '0 20px 50px rgba(0,0,0,0.22)', display: 'block' }}
+                    />
+                  </div>
+                </div>
+              </AnimateOnScroll>
+            )}
+
+            <AnimateOnScroll delay={250}>
+              <div style={{ marginTop: isMobile ? 28 : 32, display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--brand-dark)', flexShrink: 0 }} />
+                  <span style={{ fontSize: 13, color: '#4a5e4d', fontWeight: 500 }}>Built for facility admins</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--brand-gold)', flexShrink: 0 }} />
+                  <span style={{ fontSize: 13, color: '#4a5e4d', fontWeight: 500 }}>Built for professionals on the move</span>
+                </div>
+              </div>
+            </AnimateOnScroll>
+          </div>
 
           {/* Closing statement */}
           <AnimateOnScroll delay={700}>
