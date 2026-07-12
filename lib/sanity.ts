@@ -7,7 +7,7 @@ export const client = createClient({
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
   useCdn: false,
   stega: {
-    studioUrl: 'https://pronurture.sanity.studio',
+    studioUrl: 'https://pronurturesphere.sanity.studio',
   },
 })
 
