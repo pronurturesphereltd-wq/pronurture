@@ -47,6 +47,16 @@ export default function HomeClient() {
   const regulatoryBodies = data?.regulatoryBodies?.length ? data.regulatoryBodies : defaultRegulatoryBodies
   const isMobile = useIsMobile()
 
+  // Before the CMS fetch resolves, show the default copy so there's no flash of
+  // empty content. Once resolved, an explicitly cleared field hides its element
+  // instead of falling back to the default (so Studio can actually blank it out).
+  const loaded = data !== null
+  const heroEyebrow = loaded ? data?.heroEyebrow : 'Trusted by Healthcare Professionals, Hospitals & Clinics Across Nigeria'
+  const heroHeadline = loaded ? data?.heroHeadline : 'The Healthcare Workforce Platform Nigeria Has Been Waiting For.'
+  const heroSubheadline = loaded ? data?.heroSubheadline : "Whether you're advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform."
+  const closingHeadline = loaded ? data?.closingHeadline : 'Build the Future of Healthcare — Starting Today'
+  const closingSubtext = loaded ? data?.closingSubtext : "The future of healthcare depends on connected professionals, stronger institutions, and smarter workforce management. PSL brings all three together. Join the platform that's helping transform Nigeria's healthcare workforce — one professional, one facility, and one opportunity at a time."
+
   return (
     <>
       {/* HERO */}
@@ -87,35 +97,41 @@ export default function HomeClient() {
         }} />
 
         {/* Eyebrow */}
-        <div style={{ position: 'relative', marginBottom: 20 }}>
-          <SectionTag label={data?.heroEyebrow || 'Trusted by Healthcare Professionals, Hospitals & Clinics Across Nigeria'} />
-        </div>
+        {heroEyebrow && (
+          <div style={{ position: 'relative', marginBottom: 20 }}>
+            <SectionTag label={heroEyebrow} />
+          </div>
+        )}
 
         {/* Headline */}
-        <h1 style={{
-          fontSize: 'clamp(32px, 4.5vw, 58px)',
-          fontWeight: 800,
-          lineHeight: 1.08,
-          letterSpacing: '-0.02em',
-          color: '#0d2810',
-          maxWidth: 800,
-          margin: '0 auto 16px',
-          position: 'relative',
-        }}>
-          {data?.heroHeadline || 'The Healthcare Workforce Platform Nigeria Has Been Waiting For.'}
-        </h1>
+        {heroHeadline && (
+          <h1 style={{
+            fontSize: 'clamp(32px, 4.5vw, 58px)',
+            fontWeight: 800,
+            lineHeight: 1.08,
+            letterSpacing: '-0.02em',
+            color: '#0d2810',
+            maxWidth: 800,
+            margin: '0 auto 16px',
+            position: 'relative',
+          }}>
+            {heroHeadline}
+          </h1>
+        )}
 
         {/* Subheadline */}
-        <p style={{
-          fontSize: 'clamp(14px, 1.4vw, 17px)',
-          lineHeight: 1.6,
-          color: '#4a5e4d',
-          maxWidth: 580,
-          margin: '0 auto 12px',
-          position: 'relative',
-        }}>
-          {data?.heroSubheadline || "Whether you're advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform."}
-        </p>
+        {heroSubheadline && (
+          <p style={{
+            fontSize: 'clamp(14px, 1.4vw, 17px)',
+            lineHeight: 1.6,
+            color: '#4a5e4d',
+            maxWidth: 580,
+            margin: '0 auto 12px',
+            position: 'relative',
+          }}>
+            {heroSubheadline}
+          </p>
+        )}
         <p style={{
           fontSize: 14,
           fontWeight: 600,
@@ -485,8 +501,8 @@ export default function HomeClient() {
       {/* CLOSING CTA */}
       <section style={{ padding: 'var(--section-padding-y) 0', background: 'var(--brand-offwhite)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: 'clamp(30px,4.5vw,52px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 16 }}>{data?.closingHeadline || 'Build the Future of Healthcare — Starting Today'}</h2>
-          <p style={{ fontSize: 17, color: 'var(--brand-gray)', marginBottom: 36, maxWidth: 460, margin: '0 auto 36px' }}>{data?.closingSubtext || "The future of healthcare depends on connected professionals, stronger institutions, and smarter workforce management. PSL brings all three together. Join the platform that's helping transform Nigeria's healthcare workforce — one professional, one facility, and one opportunity at a time."}</p>
+          {closingHeadline && <h2 style={{ fontSize: 'clamp(30px,4.5vw,52px)', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 16 }}>{closingHeadline}</h2>}
+          {closingSubtext && <p style={{ fontSize: 17, color: 'var(--brand-gray)', marginBottom: 36, maxWidth: 460, margin: '0 auto 36px' }}>{closingSubtext}</p>}
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <PrimaryButton href="/waitlist?role=professional">Join as a Healthcare Professional</PrimaryButton>
             <PrimaryButton href="/waitlist?role=employer" variant="white">Join as a Healthcare Employer</PrimaryButton>
