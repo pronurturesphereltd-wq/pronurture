@@ -180,26 +180,32 @@ export default function HomeClient() {
         <p style={{ textAlign: 'center', fontSize: 15, color: 'var(--brand-gray)', maxWidth: 640, margin: '0 auto 24px' }}>
           PSL is built around the credentialing and compliance standards set by Nigeria's leading regulatory and healthcare bodies — and we're actively building formal partnerships across this ecosystem.
         </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 16, maxWidth: 1040, margin: '0 auto', padding: '0 24px 8px' }}>
-          {regulatoryBodies.map((body: any, i: number) => (
-            body.logo ? (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 10, width: 152, padding: '20px 14px', borderRadius: 16, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)' }}>
-                <img
-                  src={urlFor(body.logo).width(120).height(120).fit('max').url()}
-                  alt={body.name}
-                  style={{ width: 56, height: 56, objectFit: 'contain' }}
-                />
-                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--brand-near-black)', lineHeight: 1.35 }}>
-                  {body.name} <span style={{ fontWeight: 700, opacity: 0.6 }}>({body.abbreviation})</span>
-                </span>
+        <div style={{ position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 140, background: 'linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 140, background: 'linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,0) 100%)', zIndex: 2, pointerEvents: 'none' }} />
+          <div className="ticker-track" style={{ display: 'flex', alignItems: 'center', width: 'max-content' }}>
+            {[...regulatoryBodies, ...regulatoryBodies].map((body: any, i: number) => (
+              <div key={i} className="ticker-item" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                {body.logo ? (
+                  <div className="ticker-card" style={{ border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)' }}>
+                    <img
+                      className="ticker-card__logo"
+                      src={urlFor(body.logo).width(120).height(120).fit('max').url()}
+                      alt={body.name}
+                    />
+                    <span className="ticker-card__text" style={{ fontWeight: 600, color: 'var(--brand-near-black)', lineHeight: 1.35 }}>
+                      {body.name} <span style={{ fontWeight: 700, opacity: 0.6 }}>({body.abbreviation})</span>
+                    </span>
+                  </div>
+                ) : (
+                  <div className="ticker-pill" style={{ border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)' }}>
+                    <div className="ticker-pill__dot" style={{ background: 'var(--brand-dark)', opacity: 0.4 }} />
+                    <span className="ticker-pill__text" style={{ fontWeight: 700, color: 'var(--brand-near-black)', letterSpacing: '0.04em', opacity: 0.6, whiteSpace: 'nowrap' }}>{body.abbreviation}</span>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 20px', borderRadius: 100, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)' }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--brand-dark)', opacity: 0.4 }} />
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--brand-near-black)', letterSpacing: '0.04em', opacity: 0.6, whiteSpace: 'nowrap' }}>{body.abbreviation}</span>
-              </div>
-            )
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 

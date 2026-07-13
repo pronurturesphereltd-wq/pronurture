@@ -59,6 +59,14 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
 @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .ticker-track { animation: ticker 30s linear infinite; will-change: transform; }
 
+.ticker-item { padding: 0 12px; }
+.ticker-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; width: 152px; padding: 20px 14px; border-radius: 16px; }
+.ticker-card__logo { width: 56px; height: 56px; object-fit: contain; }
+.ticker-card__text { font-size: 13px; }
+.ticker-pill { display: flex; align-items: center; gap: 10px; padding: 10px 20px; border-radius: 100px; }
+.ticker-pill__dot { width: 8px; height: 8px; border-radius: 50%; }
+.ticker-pill__text { font-size: 14px; }
+
 /* Card hover interactions */
 .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
@@ -122,6 +130,15 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
 
   /* Ticker speed up on mobile */
   .ticker-track { animation-duration: 20s; }
+
+  /* Ticker cards/pills shrink on mobile so they scroll comfortably */
+  .ticker-item { padding: 0 8px; }
+  .ticker-card { width: 108px; padding: 12px 8px; gap: 6px; border-radius: 12px; }
+  .ticker-card__logo { width: 36px; height: 36px; }
+  .ticker-card__text { font-size: 10px; }
+  .ticker-pill { padding: 6px 12px; gap: 6px; }
+  .ticker-pill__dot { width: 6px; height: 6px; }
+  .ticker-pill__text { font-size: 11px; }
 
   /* Card padding reduce */
   .card-mobile { padding: 24px !important; }
