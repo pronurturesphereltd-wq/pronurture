@@ -6,6 +6,7 @@ import PrimaryButton from '@/components/ui/PrimaryButton'
 import AnimateOnScroll from '@/components/ui/AnimateOnScroll'
 import { getAboutPage, urlFor } from '@/lib/sanity'
 import FAQAccordion from '@/components/ui/FAQAccordion'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 
 const generalFAQs = [
@@ -47,6 +48,7 @@ export default function AboutClient() {
   }, [])
 
   const team = data?.team || []
+  const isMobile = useIsMobile()
 
   return (
     <>
@@ -327,8 +329,8 @@ export default function AboutClient() {
             <h2 style={{ fontSize: 'clamp(26px,3.5vw,38px)', fontWeight: 700, marginTop: 16, letterSpacing: '-0.02em' }}>Built by people who lived the problem.</h2>
           </div>
           </AnimateOnScroll>
-          {team.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: team.length === 1 ? '1fr' : 'repeat(3,1fr)', gap: 24, maxWidth: team.length === 1 ? 420 : 'none', margin: team.length === 1 ? '0 auto' : '0' }}>
+          {team.length > 1 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
               {team.map((member: any, i: number) => (
                 <AnimateOnScroll key={i} delay={i * 100}>
                 <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.08)', transition: 'transform 0.2s ease, box-shadow 0.2s ease' }}
@@ -351,6 +353,59 @@ export default function AboutClient() {
                 </AnimateOnScroll>
               ))}
             </div>
+          ) : team.length === 1 ? (
+            <AnimateOnScroll>
+            <div style={{
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              alignItems: 'center',
+              gap: isMobile ? 0 : 40,
+              maxWidth: isMobile ? 420 : 900,
+              margin: '0 auto',
+              borderRadius: 20,
+              border: '1px solid rgba(0,0,0,0.08)',
+              padding: isMobile ? 0 : 40,
+              overflow: isMobile ? 'hidden' : 'visible',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = 'none' }}
+            >
+              {isMobile ? (
+                <>
+                  {team[0].photo ? (
+                    <img src={urlFor(team[0].photo).width(400).height(400).url()} alt={team[0].name} style={{ width: '100%', height: 240, objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ width: '100%', height: 240, background: 'var(--brand-offwhite)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Users size={40} color="var(--brand-gray)" />
+                    </div>
+                  )}
+                  <div style={{ padding: 24 }}>
+                    <h4 style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{team[0].name}</h4>
+                    <p style={{ fontSize: 13, color: 'var(--brand-dark)', fontWeight: 600, marginBottom: 10 }}>{team[0].role}</p>
+                    <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{team[0].bio}</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div style={{ flex: 1 }}>
+                    <h4 style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{team[0].name}</h4>
+                    <p style={{ fontSize: 13, color: 'var(--brand-dark)', fontWeight: 600, marginBottom: 10 }}>{team[0].role}</p>
+                    <p style={{ fontSize: 14, color: 'var(--brand-gray)', lineHeight: 1.6 }}>{team[0].bio}</p>
+                  </div>
+                  <div style={{ flexShrink: 0, width: 280, height: 280, borderRadius: 16, overflow: 'hidden' }}>
+                    {team[0].photo ? (
+                      <img src={urlFor(team[0].photo).width(400).height(400).url()} alt={team[0].name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', background: 'var(--brand-offwhite)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Users size={40} color="var(--brand-gray)" />
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+            </AnimateOnScroll>
           ) : (
             <AnimateOnScroll>
             <div style={{ maxWidth: 620, margin: '0 auto', textAlign: 'center', padding: '40px 48px', borderRadius: 24, border: '1px solid rgba(0,0,0,0.08)', background: 'var(--brand-offwhite)' }}>
