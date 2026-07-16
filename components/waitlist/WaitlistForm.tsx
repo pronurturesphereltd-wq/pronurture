@@ -18,6 +18,8 @@ interface FormData {
   staffCount?: string
   registrationNumber?: string
   registrationCouncil?: string
+  isNewGraduate?: boolean
+  licenseStatusDetail?: string
   cacNumber?: string
   facilityLicenseNumber?: string
   state: string
@@ -41,6 +43,13 @@ const REGISTRATION_COUNCILS = [
   { council: 'NMCHN', label: 'NMCHN — Nigerian Institute of Medical Herbalists (Medical Herbalists)' },
   { council: 'CSNO', label: 'CSNO — Community Health Practitioners Registration Board (CHEWs & CHOs)' },
   { council: 'Other', label: 'Other regulatory council' },
+]
+
+const NEW_GRADUATE_STATUSES = [
+  'Awaiting NYSC placement',
+  'Completing internship',
+  'Registration in progress',
+  'Other',
 ]
 
 const NIGERIAN_STATES = [
@@ -88,17 +97,20 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
     defaultValues: { role: defaultRole || 'professional' },
   })
 
-  const { role, discipline } = watch()
+  const { role, discipline, isNewGraduate } = watch()
 
   const onSubmit = async (data: FormData) => {
     setSubmitting(true)
     setError('')
     try {
+      const { isNewGraduate: isSubmittedNewGraduate, licenseStatusDetail: submittedLicenseStatusDetail, ...rest } = data
       await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...data,
+          ...rest,
+          licenseStatus: data.role === 'professional' ? (isSubmittedNewGraduate ? 'new_graduate' : 'licensed') : undefined,
+          licenseStatusDetail: isSubmittedNewGraduate ? submittedLicenseStatusDetail : undefined,
           submittedAt: new Date().toISOString(),
           source: 'psl-website',
         }),
@@ -225,10 +237,19 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
 
       {role === 'professional' && (
         <div style={{ marginBottom: 16 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, color: 'var(--brand-near-black)', cursor: 'pointer' }}>
+            <input type="checkbox" {...register('isNewGraduate')} style={{ width: 16, height: 16, cursor: 'pointer', flexShrink: 0 }} />
+            I'm a new graduate / not yet licensed
+          </label>
+        </div>
+      )}
+
+      {role === 'professional' && !isNewGraduate && (
+        <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>Registration/licence number *</label>
           <input
             {...register('registrationNumber', {
-              required: role === 'professional' ? 'Required' : false,
+              required: role === 'professional' && !isNewGraduate ? 'Required' : false,
               minLength: { value: 4, message: 'Please enter a valid registration number' },
             })}
             placeholder="e.g. MDCN/12345 or NMCN/67890"
@@ -237,6 +258,19 @@ export default function WaitlistForm({ defaultRole }: { defaultRole?: Role }) {
           {errors.registrationNumber && <p style={errorStyle}>{errors.registrationNumber.message}</p>}
           <p style={{ fontSize: 12, color: '#7a8c7d', marginTop: 6 }}>
             Enter your council registration or licence number exactly as it appears on your certificate. This is used to verify your professional status.
+          </p>
+        </div>
+      )}
+
+      {role === 'professional' && isNewGraduate && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Current status (optional)</label>
+          <select {...register('licenseStatusDetail')} style={{ ...inputStyle, cursor: 'pointer' }}>
+            <option value="">Select an option</option>
+            {NEW_GRADUATE_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
+          <p style={{ fontSize: 12, color: '#7a8c7d', marginTop: 6 }}>
+            No problem — you can still join the waitlist. Let us know where you are in the process so we can guide you.
           </p>
         </div>
       )}
