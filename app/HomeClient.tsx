@@ -481,14 +481,14 @@ export default function HomeClient() {
           <div className="grid-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64 }}>
             {[
               { label: "If you're a healthcare professional", color: 'var(--brand-dark)', steps: [
-                { n:'01', t:'Create Your Account', b:"Choose whether you're joining as a healthcare professional or healthcare employer." },
-                { n:'02', t:'Complete Your Profile', b:'Add your professional information or facility details to unlock the platform.' },
-                { n:'03', t:'Start Growing', b:'Apply for jobs, recruit talent, manage your workforce, complete CPD, and access the tools you need to succeed.' },
+                { n:'01', t:'Create Your Account', b:'Sign up with your email and basic details to get started.' },
+                { n:'02', t:'Complete Your Profile', b:'Add your qualifications, licence details, and work history to unlock the platform.' },
+                { n:'03', t:'Start Growing', b:'Apply for jobs, complete CPD, track your licence renewals, and access the tools you need to grow your career.' },
               ], href: '/waitlist?role=professional', cta: 'Join as a professional' },
               { label: "If you run a healthcare facility", color: 'var(--brand-gold)', steps: [
-                { n:'01', t:'Create Your Account', b:"Choose whether you're joining as a healthcare professional or healthcare employer." },
-                { n:'02', t:'Complete Your Profile', b:'Add your professional information or facility details to unlock the platform.' },
-                { n:'03', t:'Manage everything in one dashboard', b:'CPD compliance, workforce analytics, staffing forecasts, and staff records — all from one view.' },
+                { n:'01', t:'Create Your Account', b:'Sign up and tell us about your facility.' },
+                { n:'02', t:'Complete Your Profile', b:'Add your facility details and workforce information to unlock the platform.' },
+                { n:'03', t:'Manage Staff, CPD & Scheduling in One Dashboard', b:'CPD compliance, workforce analytics, staffing forecasts, and staff records — all from one view.' },
               ], href: '/waitlist?role=employer', cta: 'Join as a facility' },
             ].map((col) => (
               <div key={col.label}>
