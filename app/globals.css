@@ -85,6 +85,13 @@ body { font-family: var(--font-primary); background: #ffffff; color: var(--brand
 .prose a { color: var(--brand-dark); text-decoration: underline; }
 .prose blockquote { border-left: 3px solid var(--brand-gold); padding-left: 1.25rem; font-style: italic; color: var(--brand-gray); margin: 1.5rem 0; }
 
+/* Hero headline "Thrive" outline treatment — solid gold fallback for browsers
+   without text-stroke support, upgraded to an outlined/stroke effect where supported. */
+.hero-stroke-text { color: var(--brand-gold); }
+@supports (-webkit-text-stroke: 1px black) {
+  .hero-stroke-text { -webkit-text-stroke: 1.5px var(--brand-gold); color: transparent; }
+}
+
 /* ── RESPONSIVE ── */
 
 /* Tablet */

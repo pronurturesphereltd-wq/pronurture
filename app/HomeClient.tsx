@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getHomepage, urlFor } from '@/lib/sanity'
@@ -52,7 +52,7 @@ export default function HomeClient() {
   // instead of falling back to the default (so Studio can actually blank it out).
   const loaded = data !== null
   const heroEyebrow = loaded ? data?.heroEyebrow : 'Trusted by Healthcare Professionals, Hospitals & Clinics Across Nigeria'
-  const heroHeadline = loaded ? data?.heroHeadline : 'The Healthcare Workforce Platform Nigeria Has Been Waiting For.'
+  const heroHeadline = loaded ? data?.heroHeadline : 'Where Healthcare Professionals Grow and Organisations Thrive.'
   const heroSubheadline = loaded ? data?.heroSubheadline : "Whether you're advancing your healthcare career or building a high-performing workforce, PSL connects healthcare professionals with trusted employers while simplifying recruitment, workforce management, CPD, compliance, scheduling, and career development — all from one intelligent platform."
   const closingHeadline = loaded ? data?.closingHeadline : 'Build the Future of Healthcare — Starting Today'
   const closingSubtext = loaded ? data?.closingSubtext : "The future of healthcare depends on connected professionals, stronger institutions, and smarter workforce management. PSL brings all three together. Join the platform that's helping transform Nigeria's healthcare workforce — one professional, one facility, and one opportunity at a time."
@@ -115,7 +115,17 @@ export default function HomeClient() {
             margin: '0 auto 16px',
             position: 'relative',
           }}>
-            {heroHeadline}
+            {heroHeadline.split(' ').map((word: string, i: number, arr: string[]) => {
+              const [, core, trailing] = word.match(/^([A-Za-z]*)(.*)$/) as RegExpMatchArray
+              let node: string | JSX.Element = core
+              if (core === 'Grow') node = <em style={{ fontStyle: 'italic' }}>{core}</em>
+              else if (core === 'Thrive') node = <span className="hero-stroke-text">{core}</span>
+              return (
+                <Fragment key={i}>
+                  {node}{trailing}{i < arr.length - 1 ? ' ' : ''}
+                </Fragment>
+              )
+            })}
           </h1>
         )}
 
