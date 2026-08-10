@@ -7,7 +7,7 @@ import AutoFitButtons from '@/components/ui/AutoFitButtons'
 import { getSiteSettings } from '@/lib/sanity'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://pronurture.vercel.app'),
+  metadataBase: new URL('https://pronurture.com.ng'),
   title: { default: 'ProNurture Sphere Limited | PSL — Nigeria\'s Healthcare Career Platform', template: '%s | PSL' },
   description: 'PSL connects Nigerian clinical professionals with verified hospitals and clinics. Find jobs with salary shown upfront, track your CPD, and pick up locum shifts — all in one platform.',
   keywords: ['Nigerian healthcare jobs', 'nurse jobs Nigeria', 'CPD Nigeria', 'locum Nigeria'],

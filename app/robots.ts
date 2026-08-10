@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/'],
     },
-    sitemap: 'https://pronurture.vercel.app/sitemap.xml',
+    sitemap: 'https://pronurture.com.ng/sitemap.xml',
   }
 }
