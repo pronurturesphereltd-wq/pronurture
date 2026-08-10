@@ -488,7 +488,7 @@ export default function HomeClient() {
               { label: "If you run a healthcare facility", color: 'var(--brand-gold)', steps: [
                 { n:'01', t:'Create Your Account', b:'Sign up and tell us about your facility.' },
                 { n:'02', t:'Complete Your Profile', b:'Add your facility details and workforce information to unlock the platform.' },
-                { n:'03', t:'Manage Staff, CPD & Scheduling in One Dashboard', b:'CPD compliance, workforce analytics, staffing forecasts, and staff records — all from one view.' },
+                { n:'03', t:'Hire, Manage & Grow Your Workforce', b:'Post vacancies, review verified applicants, track CPD compliance, and manage scheduling — all from one view.' },
               ], href: '/waitlist?role=employer', cta: 'Join as a facility' },
             ].map((col) => (
               <div key={col.label}>
